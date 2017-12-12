@@ -22,10 +22,20 @@ class TestDataHex(TestCase):
 class TestDataBase58(TestCase):
     def do_test(self, b, s):
         self.assertEqual(data.Data(b).base58, s)
-        self.assertEqual(data.frombase58(s).bytes, b)
-        self.assertEqual(data.frombase58(s).base58, s)
+        self.assertEqual(data.Data.frombase58(s).bytes, b)
+        self.assertEqual(data.Data.frombase58(s).base58, s)
     def test_set(self):
         self.do_test(b'\x00', '1')
         self.do_test(b'\x56', '2V')
         self.do_test(b'\x00\x00\x56\x2F', '117ZQ')
-        self.do_test(b'\xcf\xde\x8e\x892\xa4\xbf\xe9\xed/\xf5\xa2\x8bb\xdfU\xe7\x8a\xc9PcavK', '1Kx7VE4M41HuS96xqArvSHY8C8xfRjHvb4')
+        self.do_test(b'\x00\xcf\xde\x8e\x892\xa4\xbf\xe9\xed/\xf5\xa2\x8bb\xdfU\xe7\x8a\xc9PcavK', '1Kx7VE4M41HuS96xqArvSHY8C8xfRjHvb4')
+
+class TestAppend(TestCase):
+    def test_append(self):
+        d = data.Data.fromhex('0011FF')
+        d.append(data.Data.fromhex('55'))
+        self.assertEqual(d.hex, '0011FF55')
+    def test_prepend(self):
+        d = data.Data.fromhex('4568FA')
+        d.prepend(data.Data.fromhex('00'))
+        self.assertEqual(d.hex, '004568FA')
