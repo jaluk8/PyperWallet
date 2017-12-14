@@ -27,8 +27,7 @@ class Data:
             value += place * base58.find(c)
             place *= 58
 
-        byte_value = value.to_bytes((value.bit_length() + 7) // 8, 'big', signed=False)
-        data = Data(byte_value)
+        data = Data.fromint(value)
 
         for c in b58:
             if c == '1':
@@ -37,14 +36,28 @@ class Data:
                 break
         
         return data
+
+    @staticmethod
+    def fromint(i, size=0):
+        byte_value = i.to_bytes((i.bit_length() + 7) // 8, 'big', signed=False)
+        data = Data(byte_value)
         
+        while len(data.bytes) < size:
+            data.prepend(Data(b'\x00'))
+
+        return data
+    
     @property
     def hex(self):
         return self.bytes.hex().upper()
 
     @property
+    def int(self):
+        return int.from_bytes(self.bytes, byteorder='big', signed=False)
+
+    @property
     def base58(self):
-        value = int.from_bytes(self.bytes, byteorder='big', signed=False)
+        value = self.int
         b58 = ""
 
         while value > 0:

@@ -19,6 +19,16 @@ class TestDataHex(TestCase):
         self.do_test(b'\xFF\x10', 'FF10')
         self.do_test(b'\x00\x00\x10', '000010')
 
+class TestDataInt(TestCase):
+    def do_test(self, b, i):
+        self.assertEqual(data.Data(b).int, i)
+        self.assertEqual(data.Data.fromint(i, len(b)).bytes, b)
+        self.assertEqual(data.Data.fromint(i, len(b)).int, i)
+    def test_set(self):
+        self.do_test(b'\x00', 0)
+        self.do_test(b'\x50\xF3', 20723)
+        self.do_test(b'\x00\x50\xF3', 20723)
+
 class TestDataBase58(TestCase):
     def do_test(self, b, s):
         self.assertEqual(data.Data(b).base58, s)
