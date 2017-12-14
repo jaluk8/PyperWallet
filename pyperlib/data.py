@@ -65,3 +65,9 @@ class Data:
 
     def prepend(self, d):
         self.bytes = d.bytes + self.bytes
+
+    def __eq__(self, other):
+        return self.bytes == other.bytes
+
+    def __hash__(self):
+        return hash(self.bytes)

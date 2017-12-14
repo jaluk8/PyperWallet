@@ -2,12 +2,12 @@ from unittest import TestCase
 from pyperlib import data
 
 class TestDataBytes(TestCase):
-     def do_test(self, b):
-         self.assertEqual(data.Data(b).bytes, b)
-     def test_set(self):
-         self.do_test(b'\x00')
-         self.do_test(b'\xFF\x10\x25')
-         self.do_test(b'\x00\x00\x10')
+    def do_test(self, b):
+        self.assertEqual(data.Data(b).bytes, b)
+    def test_set(self):
+        self.do_test(b'\x00')
+        self.do_test(b'\xFF\x10\x25')
+        self.do_test(b'\x00\x00\x10')
 
 class TestDataHex(TestCase):
     def do_test(self, b, s):
@@ -39,3 +39,17 @@ class TestAppend(TestCase):
         d = data.Data.fromhex('4568FA')
         d.prepend(data.Data.fromhex('00'))
         self.assertEqual(d.hex, '004568FA')
+
+class TestEqual(TestCase):
+    def eq(self, d, b):
+        self.assertTrue(d == data.Data(b))
+    def neq(self, d, b):
+        self.assertFalse(d == data.Data(b))
+    def test_set(self):
+        tests = [data.Data(b'\x00\xFA\x04'),
+                 data.Data.fromhex("00FE45A3"),
+                 data.Data.frombase58("1HjKoPaS2")]
+        for i in range(len(tests)):
+            j = (i + 1) % len(tests)
+            self.eq(tests[i], tests[i].bytes)
+            self.neq(tests[i], tests[j].bytes)
