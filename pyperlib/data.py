@@ -84,3 +84,8 @@ class Data:
 
     def __hash__(self):
         return hash(self.bytes)
+
+    def __add__(self, other):
+        d = Data(self.bytes)
+        d.append(other)
+        return d

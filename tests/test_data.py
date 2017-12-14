@@ -63,3 +63,11 @@ class TestEqual(TestCase):
             j = (i + 1) % len(tests)
             self.eq(tests[i], tests[i].bytes)
             self.neq(tests[i], tests[j].bytes)
+
+class TestAdd(TestCase):
+    def addition(self, a, b, c):
+        self.assertEqual(data.Data(a), data.Data(b) + data.Data(c))
+    def test_set(self):
+        self.addition(b'\x01\x02', b'\x01', b'\x02')
+        self.addition(b'\xE8\x0A', b'\xE8', b'\x0A')
+        self.addition(b'\x01\x00\x01', b'\x01', b'\x00\x01')
