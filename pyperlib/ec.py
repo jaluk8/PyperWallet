@@ -14,7 +14,7 @@ class KeyPair:
 
     def gen(self):
         self.priv = data.Data(b'\x00')
-        while self.priv.bytes[0] != 0: # Some coins (ETH) do not allow leading zeroes in private keys.
+        while self.priv.bytes[0] == 0: # Some coins (ETH) do not allow leading zeroes in private keys.
             key = ec.generate_private_key(self.curve, default_backend())
             numbers = key.private_numbers()
             self.set_privnumbers(numbers)
