@@ -73,6 +73,10 @@ class Data:
 
         return b58
 
+    @property
+    def string(self):
+        return self.hex # To be overriden
+    
     def append(self, d):
         self.bytes = self.bytes + d.bytes
 
