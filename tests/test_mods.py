@@ -48,28 +48,26 @@ class TestSplice(ModTest):
         self.splice_undo("00AE3400")
 
 class TestScrypt(ModTest):
+    def scrypt(self, key, password, salt):
+        salt = data.Data.fromhex(salt)
+        key = data.Data.fromhex(key)
+        self.assertEqual(key, mods.scrypt(password, salt))
     def test(self):
-        self.do_test(mods.scrypt, "", "")
-        self.do_test(mods.scrypt, "", "")
-        self.do_test(mods.scrypt, "", "")
-        self.do_test(mods.scrypt, "", "")
-        self.do_test(mods.scrypt, "", "")
+        self.scrypt("35A47442A15AB515B469C9647F62A0C761B26AE02A5C5CE074BDDB62A231D7FD600C845477728149934871DE29D8AF2493F4446ED2F586BAECB8E58185AACFB8", "Hello", "00")
+        self.scrypt("5C4737E7A3632E3E04D550407E76F957EF3377D65C4ABEE225C6C3DE5FEFD7E5F38C5BF1447324148CA36D1B91B146D851A01BCC54FBC631EE0CB19B3865BEEF", "TheTestHere", "0011AAFF")
+        self.scrypt("F5C45C41E6D91985316117D1FF16CC815D05A7F7A1CB045944FB0A04FEA1F2FF2955468C9B4069C5468D4FE1541CD8CFD230B6575449D1AD91A920C331E80E2F", "Password", "FA356E00")
 
 class TestAes256(ModTest):
     def test(self):
-        self.do_test(mods.aes256, "", "")
-        self.do_test(mods.aes256, "", "")
-        self.do_test(mods.aes256, "", "")
-        self.do_test(mods.aes256, "", "")
-        self.do_test(mods.aes256, "", "")
+        self.do_test(mods.aes256, "B530FE0E529D04BCAAF88191D57EDBF8B530FE0E529D04BCAAF88191D57EDBF8", "5C4737E7A3632E3E5C4737E7A3632E3E5C4737E7A3632E3E5C4737E7A3632E3E", "5C4737E7A3632E3E5C4737E7A3632E3E")
+        self.do_test(mods.aes256, "FB7F00220092F64558431A8BC5B7B63305309EFFB08542A4D1E3E90561D7AC4A", "000037E7A3632E3E5C4737E7A3632E3E5C4737E7A3632E3E5C4737E7A3632E3E", "000000E7A3632E3E5C4737E7A3632E3E")
+        self.do_test(mods.aes256, "DC9E14608CE3D86E053784828312BEDF4855CC9EA585CDA06DC7B7DF2CF6B51A", "5C4737E7A3632E3E5C4737E7A3632E3E5C4737E7A3632E3E5C4737E7A3000000", "5C4737E7A3632E3E5C4737E7A3630000")
 
 class TestKeccak(ModTest):
     def test(self):
-        self.do_test(mods.keccak, "", "")
-        self.do_test(mods.keccak, "", "")
-        self.do_test(mods.keccak, "", "")
-        self.do_test(mods.keccak, "", "")
-        self.do_test(mods.keccak, "", "")
+        self.do_test(mods.keccak, "54A8C0AB653C15BFB48B47FD011BA2B9617AF01CB45CAB344ACD57C924D56798", "0000")
+        self.do_test(mods.keccak, "7A9708896A15EF140A04B38B9414EF409B5C3196E7C60B479F80E48C302F0ADD", "A4B387A200")
+        self.do_test(mods.keccak, "FDA66FC2D882FF395D5DC2955E833B8F1E5FCC96907E0B50B11C1EB4349F522F", "A57E98D0")
 
 class TestBTCChecksum(ModTest):
     def test(self):
