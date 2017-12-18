@@ -71,3 +71,16 @@ class TestAdd(TestCase):
         self.addition(b'\x01\x02', b'\x01', b'\x02')
         self.addition(b'\xE8\x0A', b'\xE8', b'\x0A')
         self.addition(b'\x01\x00\x01', b'\x01', b'\x00\x01')
+
+class TestSlice(TestCase):
+    def slice(self, in_hex, out_hex, *args):
+        din = data.Data.fromhex(in_hex)
+        dout = data.Data.fromhex(out_hex)
+        dresult = din.__getitem__(*args)
+        self.assertEqual(dout, dresult)
+    def test_set(self):
+        self.slice("AABBCC", "AA", 0)
+        self.slice("AABBCC", "CC", -1)
+        self.slice("AABBCC", "AABBCC", slice(None, None, None))
+        self.slice("AABBCC", "BBCC", slice(1, 3, None))
+        self.slice("AABBCC", "CCBBAA", slice(None, None, -1))

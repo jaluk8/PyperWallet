@@ -93,3 +93,11 @@ class Data:
         d = Data(self.bytes)
         d.append(other)
         return d
+
+    def __getitem__(self, key):
+        if type(key) is slice:
+            bts = self.bytes.__getitem__(key)
+            return Data(bts)
+        else:
+            i = self.bytes[key]
+            return Data.fromint(i, 1)
