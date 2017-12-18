@@ -40,6 +40,16 @@ class TestDataBase58(TestCase):
         self.do_test(b'\x00\x00\x56\x2F', '117ZQ')
         self.do_test(b'\x00\xcf\xde\x8e\x892\xa4\xbf\xe9\xed/\xf5\xa2\x8bb\xdfU\xe7\x8a\xc9PcavK', '1Kx7VE4M41HuS96xqArvSHY8C8xfRjHvb4')
 
+class TestDataString(TestCase):
+    def do_test(self, b, s):
+        self.assertEqual(data.Data(b).string, s)
+        self.assertEqual(data.Data.fromstring(s).bytes, b)
+        self.assertEqual(data.Data.fromstring(s).string, s)
+    def test_set(self):
+        self.do_test(b'\x41', "A")
+        self.do_test(b'\xCF\x80', u'\u03C0')
+        self.do_test(b'Hello', u'Hello')
+
 class TestAppend(TestCase):
     def test_append(self):
         d = data.Data.fromhex('0011FF')

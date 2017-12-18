@@ -1,3 +1,5 @@
+import unicodedata
+
 base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
 class EncodingException(Exception):
@@ -46,6 +48,13 @@ class Data:
             data.prepend(Data(b'\x00'))
 
         return data
+
+    @staticmethod
+    def fromstring(s, encoding="utf-8", normalize=None):
+        if normalize is not None:
+            s = unicodedata.normalize(normalize, s)
+        bts = s.encode(encoding)
+        return Data(bts)
     
     @property
     def hex(self):
@@ -75,7 +84,7 @@ class Data:
 
     @property
     def string(self):
-        return self.hex # To be overriden
+        return self.bytes.decode("utf-8")
     
     def append(self, d):
         self.bytes = self.bytes + d.bytes
@@ -93,6 +102,9 @@ class Data:
         d = Data(self.bytes)
         d.append(other)
         return d
+
+    def __len__(self):
+        return len(self.bytes)
 
     def __getitem__(self, key):
         if type(key) is slice:
