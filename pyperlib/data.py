@@ -6,7 +6,7 @@ class EncodingException(Exception):
 class Data:
     """The generic data class for PyperWallet.
     It can convert between various needed data types."""
-    def __init__(self, b):
+    def __init__(self, b=b''):
         assert type(b) is bytes
         self.bytes = b
 
