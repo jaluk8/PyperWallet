@@ -1,5 +1,6 @@
 from pyperlib import data
 import hashlib
+import sha3
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
@@ -14,16 +15,22 @@ class Mod(data.Data):
 
 class HashMod(Mod):
     def mod(self, d):
-        h = hashlib.new(self.algorithm)
+        h = self.algorithm()
         h.update(d.bytes)
         bts = h.digest()
         return data.Data(bts)
 
 class Sha256(HashMod):
-    algorithm = 'sha256'
+    def algorithm(self):
+        return hashlib.new('sha256')
 
 class Ripemd160(HashMod):
-    algorithm = 'ripemd160'
+    def algorithm(self):
+        return hashlib.new('ripemd160')
+
+class Keccak(HashMod):
+    def algorithm(self):
+        return sha3.keccak_256()
 
 class Concat(Mod):
     def mod(self, *args):
@@ -65,7 +72,3 @@ class Aes256Dec(Aes256):
     def mod(self, block, key):
         context = self.cipher(key).decryptor()
         return self.run_cipher(context, block)
-
-class Keccak(Mod):
-    def mod(self, d):
-        pass
