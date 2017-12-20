@@ -15,7 +15,14 @@ class TestCoinList(TestCase):
         self.do_test('ltc', cl)
 
 class TestBaseCoin(TestCase):
-    pass
+    def do_constructor(self, *args, **kwargs):
+        self.assertRaises(NotImplementedError, coins.BaseCoin, *args, **kwargs)
+
+    def test_set(self):
+        self.do_constructor()
+        self.do_constructor(wif=1)
+        self.do_constructor(view=1)
+        self.do_constructor(addr=1)
 
 class TestAllCoins(TestCase):
     pass
