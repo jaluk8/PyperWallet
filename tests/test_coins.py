@@ -7,7 +7,10 @@ class TestCoinList(TestCase):
     def do_test(self, name, cl):
         """Check that the coinlist has the coin and can load it."""
         self.assertTrue(cl.has_coin(name))
-        c = cl.get_coin(name)
+        try:
+            c = cl.get_coin(name)
+        except NotImplementedError:
+            return
         self.assertTrue(issubclass(c, coins.BaseCoin))
     def tests(self):
         """Check all coins in the list, as well as the current top 3."""
@@ -34,3 +37,40 @@ class TestBaseCoin(TestCase):
 
 class TestAllCoins(TestCase):
     """A TestCase for every Coin module."""
+
+    example_keys = {"btc": ("KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU", None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx")}
+    
+    def check_load(self, Coin, wif, view, addr):
+        """Load Coin from various keys and check correctness."""
+        wif = Coin.str2wif(wif)
+        addr = Coin.str2addr(addr)
+        if Coin.has_privacy:
+            view = Coin.str2view()
+
+        c1 = Coin(wif=wif)
+        self.assertEqual(c1.wif(), wif)
+        self.assertEqual(c1.addr(), addr)
+        if Coin.has_privacy:
+            self.assertEqual(c1.view(), view)
+
+        if Coin.load_from_addr:
+            c2 = Coin(addr=addr)
+            self.assertEqual(c2.wif(), None)
+            self.assertEqual(c2.addr(), addr)
+            if Coin.has_privacy:
+                self.assertEqual(c2.view(), None)
+
+        if Coin.has_privacy:
+            c3 = Coin(view=view)
+            self.assertEqual(c3.wif(), None)
+            self.assertEqual(c3.addr(), addr)
+            self.assertEqual(c3.view(), view)
+
+    def test_all(self):
+        """Gets a list of all implemented coins and runs check_coin."""
+        cl = coins.CoinList()
+        for name in cl.list_coins():
+            if name in self.example_keys:
+                Coin = cl.get_coin(name)
+                key = self.example_keys[name]
+                self.check_load(Coin, *key)

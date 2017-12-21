@@ -105,7 +105,10 @@ class Data:
 
     def __eq__(self, other):
         """Determine the equality of two Data objects."""
-        return self.bytes == other.bytes
+        if issubclass(type(other), Data):
+            return self.bytes == other.bytes
+        else:
+            return False
 
     def __hash__(self):
         """Return the hash of the Data."""

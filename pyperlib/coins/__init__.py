@@ -33,6 +33,11 @@ class BaseCoin:
 
     curve = None
     has_privacy = False
+    load_from_addr = False
+
+    wif_type = None
+    view_type = None
+    addr_type = None
 
     def __init__(self, wif=None, view=None, addr=None):
         """Construct the coin based on spend, view, or address keys."""
@@ -45,6 +50,30 @@ class BaseCoin:
             self.from_addr(addr)
         else:
             self.gen()
+
+    @classmethod
+    def str2wif(self, string):
+        """Convert ambiguous string to wif_type."""
+        if self.wif_type is None:
+            raise NotImplementedError
+        else:
+            return self.wif_type(string)
+
+    @classmethod
+    def str2view(self, string):
+        """Convert ambiguous string to view_type."""
+        if self.view_type is None:
+            raise NotImplementedError
+        else:
+            return self.view_type(string)
+
+    @classmethod
+    def str2addr(self, string):
+        """Convert ambiguous string to addr_type."""
+        if self.addr_type is None:
+            raise NotImplementedError
+        else:
+            return self.addr_type(string)
 
     def check_curve(self):
         """Raise an error if the curve is not implemented."""
@@ -65,7 +94,7 @@ class BaseCoin:
         """Set the keypair from a public key."""
         self.check_curve()
         self.keypair = ec.KeyPair(self.curve, pub=pub)
-
+    
     def from_wif(self, wif):
         """Generate the coin from wallet import format Data."""
         raise NotImplementedError
