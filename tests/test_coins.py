@@ -40,7 +40,12 @@ class TestAllCoins(TestCase):
 
     example_keys = {
         "btc": ("KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU", None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"),
-        "ltc": ("T3hvqLBBEtBui8Leo9bhezChRggpouqVxBP2A9svN8gYrig13GDZ", None, "LWUhrUrbUMZTsNqQkCtuMwsr9pTskCLtVt")}
+        "ltc": ("T3hvqLBBEtBui8Leo9bhezChRggpouqVxBP2A9svN8gYrig13GDZ", None, "LWUhrUrbUMZTsNqQkCtuMwsr9pTskCLtVt"),
+        "bch": ("KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU", None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"),
+        "dash": ("XCZtcGqHxmFAmLxQhKmra9AwkESEHknu5jTAKEgSTAFypc93jovp", None, "XwEMaB6n2CpxKS9poY1DZCZEv7v8woJmWu"),
+        "doge": ("QWyapnA2914T89HSR23QZiJgmM55oPeBUcjdJ9PkFKYccZpoF9uj", None, "DFxKgD7CY6zTGDGsyFfr2YHNzPhMooUSYb"),
+        "ftc": ("N9mVytYSm1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d", None, "6fQZRM3i5NWs5YXEdQgAKpjrGfwjZQnbje"),
+        "vtc": ("WZHPcZNDbWiJEUEgR36prdAR2nqJ1ZftFNRnnjUV5N2SkeVgVkMk", None, "VmeQa8L2xidM976jLbBqCWPWFbEDEXfPpe"),}
     
     def check_load(self, Coin, wif, view, addr):
         """Load Coin from various keys and check correctness."""
