@@ -1,5 +1,8 @@
-from .. import coins
+from .. import coins, data
+from . import btc
 
-class Coin(coins.BaseCoin):
+class Coin(btc.Coin):
     """A coin that represents the Litecoin protocol."""
-    pass
+
+    wif_version = data.HexData("B0")
+    addr_version = data.HexData("30")

@@ -1,5 +1,5 @@
-from .. import coins
+from .. import coins, data
+from . import btc
 
-class Coin(coins.BaseCoin):
+class Coin(btc.Coin):
     """A coin that represents the Bitcoin Cash protocol."""
-    pass

@@ -22,10 +22,9 @@ class CoinList:
 
     def get_coin(self, name):
         """Return the coin module or None if it doesn't exist."""
-        try:
-            p = importlib.import_module('.btc', package=__package__)
-        except ImportError:
+        if not self.has_coin(name):
             return None
+        p = importlib.import_module('.' + name, package=__package__)
         return p.Coin
 
 class BaseCoin:

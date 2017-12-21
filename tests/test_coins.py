@@ -38,7 +38,9 @@ class TestBaseCoin(TestCase):
 class TestAllCoins(TestCase):
     """A TestCase for every Coin module."""
 
-    example_keys = {"btc": ("KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU", None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx")}
+    example_keys = {
+        "btc": ("KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU", None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"),
+        "ltc": ("T3hvqLBBEtBui8Leo9bhezChRggpouqVxBP2A9svN8gYrig13GDZ", None, "LWUhrUrbUMZTsNqQkCtuMwsr9pTskCLtVt")}
     
     def check_load(self, Coin, wif, view, addr):
         """Load Coin from various keys and check correctness."""
