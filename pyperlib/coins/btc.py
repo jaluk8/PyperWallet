@@ -3,6 +3,7 @@ from .. import coins, ec, data, mods
 class Coin(coins.BaseCoin):
     """A coin that represents the Bitcoin protocol."""
 
+    name = "Bitcoin"
     curve = ec.SECP256K1
 
     wif_type = data.Base58Data

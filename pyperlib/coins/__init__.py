@@ -30,6 +30,7 @@ class CoinList:
 class BaseCoin:
     """The base class for all coins."""
 
+    name = "[Base Coin]"
     curve = None
     has_privacy = False
     load_from_addr = False
@@ -54,7 +55,7 @@ class BaseCoin:
     def str2wif(self, string):
         """Convert ambiguous string to wif_type."""
         if self.wif_type is None:
-            raise NotImplementedError
+            raise NotImplementedError(self.name + " does not support str2wif.")
         else:
             return self.wif_type(string)
 
@@ -62,7 +63,7 @@ class BaseCoin:
     def str2view(self, string):
         """Convert ambiguous string to view_type."""
         if self.view_type is None:
-            raise NotImplementedError
+            raise NotImplementedError(self.name + " does not support str2view.")
         else:
             return self.view_type(string)
 
@@ -70,14 +71,14 @@ class BaseCoin:
     def str2addr(self, string):
         """Convert ambiguous string to addr_type."""
         if self.addr_type is None:
-            raise NotImplementedError
+            raise NotImplementedError(self.name + " does not support str2addr.")
         else:
             return self.addr_type(string)
 
     def check_curve(self):
         """Raise an error if the curve is not implemented."""
         if self.curve is None:
-            raise NotImplementedError
+            raise NotImplementedError(self.name + " does not support ec.")
     
     def gen(self):
         """Generate the coin from its curve."""
@@ -96,24 +97,24 @@ class BaseCoin:
     
     def from_wif(self, wif):
         """Generate the coin from wallet import format Data."""
-        raise NotImplementedError
+        raise NotImplementedError(self.name + " does not support from_wif.")
 
     def from_view(self, view):
         """Generate the coin from viewkey Data."""
-        raise NotImplementedError
+        raise NotImplementedError(self.name + " does not support from_view.")
     
     def from_addr(self, addr):
         """Generate the coin from address Data."""
-        raise NotImplementedError
+        raise NotImplementedError(self.name + " does not support from_addr.")
 
     def wif(self, compressed=True):
         """Return the coin's wallet import format Data."""
-        raise NotImplementedError
+        raise NotImplementedError(self.name + " does not support wif.")
 
     def view(self, compressed=True):
         """Return the coin's viewkey Data."""
-        raise NotImplementedError
+        raise NotImplementedError(self.name + " does not support view.")
 
     def addr(self, compressed=True):
         """Return the coin's address Data."""
-        raise NotImplementedError
+        raise NotImplementedError(self.name + " does not support addr.")
