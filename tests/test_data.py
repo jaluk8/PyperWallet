@@ -6,7 +6,7 @@ class TestDataBytes(TestCase):
 
     def do_test(self, b):
         """Check construction from bytes."""
-        self.assertEqual(data.Data(b).bytes, b)
+        self.assertEqual(data.ByteData(b).bytes, b)
     def test_set(self):
         """Check various data."""
         self.do_test(b'\x00')
@@ -18,9 +18,9 @@ class TestDataHex(TestCase):
 
     def do_test(self, b, s):
         """Check construction from hex."""
-        self.assertEqual(data.Data(b).hex, s)
-        self.assertEqual(data.Data.fromhex(s).bytes, b)
-        self.assertEqual(data.Data.fromhex(s).hex, s)
+        self.assertEqual(data.ByteData(b).hex, s)
+        self.assertEqual(data.HexData(s).bytes, b)
+        self.assertEqual(data.HexData(s).hex, s)
     def test_set(self):
         """Check various data."""
         self.do_test(b'\x00', '00')
@@ -32,9 +32,9 @@ class TestDataInt(TestCase):
 
     def do_test(self, b, i):
         """Check construction from int."""
-        self.assertEqual(data.Data(b).int, i)
-        self.assertEqual(data.Data.fromint(i, len(b)).bytes, b)
-        self.assertEqual(data.Data.fromint(i, len(b)).int, i)
+        self.assertEqual(data.ByteData(b).int, i)
+        self.assertEqual(data.IntData(i, len(b)).bytes, b)
+        self.assertEqual(data.IntData(i, len(b)).int, i)
     def test_set(self):
         """Check various data."""
         self.do_test(b'\x00', 0)
@@ -46,9 +46,9 @@ class TestDataBase58(TestCase):
 
     def do_test(self, b, s):
         """Check construction from base58."""
-        self.assertEqual(data.Data(b).base58, s)
-        self.assertEqual(data.Data.frombase58(s).bytes, b)
-        self.assertEqual(data.Data.frombase58(s).base58, s)
+        self.assertEqual(data.ByteData(b).base58, s)
+        self.assertEqual(data.Base58Data(s).bytes, b)
+        self.assertEqual(data.Base58Data(s).base58, s)
     def test_set(self):
         """Check various data."""
         self.do_test(b'\x00', '1')
@@ -61,43 +61,29 @@ class TestDataString(TestCase):
 
     def do_test(self, b, s):
         """Check construction from string."""
-        self.assertEqual(data.Data(b).string, s)
-        self.assertEqual(data.Data.fromstring(s).bytes, b)
-        self.assertEqual(data.Data.fromstring(s).string, s)
+        self.assertEqual(data.ByteData(b).string, s)
+        self.assertEqual(data.StringData(s).bytes, b)
+        self.assertEqual(data.StringData(s).string, s)
     def test_set(self):
         """Check various data."""
         self.do_test(b'\x41', "A")
         self.do_test(b'\xCF\x80', u'\u03C0')
         self.do_test(b'Hello', u'Hello')
 
-class TestAppend(TestCase):
-    """A TestCase for Data append and prepend."""
-
-    def test_append(self):
-        """Check Data.append."""
-        d = data.Data.fromhex('0011FF')
-        d.append(data.Data.fromhex('55'))
-        self.assertEqual(d.hex, '0011FF55')
-    def test_prepend(self):
-        """Check Data.prepend."""
-        d = data.Data.fromhex('4568FA')
-        d.prepend(data.Data.fromhex('00'))
-        self.assertEqual(d.hex, '004568FA')
-
 class TestEqual(TestCase):
     """A TestCase for Data equality."""
 
     def eq(self, d, b):
         """Check that two Data objects are equal."""
-        self.assertTrue(d == data.Data(b))
+        self.assertTrue(d == data.ByteData(b))
     def neq(self, d, b):
         """Check that two Data objects are not equal."""
-        self.assertFalse(d == data.Data(b))
+        self.assertFalse(d == data.ByteData(b))
     def test_set(self):
         """Check equality relations for 3 Data."""
-        tests = [data.Data(b'\x00\xFA\x04'),
-                 data.Data.fromhex("00FE45A3"),
-                 data.Data.frombase58("1HjKoPaS2")]
+        tests = [data.ByteData(b'\x00\xFA\x04'),
+                 data.HexData("00FE45A3"),
+                 data.Base58Data("1HjKoPaS2")]
         for i in range(len(tests)):
             j = (i + 1) % len(tests)
             self.eq(tests[i], tests[i].bytes)
@@ -108,7 +94,7 @@ class TestAdd(TestCase):
 
     def addition(self, a, b, c):
         """Check that a+b=c."""
-        self.assertEqual(data.Data(a), data.Data(b) + data.Data(c))
+        self.assertEqual(data.ByteData(a), data.ByteData(b) + data.ByteData(c))
     def test_set(self):
         """Check various data."""
         self.addition(b'\x01\x02', b'\x01', b'\x02')
@@ -120,8 +106,8 @@ class TestSlice(TestCase):
 
     def slice(self, in_hex, out_hex, *args):
         """Check that in_hex[args] = out_hex."""
-        din = data.Data.fromhex(in_hex)
-        dout = data.Data.fromhex(out_hex)
+        din = data.HexData(in_hex)
+        dout = data.HexData(out_hex)
         dresult = din.__getitem__(*args)
         self.assertEqual(dout, dresult)
     def test_set(self):

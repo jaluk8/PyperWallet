@@ -5,11 +5,11 @@ class Coin(coins.BaseCoin):
 
     curve = ec.SECP256K1
 
-    wif_type = data.Data.frombase58
-    addr_type = data.Data.frombase58
+    wif_type = data.Base58Data
+    addr_type = data.Base58Data
 
-    wif_version = data.Data.fromhex("80")
-    addr_version = data.Data.fromhex("00")
+    wif_version = data.HexData("80")
+    addr_version = data.HexData("00")
 
     def from_wif(self, wif):
         """Generate the coin from wallet import format Data."""
@@ -35,7 +35,7 @@ class Coin(coins.BaseCoin):
         """Return the coin's wallet import format Data."""
         payload = self.wif_version + self.keypair.priv
         if compressed:
-            payload += data.Data.fromhex("01")
+            payload += data.HexData("01")
         return self.base58check(payload)
         
 

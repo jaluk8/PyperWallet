@@ -23,7 +23,7 @@ class KeyPair:
 
     def gen(self):
         """Generate private/public keys randomly."""
-        self.priv = data.Data(b'\x00')
+        self.priv = data.ByteData(b'\x00')
         while self.priv.bytes[0] == 0: # Some coins (ETH) do not allow leading zeroes in private keys.
             key = ec.generate_private_key(self.curve, default_backend())
             self.set_priv(key)
@@ -51,7 +51,7 @@ class KeyPair:
         self.public_numbers = privnumbers.public_numbers
 
         priv_int = privnumbers.private_value
-        self.priv = data.Data.fromint(priv_int, self.curve.key_size//8)
+        self.priv = data.IntData(priv_int, self.curve.key_size//8)
 
         x_int = self.public_numbers.x
         y_int = self.public_numbers.y
@@ -63,16 +63,16 @@ class KeyPair:
     def set_pub(self, x, y):
         """Set the public keys from x and y coordinates."""
         coord_size = (self.curve.key_size//8 - 1) // 2
-        x_data = data.Data.fromint(x, coord_size)
-        y_data = data.Data.fromint(y, coord_size)
+        x_data = data.IntData(x, coord_size)
+        y_data = data.IntData(y, coord_size)
 
         if y % 2 == 0:
             prefix = b'\x02'
         else:
             prefix = b'\x03'
         
-        uncompressed = data.Data(b'\x04') + x_data + y_data
-        compressed = data.Data(prefix) + x_data
+        uncompressed = data.ByteData(b'\x04') + x_data + y_data
+        compressed = data.ByteData(prefix) + x_data
         self.pub_u = uncompressed
         self.pub_c = compressed        
 

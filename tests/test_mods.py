@@ -6,8 +6,8 @@ class ModTest(TestCase):
 
     def do_test(self, mod, o, *a):
         """Run the mod given *a, and expect o."""
-        args = [data.Data.fromhex(i) for i in a]
-        self.assertEqual(mod(*args), data.Data.fromhex(o))
+        args = [data.HexData(i) for i in a]
+        self.assertEqual(mod(*args), data.HexData(o))
 
 class TestSha256(ModTest):
     """A TestCase for the Sha256 Mod."""
@@ -54,7 +54,7 @@ class TestSlice(ModTest):
 
     def slice_undo(self, i):
         """Slice i in half, concat it together, and check."""
-        d = data.Data.fromhex(i)
+        d = data.HexData(i)
         d1 = mods.Slice(d, 0, 2)
         d2 = mods.Slice(d, 2, 4)
         dc = mods.Concat(d1, d2)
@@ -72,9 +72,9 @@ class TestScrypt(ModTest):
 
     def scrypt(self, key, password, salt):
         """Run scrypt on password and salt, expect key."""
-        salt = data.Data.fromhex(salt)
-        key = data.Data.fromhex(key)
-        password = data.Data.fromstring(password, "utf-8", "NFC")
+        salt = data.HexData(salt)
+        key = data.HexData(key)
+        password = data.StringData(password, "utf-8", "NFC")
         self.assertEqual(key, mods.Scrypt(password, salt))
 
     def test(self):
@@ -88,9 +88,9 @@ class TestAes256(ModTest):
 
     def do_test(self, o, i, k):
         """Encrypt i into o and decrypt o into i with k."""
-        o = data.Data.fromhex(o)
-        i = data.Data.fromhex(i)
-        k = data.Data.fromhex(k)
+        o = data.HexData(o)
+        i = data.HexData(i)
+        k = data.HexData(k)
 
         enc = mods.Aes256Enc(i, k)
         dec = mods.Aes256Dec(o, k)
