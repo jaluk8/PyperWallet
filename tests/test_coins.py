@@ -45,7 +45,8 @@ class TestAllCoins(TestCase):
         "dash": ("XCZtcGqHxmFAmLxQhKmra9AwkESEHknu5jTAKEgSTAFypc93jovp", None, "XwEMaB6n2CpxKS9poY1DZCZEv7v8woJmWu"),
         "doge": ("QWyapnA2914T89HSR23QZiJgmM55oPeBUcjdJ9PkFKYccZpoF9uj", None, "DFxKgD7CY6zTGDGsyFfr2YHNzPhMooUSYb"),
         "ftc": ("N9mVytYSm1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d", None, "6fQZRM3i5NWs5YXEdQgAKpjrGfwjZQnbje"),
-        "vtc": ("WZHPcZNDbWiJEUEgR36prdAR2nqJ1ZftFNRnnjUV5N2SkeVgVkMk", None, "VmeQa8L2xidM976jLbBqCWPWFbEDEXfPpe"),}
+        "vtc": ("WZHPcZNDbWiJEUEgR36prdAR2nqJ1ZftFNRnnjUV5N2SkeVgVkMk", None, "VmeQa8L2xidM976jLbBqCWPWFbEDEXfPpe"),
+        "zec": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfPbetMbSD9hoY1gDLvdL", None, "t1WCf2xoYaeUzHKjdLCxjHL2c4W2S6jZMSQ")}
     
     def check_load(self, Coin, wif, view, addr):
         """Load Coin from various keys and check correctness."""
