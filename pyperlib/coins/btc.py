@@ -1,4 +1,4 @@
-from .. import coins, ec, data, mods
+from pyperlib import coins, ec, data, mods
 
 
 class Coin(coins.BaseCoin):
@@ -16,7 +16,10 @@ class Coin(coins.BaseCoin):
     def from_wif(self, wif):
         """Generate the coin from wallet import format Data."""
         self.verifybase58check(wif)  # TODO: Make this error if it fails.
-        # TODO: Make this set compression flags if x01 is present.
+        if len(wif) == 38:
+            self.settings.compression = True
+        elif len(wif) == 37:
+            self.settings.compression = False
         priv = wif[1:33]
         self.load_priv(priv)
 
@@ -34,15 +37,17 @@ class Coin(coins.BaseCoin):
         check = mods.Sha256(mods.Sha256(d))
         return d + check[:4]
 
-    def wif(self, compressed=True):
+    @property
+    def wif(self):
         """Return the coin's wallet import format Data."""
         payload = self.wif_version + self.keypair.priv
-        if compressed:
+        if self.settings.compression:
             payload += data.HexData("01")
         return self.base58check(payload)
 
-    def addr(self, compressed=True):
+    @property
+    def addr(self):
         """Return the coin's address Data."""
-        pub = self.keypair.pub(compressed)
+        pub = self.keypair.pub(self.settings.compression)
         payload = mods.Ripemd160(mods.Sha256(pub))
         return self.base58check(self.addr_version + payload)

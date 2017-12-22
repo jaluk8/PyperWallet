@@ -29,6 +29,11 @@ class CoinList:
         return p.Coin
 
 
+class CoinSettings:
+    """A container for keeping track of user-defined coin settings."""
+    compression = True
+
+
 class BaseCoin:
     """The base class for all coins."""
 
@@ -44,6 +49,8 @@ class BaseCoin:
     def __init__(self, wif=None, view=None, addr=None):
         """Construct the coin based on spend, view, or address keys."""
         self.keypair = None
+        self.settings = CoinSettings()
+
         if wif is not None:
             self.from_wif(wif)
         elif view is not None:
@@ -111,14 +118,29 @@ class BaseCoin:
         """Generate the coin from address Data."""
         raise NotImplementedError(self.name + " does not support from_addr.")
 
-    def wif(self, compressed=True):
+    @property
+    def wif(self):
         """Return the coin's wallet import format Data."""
         raise NotImplementedError(self.name + " does not support wif.")
 
-    def view(self, compressed=True):
+    @property
+    def view(self):
         """Return the coin's viewkey Data."""
         raise NotImplementedError(self.name + " does not support view.")
 
-    def addr(self, compressed=True):
+    @property
+    def addr(self):
         """Return the coin's address Data."""
         raise NotImplementedError(self.name + " does not support addr.")
+
+    def export_wif(self):
+        """Return wif not as Data but as its native type."""
+        return self.wif.export(self.wif_type)
+
+    def export_view(self):
+        """Return view not as Data but as its native type."""
+        return self.view.export(self.view_type)
+
+    def export_addr(self):
+        """Return addr not as Data but as its native type."""
+        return self.addr.export(self.addr_type)

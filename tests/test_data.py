@@ -83,6 +83,31 @@ class TestDataString(TestCase):
         self.do_test(b'Hello', u'Hello')
 
 
+class TestDataExport(TestCase):
+    """A TestCase for exporting data back to native types."""
+
+    def do_test(self, t, d, n):
+        """Check exporting Data d as type t for native value n."""
+        exported = d.export(t)
+        self.assertEqual(exported, n)
+
+    def check_hex(self, hex_str):
+        """Convert a given hex to all Data types and check with do_test."""
+        d = data.HexData(hex_str)
+        self.do_test(data.ByteData, d, d.bytes)
+        self.do_test(data.HexData, d, d.hex)
+        self.do_test(data.Base58Data, d, d.base58)
+        self.do_test(data.IntData, d, d.int)
+        self.do_test(data.StringData, d, d.string)
+
+    def test_set(self):
+        """Perform check_hex on various data."""
+        self.check_hex("43")
+        self.check_hex("0043")
+        self.check_hex("CF80")
+        self.check_hex("48656C6C6F")
+
+
 class TestEqual(TestCase):
     """A TestCase for Data equality."""
 

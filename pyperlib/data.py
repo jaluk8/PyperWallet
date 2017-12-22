@@ -49,6 +49,19 @@ class ByteData:
         """Return the encoded string of the Data."""
         return self.bytes.decode("utf-8")
 
+    def export(self, t):
+        """Export from Data to type t."""
+        if t is ByteData:
+            return self.bytes
+        elif t is HexData:
+            return self.hex
+        elif t is Base58Data:
+            return self.base58
+        elif t is IntData:
+            return self.int
+        elif t is StringData:
+            return self.string
+
     def __eq__(self, other):
         """Determine the equality of two Data objects."""
         if issubclass(type(other), ByteData):
