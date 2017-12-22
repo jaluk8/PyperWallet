@@ -1,5 +1,5 @@
-from .. import coins, data
-from . import btc
+from pyperlib import coins, data
+from pyperlib.coins import btc
 
 
 class Coin(btc.Coin):
