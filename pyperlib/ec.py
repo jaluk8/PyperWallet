@@ -4,6 +4,7 @@ from pyperlib import data
 
 SECP256K1 = ec.SECP256K1
 
+
 class KeyPair:
     """A set of private and public keys described as Data objects."""
 
@@ -13,7 +14,7 @@ class KeyPair:
         self.priv = None
         self.pub_u = None
         self.pub_c = None
-        
+
         if priv is not None:
             self.load_priv(priv)
         elif pub is not None:
@@ -24,7 +25,8 @@ class KeyPair:
     def gen(self):
         """Generate private/public keys randomly."""
         self.priv = data.ByteData(b'\x00')
-        while self.priv.bytes[0] == 0: # Some coins (ETH) do not allow leading zeroes in private keys.
+        # Some coins (ETH) do not allow leading zeroes in private keys.
+        while self.priv.bytes[0] == 0:
             key = ec.generate_private_key(self.curve, default_backend())
             self.set_priv(key)
 
@@ -37,9 +39,9 @@ class KeyPair:
         """Set the public keys from a public Data object."""
         t = pub[0].hex
         if t == '04':
-            l = len(pub) // 2 + 1
-            x = pub[1:l].int
-            y = pub[l:].int
+            coord_len = len(pub) // 2 + 1
+            x = pub[1:coord_len].int
+            y = pub[coord_len:].int
             self.set_pub(x, y)
         else:
             self.pub_c = pub
@@ -51,18 +53,18 @@ class KeyPair:
         self.public_numbers = privnumbers.public_numbers
 
         priv_int = privnumbers.private_value
-        self.priv = data.IntData(priv_int, self.curve.key_size//8)
+        self.priv = data.IntData(priv_int, self.curve.key_size // 8)
 
         x_int = self.public_numbers.x
         y_int = self.public_numbers.y
 
         self.set_pub(x_int, y_int)
 
-        assert len(self.priv.bytes) == self.curve.key_size//8
+        assert len(self.priv.bytes) == self.curve.key_size // 8
 
     def set_pub(self, x, y):
         """Set the public keys from x and y coordinates."""
-        coord_size = (self.curve.key_size//8 - 1) // 2
+        coord_size = (self.curve.key_size // 8 - 1) // 2
         x_data = data.IntData(x, coord_size)
         y_data = data.IntData(y, coord_size)
 
@@ -70,11 +72,11 @@ class KeyPair:
             prefix = b'\x02'
         else:
             prefix = b'\x03'
-        
+
         uncompressed = data.ByteData(b'\x04') + x_data + y_data
         compressed = data.ByteData(prefix) + x_data
         self.pub_u = uncompressed
-        self.pub_c = compressed        
+        self.pub_c = compressed
 
     def pub(self, compressed):
         """Return a compressed or uncompressed public Data object."""

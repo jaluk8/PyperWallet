@@ -2,6 +2,7 @@ from pyperlib import data, ec
 import importlib
 import pkgutil
 
+
 class CoinList:
     """A class that keeps track of and returns all coin modules."""
 
@@ -26,6 +27,7 @@ class CoinList:
             return None
         p = importlib.import_module('.' + name, package=__package__)
         return p.Coin
+
 
 class BaseCoin:
     """The base class for all coins."""
@@ -63,7 +65,8 @@ class BaseCoin:
     def str2view(self, string):
         """Convert ambiguous string to view_type."""
         if self.view_type is None:
-            raise NotImplementedError(self.name + " does not support str2view.")
+            raise NotImplementedError(
+                self.name + " does not support str2view.")
         else:
             return self.view_type(string)
 
@@ -71,7 +74,8 @@ class BaseCoin:
     def str2addr(self, string):
         """Convert ambiguous string to addr_type."""
         if self.addr_type is None:
-            raise NotImplementedError(self.name + " does not support str2addr.")
+            raise NotImplementedError(
+                self.name + " does not support str2addr.")
         else:
             return self.addr_type(string)
 
@@ -79,7 +83,7 @@ class BaseCoin:
         """Raise an error if the curve is not implemented."""
         if self.curve is None:
             raise NotImplementedError(self.name + " does not support ec.")
-    
+
     def gen(self):
         """Generate the coin from its curve."""
         self.check_curve()
@@ -94,7 +98,7 @@ class BaseCoin:
         """Set the keypair from a public key."""
         self.check_curve()
         self.keypair = ec.KeyPair(self.curve, pub=pub)
-    
+
     def from_wif(self, wif):
         """Generate the coin from wallet import format Data."""
         raise NotImplementedError(self.name + " does not support from_wif.")
@@ -102,7 +106,7 @@ class BaseCoin:
     def from_view(self, view):
         """Generate the coin from viewkey Data."""
         raise NotImplementedError(self.name + " does not support from_view.")
-    
+
     def from_addr(self, addr):
         """Generate the coin from address Data."""
         raise NotImplementedError(self.name + " does not support from_addr.")

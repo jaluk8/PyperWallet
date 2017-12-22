@@ -1,5 +1,6 @@
 from .. import coins, ec, data, mods
 
+
 class Coin(coins.BaseCoin):
     """A coin that represents the Bitcoin protocol."""
 
@@ -14,8 +15,9 @@ class Coin(coins.BaseCoin):
 
     def from_wif(self, wif):
         """Generate the coin from wallet import format Data."""
-        self.verifybase58check(wif) # TODO: Make this error if it fails.
-        priv = wif[1:33] # TODO: Make this set compression flags if x01 is present.
+        self.verifybase58check(wif)  # TODO: Make this error if it fails.
+        # TODO: Make this set compression flags if x01 is present.
+        priv = wif[1:33]
         self.load_priv(priv)
 
     def from_addr(self, addr):
@@ -26,7 +28,7 @@ class Coin(coins.BaseCoin):
         """Verify that the data has a correct checksum."""
         d2 = self.base58check(d[:-4])
         return d == d2
-    
+
     def base58check(self, d):
         """Return the base58check encoding of Data."""
         check = mods.Sha256(mods.Sha256(d))
@@ -38,7 +40,6 @@ class Coin(coins.BaseCoin):
         if compressed:
             payload += data.HexData("01")
         return self.base58check(payload)
-        
 
     def addr(self, compressed=True):
         """Return the coin's address Data."""

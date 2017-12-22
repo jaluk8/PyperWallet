@@ -4,17 +4,22 @@ import sha3
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.backends import default_backend
 
+
 class LengthError(Exception):
     """An Exception that occurs when Data is of improper length."""
 
+
 class Mod(data.ByteData):
-    """The base class for Mods that alter Data through the Algorithm design pattern."""
+    """The base class for Mods that alter Data through construnction."""
+
     def __init__(self, *args):
         """Construnct the mod and run mod(*args)."""
         self.bytes = self.mod(*args).bytes
+
     def mod(self, d):
         """Execute the mod."""
         raise NotImplementedError
+
 
 class HashMod(Mod):
     """An abstract Mod that gets a hash of Data."""
@@ -26,12 +31,14 @@ class HashMod(Mod):
         bts = h.digest()
         return data.ByteData(bts)
 
+
 class Sha256(HashMod):
     """A HashMod using sha256."""
 
     def algorithm(self):
         """Execute the hash."""
         return hashlib.new('sha256')
+
 
 class Ripemd160(HashMod):
     """A HashMod using ripemd160."""
@@ -40,12 +47,14 @@ class Ripemd160(HashMod):
         """Execute the hash."""
         return hashlib.new('ripemd160')
 
+
 class Keccak(HashMod):
     """A HashMod using keccak (NOT SHA3)."""
 
     def algorithm(self):
         """Execute the hash."""
         return sha3.keccak_256()
+
 
 class Concat(Mod):
     """A Mod that concats two pieces of Data."""
@@ -54,16 +63,18 @@ class Concat(Mod):
         """Execute the mod."""
         return sum(args, data.ByteData())
 
+
 class Xor(Mod):
     """A Mod that performs xor on two pieces of Data."""
 
     def mod(self, d1, d2):
         """Execute the mod."""
-        l = len(d1)
-        if l != len(d2):
-            raise LengthError("Both operands of xor must have the same length.")
+        if len(d1) != len(d2):
+            raise LengthError(
+                "Both operands of xor must have the same length.")
         i = d1.int ^ d2.int
-        return data.IntData(i, l)
+        return data.IntData(i, len(d1))
+
 
 class Slice(Mod):
     """A Mod that performs slicing on Data."""
@@ -72,13 +83,16 @@ class Slice(Mod):
         """Execute the mod."""
         return d[i:j:k]
 
+
 class Scrypt(Mod):
     """A Mod that performs SCrypt key derivation for bip38."""
 
     def mod(self, password, salt):
         """Execute the mod."""
-        bts = hashlib.scrypt(password.bytes, salt=salt.bytes, n=16384, r=8, p=8, dklen=64)
+        bts = hashlib.scrypt(password.bytes, salt=salt.bytes,
+                             n=16384, r=8, p=8, dklen=64)
         return data.ByteData(bts)
+
 
 class Aes256(Mod):
     """A base Mod for aes256 operations."""
@@ -95,6 +109,7 @@ class Aes256(Mod):
         result += context.finalize()
         return data.ByteData(result)
 
+
 class Aes256Enc(Aes256):
     """A Mod that encrypts aes256."""
 
@@ -102,6 +117,7 @@ class Aes256Enc(Aes256):
         """Execute the mod."""
         context = self.cipher(key).encryptor()
         return self.run_cipher(context, block)
+
 
 class Aes256Dec(Aes256):
     """A Mod that decrypts aes256."""

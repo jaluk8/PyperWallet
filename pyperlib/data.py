@@ -2,17 +2,19 @@ import unicodedata
 
 base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
+
 class EncodingException(Exception):
-    """An Exception that occurs when invalid characters exist during conversion."""
+    """Occurs when invalid characters exist during conversion."""
+
 
 class ByteData:
-    """A main data class that can convert between various needed data types, internally using bytes."""
-    
+    """A main data class that can convert between various needed data types."""
+
     def __init__(self, b=b''):
         """Construct Data from bytes."""
         assert type(b) is bytes
         self.bytes = b
-    
+
     @property
     def hex(self):
         """Return the hex string of the Data."""
@@ -46,7 +48,7 @@ class ByteData:
     def string(self):
         """Return the encoded string of the Data."""
         return self.bytes.decode("utf-8")
-    
+
     def __eq__(self, other):
         """Determine the equality of two Data objects."""
         if issubclass(type(other), ByteData):
@@ -76,6 +78,7 @@ class ByteData:
             i = self.bytes[key]
             return IntData(i, 1)
 
+
 class HexData(ByteData):
     """A separate constructor for the data class that uses hex strings."""
 
@@ -84,18 +87,20 @@ class HexData(ByteData):
         assert type(s) is str
         super().__init__(bytes.fromhex(s))
 
+
 class Base58Data(ByteData):
     """A separate constructor for the data class that uses base58 strings."""
 
     def __init__(self, b58=""):
         """Construct Data from a base58 string."""
         assert type(b58) is str
-        
+
         value = 0
         place = 1
         for c in b58[::-1]:
-            if not c in base58:
-                raise EncodingException(c + " is not a valid base58 character.")
+            if c not in base58:
+                raise EncodingException(
+                    c + " is not a valid base58 character.")
             value += place * base58.find(c)
             place *= 58
 
@@ -106,8 +111,9 @@ class Base58Data(ByteData):
                 data = ByteData(b'\x00') + data
             else:
                 break
-        
+
         super().__init__(data.bytes)
+
 
 class IntData(ByteData):
     """A separate constructor for the data class that uses ints."""
@@ -115,11 +121,12 @@ class IntData(ByteData):
     def __init__(self, i, size=0):
         """Construct Data from an int and a data size."""
         byte_value = i.to_bytes((i.bit_length() + 7) // 8, 'big', signed=False)
-        
+
         while len(byte_value) < size:
             byte_value = b'\x00' + byte_value
 
         super().__init__(byte_value)
+
 
 class StringData(ByteData):
     """A separate constructor for the data class that uses encoded strings."""
