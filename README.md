@@ -6,3 +6,7 @@ PyperWallet is an advanced and extendable paper wallet generator written in Pyth
 ## Dependencies (python 3)
 * cryptography (2.x.x)
 * pysha3 (1.x.x)
+
+## Optional Dependencies (python 3)
+* pycodestyle (Code style)
+* autopep8 (Code style)
