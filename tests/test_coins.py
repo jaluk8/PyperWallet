@@ -57,7 +57,9 @@ class TestAllCoins(TestCase):
         "vtc": ("WZHPcZNDbWiJEUEgR36prdAR2nqJ1ZftFNRnnjUV5N2SkeVgVkMk",
                 None, "VmeQa8L2xidM976jLbBqCWPWFbEDEXfPpe"),
         "zec": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfPbetMbSD9hoY1gDLvdL",
-                None, "t1WCf2xoYaeUzHKjdLCxjHL2c4W2S6jZMSQ")}
+                None, "t1WCf2xoYaeUzHKjdLCxjHL2c4W2S6jZMSQ"),
+        "eth": ("ab2aeb09578892b1658ee824ae166772c57ce4b77685eca3ea6647da84b96"
+                "287", None, "0xB8F758b3f2016Bb391fb18C7Ef39847ef164649e")}
 
     def check_gen(self, Coin):
         """Generate Coin and check that it loads correctly."""
