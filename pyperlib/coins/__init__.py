@@ -52,17 +52,19 @@ class BaseCoin:
         self.settings = CoinSettings()
 
         if wif is not None:
-            self.from_wif(wif)
+            self.from_wif(self.str2wif(wif))
         elif view is not None:
-            self.from_view(view)
+            self.from_view(self.str2view(view))
         elif addr is not None:
-            self.from_addr(addr)
+            self.from_addr(self.str2addr(addr))
         else:
             self.gen()
 
     @classmethod
     def str2wif(self, string):
         """Convert ambiguous string to wif_type."""
+        if type(string) is not str:
+            return string
         if self.wif_type is None:
             raise NotImplementedError(self.name + " does not support str2wif.")
         else:
@@ -71,6 +73,8 @@ class BaseCoin:
     @classmethod
     def str2view(self, string):
         """Convert ambiguous string to view_type."""
+        if type(string) is not str:
+            return string
         if self.view_type is None:
             raise NotImplementedError(
                 self.name + " does not support str2view.")
@@ -80,6 +84,8 @@ class BaseCoin:
     @classmethod
     def str2addr(self, string):
         """Convert ambiguous string to addr_type."""
+        if type(string) is not str:
+            return string
         if self.addr_type is None:
             raise NotImplementedError(
                 self.name + " does not support str2addr.")

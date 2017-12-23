@@ -71,9 +71,9 @@ class TestAllCoins(TestCase):
             else:
                 view = None
 
-            self.check_load(Coin, c.wif, view, c.addr)
+            self.check_load(Coin, None, None, None, c.wif, view, c.addr)
 
-    def check_load(self, Coin, wif, view, addr):
+    def check_load(self, Coin, wif_str, view_str, addr_str, wif, view, addr):
         """Load Coin from various keys and check correctness."""
         c1 = Coin(wif=wif)
         self.assertEqual(c1.wif, wif)
@@ -94,6 +94,18 @@ class TestAllCoins(TestCase):
             self.assertEqual(c3.addr, addr)
             self.assertEqual(c3.view, view)
 
+        if wif_str is not None:
+            c4 = Coin(wif=wif_str)
+            self.assertEqual(c4.wif, wif)
+
+        if addr_str is not None and Coin.load_from_addr:
+            c5 = Coin(addr=addr_str)
+            self.assertEqual(c5.addr, addr)
+
+        if view_str is not None and Coin.has_privacy:
+            c6 = Coin(view=view_str)
+            self.assertEqual(c6.view, view)
+
     def get_key(self, name, Coin):
         """Retrieves the example values for name."""
         key = self.example_keys[name]
@@ -105,7 +117,7 @@ class TestAllCoins(TestCase):
         else:
             view = None
 
-        return wif, view, addr
+        return key[0], key[1], key[2], wif, view, addr
 
     def test_all(self):
         """Gets a list of all implemented coins and runs check_coin."""
