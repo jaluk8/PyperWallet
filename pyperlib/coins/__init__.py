@@ -133,14 +133,15 @@ class BaseCoin:
         """Return the coin's address Data."""
         raise NotImplementedError(self.name + " does not support addr.")
 
-    def export_wif(self):
-        """Return wif not as Data but as its native type."""
+    @property
+    def wif_string(self):
+        """Return wif not as Data but as string."""
         return self.wif.export(self.wif_type)
 
-    def export_view(self):
-        """Return view not as Data but as its native type."""
+    def view_string(self):
+        """Return view not as Data but as string."""
         return self.view.export(self.view_type)
 
-    def export_addr(self):
-        """Return addr not as Data but as its native type."""
+    def addr_string(self):
+        """Return addr not as Data but as string."""
         return self.addr.export(self.addr_type)
