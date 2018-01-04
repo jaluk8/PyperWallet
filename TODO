@@ -1,11 +1,15 @@
 * pyperlib.coins
+ - MODIFY coin error reporting
  - ADD validation to supported coins
+ - MODIFY coins to auto-validate on creation
  - ADD XMR support
+ - ADD seeds to coins that use them?
 * pyperlib.import
  - ADD importer base class
  - ADD generator importer
  - ADD cli importer
  - ADD qr scanner importer
+ - ADD a brain-wallet importer?
 * pyperlib.export
  - ADD exporter base class
  - ADD cli exporter
@@ -18,12 +22,14 @@
  - ADD bip38 cryptor
  - ADD bip39 cryptor
 * pyperlib.wallet
+ - ADD wallet base class
  - ADD high-level interface
-* Pyper.py
+* pyper_wallet.py
  - ADD cli
  - ADD user-friendly error reporting to cli
  - ADD --help
  - ADD gui?
+ - ADD installer?
 * logos
  - ADD logos from all supported coins
 * wallets
@@ -32,6 +38,8 @@
  - ADD sixfold-style images
 * README.md
  - MODIFY the description to be more detailed
- - ADD an installation guide?
+ - ADD an installation guide
  - ADD a use guide
- - ADD an extension guide
+ - ADD an extension guide?
+* Tests
+ - ADD more monkey-testing cases
