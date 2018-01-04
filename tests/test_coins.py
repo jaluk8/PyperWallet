@@ -129,3 +129,45 @@ class TestAllCoins(TestCase):
             if name in self.example_keys:
                 key = self.get_key(name, Coin)
                 self.check_load(Coin, *key)
+
+
+class TestValidation(TestAllCoins):
+    """A TestCase for checking that checksum validation works."""
+
+    example_keys = {  # These all have minor errors included
+        "btc": ("KyF4khaPVK9YeMBUukYKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU",
+                None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw6ywx"),
+        "ltc": ("T3hvqLBBEtBui8Leo9bhezChRggpPuqVxBP2A9svN8gYrig13GDZ",
+                None, "LWUhrUrbUMZTsNqQkCtuMwsr9pTskCLrVt"),
+        "bch": ("5JNrhoR2HJ1fH5ts1n2D77o35MrVCEj3gQvBWTc3oZi55uuMu34",
+                None, "13gU9r4cKRvLMKgFtt5nuMYJ6SEyPBjwiD"),  # Uncompressed
+        "dash": ("XCZtcGqHxmFAmfxQhKmra9AwkESEHknu5jTAKEgSTAFypc93jovp",
+                 None, "XwEMaB6n2CPxKS9poY1DZCZEv7v8woJmWu"),
+        "doge": ("qWyapnA2914T89HSR23QZiJgmM55oPeBUcjdJ9PkFKYccZpoF9uj",
+                 None, "dFxKgD7CY6zTGDGsyFfr2YHNzPhMooUSYb"),
+        "ftc": ("N9mVytYSM1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d",
+                None, "6fQZRM4i5NWs5YXEdQgAKpjrGfwjZQnbje"),
+        "vtc": ("WZHPcZNDbWiJEUEgR36prdAR2nqJ1ZftFNRnnjUV5N2SkeVgVkMK",
+                None, "VmeQa8L2xidM976jLbBqCWPWFbEDEXfPp3"),
+        "zec": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfpbetMbSD9hoY1gDLvdL",
+                None, "t1WCf2xoYaeUzHKjdLCxjHL2C4W2S6jZMSQ"),
+        "eth": ("ab2aeb09578892b1658ee924ae166772c57ce4b77685eca3ea6647da84b96"
+                "287", None, "0xB8F758b3f2016Bb391fb18C7EF39847ef164649e")}
+
+    def check_gen(self, Coin):
+        """Does nothing as gen validation is checked in the base class."""
+
+    def check_load(self, Coin, wif_str, view_str, addr_str, wif, view, addr):
+        """Load Coin from various keys and check incorrectness."""
+
+        if Coin.has_priv_csum:
+            with self.assertRaises(coins.InvalidCoinError):
+                c1 = Coin(wif=wif)
+
+        if Coin.has_addr_csum and Coin.load_from_addr:
+            with self.assertRaises(coins.InvalidCoinError):
+                c2 = Coin(addr=addr)
+
+        if Coin.has_view_csum and Coin.has_privacy:
+            with self.assertRaises(coins.InvalidCoinError):
+                c3 = Coin(view=view)

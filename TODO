@@ -1,7 +1,4 @@
 * pyperlib.coins
- - MODIFY coin error reporting
- - ADD validation to supported coins
- - MODIFY coins to auto-validate on creation
  - ADD XMR support
  - ADD seeds to coins that use them?
 * pyperlib.import

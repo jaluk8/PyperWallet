@@ -10,12 +10,16 @@ class Coin(coins.BaseCoin):
     wif_type = data.Base58Data
     addr_type = data.Base58Data
 
+    has_priv_csum = True
+    has_addr_csum = True
+
     wif_version = data.HexData("80")
     addr_version = data.HexData("00")
 
     def from_wif(self, wif):
         """Generate the coin from wallet import format Data."""
-        self.verifybase58check(wif)  # TODO: Make this error if it fails.
+        self.verifybase58check(wif)
+
         if len(wif) == 38:
             self.settings.compression = True
         elif len(wif) == 37:
@@ -30,12 +34,21 @@ class Coin(coins.BaseCoin):
     def verifybase58check(self, d):
         """Verify that the data has a correct checksum."""
         d2 = self.base58check(d[:-4])
-        return d == d2
+        if not d == d2:
+            raise coins.InvalidCoinError("Base58 Checksum failed.")
 
     def base58check(self, d):
         """Return the base58check encoding of Data."""
         check = mods.Sha256(mods.Sha256(d))
         return d + check[:4]
+
+    def validate_wif(self):
+        """Raise an error if the wif checksum fails."""
+        self.verifybase58check(self.wif)
+
+    def validate_addr(self):
+        """Raise an error if the addr checksum fails."""
+        self.verifybase58check(self.addr)
 
     @property
     def wif(self):

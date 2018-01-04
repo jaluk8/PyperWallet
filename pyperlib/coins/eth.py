@@ -7,6 +7,8 @@ class Coin(coins.BaseCoin):
     name = "Ethereum"
     curve = ec.SECP256K1
 
+    has_addr_csum = True
+
     wif_type = data.StringData
     addr_type = data.StringData
 
@@ -32,6 +34,11 @@ class Coin(coins.BaseCoin):
                 out += a
 
         return data.StringData(out)
+
+    def validate_addr(self):
+        """Raise an error if the addr checksum fails."""
+        if self.addr != self.eth_checksum(self.addr):
+            raise coins.InvalidCoinError
 
     @property
     def wif(self):

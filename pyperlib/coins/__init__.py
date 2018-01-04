@@ -3,6 +3,10 @@ import importlib
 import pkgutil
 
 
+class InvalidCoinError(Exception):
+    """An error that is raised when an address checksum fails."""
+
+
 class CoinList:
     """A class that keeps track of and returns all coin modules."""
 
@@ -42,6 +46,10 @@ class BaseCoin:
     has_privacy = False
     load_from_addr = False
 
+    has_priv_csum = False
+    has_view_csum = False
+    has_addr_csum = False
+
     wif_type = None
     view_type = None
     addr_type = None
@@ -59,6 +67,8 @@ class BaseCoin:
             self.from_addr(self.str2addr(addr))
         else:
             self.gen()
+
+        self.validate_all()
 
     @classmethod
     def str2wif(self, string):
@@ -96,6 +106,24 @@ class BaseCoin:
         """Raise an error if the curve is not implemented."""
         if self.curve is None:
             raise NotImplementedError(self.name + " does not support ec.")
+
+    def validate_wif(self):
+        """Raise an error if the wif checksum fails."""
+
+    def validate_view(self):
+        """Raise an error if the view checksum fails."""
+
+    def validate_addr(self):
+        """Raise an error if the addr checksum fails."""
+
+    def validate_all(self):
+        """Attempt to validate all available information."""
+        if self.wif is not None:
+            self.validate_wif()
+        if self.has_privacy and self.view is not None:
+            self.validate_view()
+        if self.addr is not None:
+            self.validate_addr()
 
     def gen(self):
         """Generate the coin from its curve."""
