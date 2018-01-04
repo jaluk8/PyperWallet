@@ -1,0 +1,37 @@
+* pyperlib.coins
+ - ADD validation to supported coins
+ - ADD XMR support
+* pyperlib.import
+ - ADD importer base class
+ - ADD generator importer
+ - ADD cli importer
+ - ADD qr scanner importer
+* pyperlib.export
+ - ADD exporter base class
+ - ADD cli exporter
+ - ADD text file exporter
+ - ADD bill-style wallet exporter
+ - ADD trifold-style wallet exporter
+ - ADD sixfold-style wallet exporter
+* pyperlib.crypto
+ - ADD cryptor base class
+ - ADD bip38 cryptor
+ - ADD bip39 cryptor
+* pyperlib.wallet
+ - ADD high-level interface
+* Pyper.py
+ - ADD cli
+ - ADD user-friendly error reporting to cli
+ - ADD --help
+ - ADD gui?
+* logos
+ - ADD logos from all supported coins
+* wallets
+ - ADD bill-style images
+ - ADD trifold-style images
+ - ADD sixfold-style images
+* README.md
+ - MODIFY the description to be more detailed
+ - ADD an installation guide?
+ - ADD a use guide
+ - ADD an extension guide
