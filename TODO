@@ -5,7 +5,6 @@
  - ADD qr scanner importer
  - ADD a brain-wallet importer?
 * pyperlib.exporter
- - ADD cli exporter
  - ADD text file exporter
  - ADD bill-style wallet exporter
  - ADD trifold-style wallet exporter

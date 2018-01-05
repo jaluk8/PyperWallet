@@ -21,3 +21,19 @@ class BaseExporter:
             addr = c.addr_string()
 
         return wif, view, addr
+
+
+class CliExporter(BaseExporter):
+    """Takes in a Coin object and prints its data to stdout."""
+
+    def run(self, c):
+        """Exports the given coin to stdout."""
+        wif, view, addr = super().run(c)
+
+        print("Coin type: " + c.name)
+        if wif is not None:
+            print("WIF: " + wif)
+        if view is not None:
+            print("View key: " + view)
+        if addr is not None:
+            print("Address: " + addr)
