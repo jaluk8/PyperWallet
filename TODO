@@ -1,13 +1,13 @@
 * pyperlib.coins
  - ADD XMR support
  - ADD seeds to coins that use them?
-* pyperlib.import
+* pyperlib.importer
  - ADD importer base class
  - ADD generator importer
  - ADD cli importer
  - ADD qr scanner importer
  - ADD a brain-wallet importer?
-* pyperlib.export
+* pyperlib.exporter
  - ADD exporter base class
  - ADD cli exporter
  - ADD text file exporter
