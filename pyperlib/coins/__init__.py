@@ -132,6 +132,10 @@ class BaseCoin:
         """Generate the coin from its curve."""
         self.check_curve()
         self.keypair = ec.KeyPair(self.curve)
+        self.calc_wif()
+        if self.has_privacy:
+            self.calc_view()
+        self.calc_addr()
 
     def load_priv(self, priv):
         """Set the keypair from a private key."""

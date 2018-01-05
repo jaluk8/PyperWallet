@@ -1,13 +1,14 @@
 from unittest import TestCase
+from unittest.mock import patch
 from pyperlib import importer, coins
 
 
 class TestBaseImporter(TestCase):
     """A TestCase that creates BaseImporters and verifies their output."""
 
-    def do_test(self, i, w, v, a, **kwargs):
-        """Uses importer i with **kwargs, checking that the results fit."""
-        coin = i.run(**kwargs)
+    def do_test(self, i, w, v, a, *args, **kwargs):
+        """Uses importer i with given args, checking that the results fit."""
+        coin = i.run(*args, **kwargs)
         self.assertIsInstance(coin, coins.BaseCoin)
 
         if w is not None:
@@ -31,3 +32,40 @@ class TestBaseImporter(TestCase):
 
         self.do_test(i, wif, None, addr, wif=wif)
         self.do_test(i, None, None, addr, addr=addr)
+
+
+class TestGenImporter(TestBaseImporter):
+    """The same as TestBaseImporter, but for GenImporter."""
+
+    def test_all(self):
+        """Run do_test a couple times to test generation."""
+
+        cl = coins.CoinList()
+        Coin = cl.get_coin("btc")
+        i = importer.GenImporter(Coin)
+
+        for j in range(10):
+            self.do_test(i, None, None, None)
+
+
+class TestCliImporter(TestBaseImporter):
+    """The same as TestBaseImporter, but for CliImporter."""
+
+    def test_all(self):
+        """Run do_test given command line input."""
+
+        cl = coins.CoinList()
+        Coin = cl.get_coin("btc")
+        i = importer.CliImporter(Coin)
+
+        wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
+        addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
+
+        in1 = ["wif", wif]
+        in2 = ["addr", addr]
+
+        with patch("builtins.input", side_effect=in1):
+            self.do_test(i, wif, None, addr)
+
+        with patch("builtins.input", side_effect=in2):
+            self.do_test(i, None, None, addr)

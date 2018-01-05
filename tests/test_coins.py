@@ -1,4 +1,4 @@
-from pyperlib import coins
+from pyperlib import coins, data
 from unittest import TestCase
 
 
@@ -66,8 +66,12 @@ class TestAllCoins(TestCase):
         for _ in range(100):
             c = Coin()
 
+            self.assertIsInstance(c.wif_string(), str)
+            self.assertIsInstance(c.addr_string(), str)
+
             if Coin.has_privacy:
                 view = c.view
+                self.assertIsInstance(c.view_string(), str)
             else:
                 view = None
 
