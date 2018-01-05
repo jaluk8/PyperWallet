@@ -81,24 +81,23 @@ class TestAllCoins(TestCase):
         if Coin.has_privacy:
             self.assertEqual(c1.view, view)
 
-        if Coin.load_from_addr:
-            c2 = Coin(addr=addr)
-            self.assertEqual(c2.wif, None)
-            self.assertEqual(c2.addr, addr)
-            if Coin.has_privacy:
-                self.assertEqual(c2.view, None)
+        c2 = Coin(addr=addr)
+        self.assertEqual(c2.wif, None)
+        self.assertEqual(c2.addr, addr)
+        if Coin.has_privacy:
+            self.assertEqual(c2.view, None)
 
         if Coin.has_privacy:
             c3 = Coin(view=view)
             self.assertEqual(c3.wif, None)
-            self.assertEqual(c3.addr, addr)
+            self.assertEqual(c3.addr, None)
             self.assertEqual(c3.view, view)
 
         if wif_str is not None:
             c4 = Coin(wif=wif_str)
             self.assertEqual(c4.wif, wif)
 
-        if addr_str is not None and Coin.load_from_addr:
+        if addr_str is not None:
             c5 = Coin(addr=addr_str)
             self.assertEqual(c5.addr, addr)
 
@@ -164,7 +163,7 @@ class TestValidation(TestAllCoins):
             with self.assertRaises(coins.InvalidCoinError):
                 c1 = Coin(wif=wif)
 
-        if Coin.has_addr_csum and Coin.load_from_addr:
+        if Coin.has_addr_csum:
             with self.assertRaises(coins.InvalidCoinError):
                 c2 = Coin(addr=addr)
 

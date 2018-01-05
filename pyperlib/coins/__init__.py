@@ -44,7 +44,6 @@ class BaseCoin:
     name = "[Base Coin]"
     curve = None
     has_privacy = False
-    load_from_addr = False
 
     has_priv_csum = False
     has_view_csum = False
@@ -57,6 +56,10 @@ class BaseCoin:
     def __init__(self, wif=None, view=None, addr=None):
         """Construct the coin based on spend, view, or address keys."""
         self.keypair = None
+        self.wif = None
+        self.view = None
+        self.addr = None
+
         self.settings = CoinSettings()
 
         if wif is not None:
@@ -152,22 +155,18 @@ class BaseCoin:
         """Generate the coin from address Data."""
         raise NotImplementedError(self.name + " does not support from_addr.")
 
-    @property
-    def wif(self):
-        """Return the coin's wallet import format Data."""
+    def calc_wif(self):
+        """Calculate the wif key from the keypair."""
         raise NotImplementedError(self.name + " does not support wif.")
 
-    @property
-    def view(self):
-        """Return the coin's viewkey Data."""
+    def calc_view(self):
+        """Calculate the view key from the keypair."""
         raise NotImplementedError(self.name + " does not support view.")
 
-    @property
-    def addr(self):
-        """Return the coin's address Data."""
+    def calc_addr(self):
+        """Calculate the addr from the keypair."""
         raise NotImplementedError(self.name + " does not support addr.")
 
-    @property
     def wif_string(self):
         """Return wif not as Data but as string."""
         return self.wif.export(self.wif_type)

@@ -17,7 +17,7 @@ class Coin(coins.BaseCoin):
     addr_version = data.HexData("00")
 
     def from_wif(self, wif):
-        """Generate the coin from wallet import format Data."""
+        """Create the coin from wallet import format Data."""
         self.verifybase58check(wif)
 
         if len(wif) == 38:
@@ -26,10 +26,13 @@ class Coin(coins.BaseCoin):
             self.settings.compression = False
         priv = wif[1:33]
         self.load_priv(priv)
+        self.calc_wif()
+        self.calc_addr()
 
     def from_addr(self, addr):
-        """Bitcoin protocol does not support addr->pub conversion."""
-        raise NotImplementedError
+        """Create a coin object only containing the addr."""
+        self.verifybase58check(addr)
+        self.addr = addr
 
     def verifybase58check(self, d):
         """Verify that the data has a correct checksum."""
@@ -50,17 +53,15 @@ class Coin(coins.BaseCoin):
         """Raise an error if the addr checksum fails."""
         self.verifybase58check(self.addr)
 
-    @property
-    def wif(self):
-        """Return the coin's wallet import format Data."""
+    def calc_wif(self):
+        """Calculate the wif key from the keypair."""
         payload = self.wif_version + self.keypair.priv
         if self.settings.compression:
             payload += data.HexData("01")
-        return self.base58check(payload)
+        self.wif = self.base58check(payload)
 
-    @property
-    def addr(self):
-        """Return the coin's address Data."""
+    def calc_addr(self):
+        """Calculate the addr from the keypair."""
         pub = self.keypair.pub(self.settings.compression)
         payload = mods.Ripemd160(mods.Sha256(pub))
-        return self.base58check(self.addr_version + payload)
+        self.addr = self.base58check(self.addr_version + payload)

@@ -13,13 +13,16 @@ class Coin(coins.BaseCoin):
     addr_type = data.StringData
 
     def from_wif(self, wif):
-        """Generate the coin from wallet import format Data."""
+        """Create the coin from wallet import format Data."""
         priv = data.HexData(wif.string)
         self.load_priv(priv)
+        self.calc_wif()
+        self.calc_addr()
 
     def from_addr(self, addr):
-        """Ethereum protocol does not support addr->pub conversion."""
-        raise NotImplementedError
+        """Create a coin containing only the addr."""
+        self.eth_checksum(addr)
+        self.addr = addr
 
     def eth_checksum(self, addr):
         """Converts a lowercase string address into a checksummed one."""
@@ -40,17 +43,15 @@ class Coin(coins.BaseCoin):
         if self.addr != self.eth_checksum(self.addr):
             raise coins.InvalidCoinError
 
-    @property
-    def wif(self):
-        """Return the coin's wallet import format Data."""
+    def calc_wif(self):
+        """Calculate the wif key from the keypair."""
         wif_hex = self.keypair.priv.hex.lower()
-        return data.StringData(wif_hex)
+        self.wif = data.StringData(wif_hex)
 
-    @property
-    def addr(self):
-        """Return the coin's address Data."""
+    def calc_addr(self):
+        """Calculate the addr from the keypair."""
         keccak = mods.Keccak(self.keypair.pub_u[1:])
         addr_hex = keccak[-20:]
         addr_str = "0x" + addr_hex.hex
         addr = data.StringData(addr_str)
-        return self.eth_checksum(addr)
+        self.addr = self.eth_checksum(addr)
