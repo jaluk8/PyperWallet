@@ -2,7 +2,6 @@
  - ADD XMR support
  - ADD seeds to coins that use them?
 * pyperlib.importer
- - ADD importer base class
  - ADD generator importer
  - ADD cli importer
  - ADD qr scanner importer
