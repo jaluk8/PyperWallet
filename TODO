@@ -10,7 +10,6 @@
  - ADD trifold-style wallet exporter
  - ADD sixfold-style wallet exporter
 * pyperlib.crypto
- - ADD cryptor base class
  - ADD bip38 cryptor
  - ADD bip39 cryptor
 * pyperlib.wallet

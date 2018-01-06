@@ -7,6 +7,10 @@ class InvalidCoinError(Exception):
     """An error that is raised when an address checksum fails."""
 
 
+class CryptError(Exception):
+    """An error that is raised when there is an issue with cryptography."""
+
+
 class CoinList:
     """A class that keeps track of and returns all coin modules."""
 
@@ -36,6 +40,7 @@ class CoinList:
 class CoinSettings:
     """A container for keeping track of user-defined coin settings."""
     compression = True
+    cryptor = None
 
 
 class BaseCoin:
@@ -59,6 +64,7 @@ class BaseCoin:
         self.wif = None
         self.view = None
         self.addr = None
+        self.crypt_type = None
 
         self.settings = CoinSettings()
 
@@ -182,3 +188,25 @@ class BaseCoin:
     def addr_string(self):
         """Return addr not as Data but as string."""
         return self.addr.export(self.addr_type)
+
+    def encrypt(self, **kwargs):
+        """Changes the unencrypted wif into an encrypted one."""
+        if self.crypt_type is not None:
+            raise CryptError("Coin is already encrypted.")
+        elif self.settings.cryptor is None:
+            raise CryptError("No cryptor is selected.")
+
+        self.wif = self.settings.cryptor.encrypt(wif=self.wif, **kwargs)
+        self.crypt_type = self.settings.cryptor.name
+
+    def decrypt(self, **kwargs):
+        """Changes the encrypted wif key to a decrypted one."""
+        if self.crypt_type is None:
+            raise CryptError("Coin is not encrypted.")
+        elif self.settings.cryptor is None:
+            raise CryptError("No cryptor is selected.")
+        elif self.crypt_type != self.settings.cryptor.name:
+            raise CryptError("Cryptor does not match the encryption type.")
+
+        self.wif = self.settings.cryptor.decrypt(wif=self.wif, **kwargs)
+        self.crypt_type = None
