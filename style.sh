@@ -2,14 +2,35 @@
 
 function doc
 {
+    status=
     last=
     while read line
     do
-        if echo "$last" | grep -Eq '^ *(class|def) '
+        if [[ -z $status ]]
         then
-            if ! echo "$line" | grep -Eq '^""".*\."""$'
+            if echo "$line" | grep -Eq '^ *(class|def) '
             then
+                status=start
+            fi
+        fi
+
+        if [[ $status == start ]]
+        then
+            if echo "$line" | grep -Eq ':$'
+            then
+                status=end
+                continue
+            fi
+        fi
+
+        if [[ $status == end ]]
+        then
+            if echo "$line" | grep -Eq '^""".*\."""$'
+            then
+                status=
+            else
                 echo "IMPROPER DOCS: $1: $last"
+                status=
             fi
         fi
         last="$line"
