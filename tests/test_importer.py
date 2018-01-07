@@ -1,6 +1,18 @@
 from unittest import TestCase
 from unittest.mock import patch
-from pyperlib import importer, coins
+from pyperlib import importer, coins, helper
+
+
+class TestImporterFactory(helper.TestNameFactory):
+    """Test the ImporterFactory's get method."""
+
+    factory = importer.ImporterFactory
+    
+    def test_all(self):
+        """Attempt to import various names."""
+        self.do_test("Base", None)
+        self.do_test("Nonexistant", None)
+        self.do_test("cli", importer.CliImporter)
 
 
 class TestBaseImporter(TestCase):

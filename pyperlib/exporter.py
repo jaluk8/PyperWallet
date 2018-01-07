@@ -1,4 +1,11 @@
 from copy import deepcopy
+from pyperlib import helper
+
+
+class ExporterFactory(helper.NameFactory):
+    """A class that makes exporters from names."""
+    suffix = "Exporter"
+    pool = globals()
 
 
 class Exported:

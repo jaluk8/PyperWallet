@@ -1,4 +1,10 @@
-from pyperlib import mods
+from pyperlib import mods, helper
+
+
+class CryptorFactory(helper.NameFactory):
+    """A class that makes cryptors from names."""
+    suffix = "Cryptor"
+    pool = globals()
 
 
 class BaseCryptor:

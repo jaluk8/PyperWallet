@@ -1,6 +1,18 @@
 from unittest import TestCase
 from unittest.mock import patch
-from pyperlib import exporter, coins
+from pyperlib import exporter, coins, helper
+
+
+class TestExporterFactory(helper.TestNameFactory):
+    """Test the ExporterFactory's get method."""
+
+    factory = exporter.ExporterFactory
+    
+    def test_all(self):
+        """Attempt to export various names."""
+        self.do_test("Base", None)
+        self.do_test("Nonexistant", None)
+        self.do_test("cli", exporter.CliExporter)
 
 
 class TestBaseExporter(TestCase):
