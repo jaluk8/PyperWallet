@@ -1,5 +1,6 @@
 from pyperlib import data, mods
 
+
 class BaseImporter:
     """An importer that imports using args, rather than external sources."""
 

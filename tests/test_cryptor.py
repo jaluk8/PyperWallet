@@ -5,7 +5,8 @@ from pyperlib import cryptor, coins
 class TestBaseCryptor(TestCase):
     """Encrypt and decrypt a coin, checking for correctness."""
 
-    cl = coins.CoinList()
+    cf = coins.CoinFactory()
+    Coin = cf.get_coin("btc")
     wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
 
     enc_wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
@@ -28,8 +29,7 @@ class TestBaseCryptor(TestCase):
     def make_coin(self):
         """Generate the coin from self.wif."""
 
-        Coin = self.cl.get_coin("btc")
-        coin = Coin(wif=self.wif)
+        coin = self.Coin(wif=self.wif)
         coin.settings.cryptor = self.cryptor
         return coin
 

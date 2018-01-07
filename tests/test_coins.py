@@ -2,25 +2,25 @@ from pyperlib import coins, data
 from unittest import TestCase
 
 
-class TestCoinList(TestCase):
-    """A TestCase for the CoinList class."""
+class TestCoinFactory(TestCase):
+    """A TestCase for the CoinFactory class."""
 
-    def do_test(self, name, cl):
-        """Check that the coinlist has the coin and can load it."""
-        self.assertTrue(cl.has_coin(name))
+    def do_test(self, name, cf):
+        """Check that the coinfactory has the coin and can load it."""
+        self.assertTrue(cf.has_coin(name))
         try:
-            c = cl.get_coin(name)
+            c = cf.get_coin(name)
         except NotImplementedError:
             return
         self.assertTrue(issubclass(c, coins.BaseCoin))
 
     def tests(self):
         """Check all coins in the list, as well as the current top 3."""
-        cl = coins.CoinList()
-        for name in cl.list_coins():
-            self.do_test(name, cl)
-        self.do_test('btc', cl)
-        self.do_test('ltc', cl)
+        cf = coins.CoinFactory()
+        for name in cf.list_coins():
+            self.do_test(name, cf)
+        self.do_test('btc', cf)
+        self.do_test('ltc', cf)
 
 
 class TestBaseCoin(TestCase):
@@ -124,9 +124,9 @@ class TestAllCoins(TestCase):
 
     def test_all(self):
         """Gets a list of all implemented coins and runs check_coin."""
-        cl = coins.CoinList()
-        for name in cl.list_coins():
-            Coin = cl.get_coin(name)
+        cf = coins.CoinFactory()
+        for name in cf.list_coins():
+            Coin = cf.get_coin(name)
             self.check_gen(Coin)
 
             if name in self.example_keys:

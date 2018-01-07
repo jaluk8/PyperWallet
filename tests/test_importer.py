@@ -6,6 +6,9 @@ from pyperlib import importer, coins
 class TestBaseImporter(TestCase):
     """A TestCase that creates BaseImporters and verifies their output."""
 
+    cf = coins.CoinFactory()
+    Coin = cf.get_coin("btc")
+
     def do_test(self, i, w, v, a, *args, **kwargs):
         """Uses importer i with given args, checking that the results fit."""
         coin = i.run(*args, **kwargs)
@@ -20,9 +23,7 @@ class TestBaseImporter(TestCase):
 
     def test_all(self):
         """Run do_test with various args to check all cases."""
-        cl = coins.CoinList()
-        Coin = cl.get_coin("btc")
-        i = importer.BaseImporter(Coin)
+        i = importer.BaseImporter(self.Coin)
 
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
@@ -39,10 +40,7 @@ class TestGenImporter(TestBaseImporter):
 
     def test_all(self):
         """Run do_test a couple times to test generation."""
-
-        cl = coins.CoinList()
-        Coin = cl.get_coin("btc")
-        i = importer.GenImporter(Coin)
+        i = importer.GenImporter(self.Coin)
 
         for j in range(10):
             self.do_test(i, None, None, None)
@@ -53,10 +51,7 @@ class TestCliImporter(TestBaseImporter):
 
     def test_all(self):
         """Run do_test given command line input."""
-
-        cl = coins.CoinList()
-        Coin = cl.get_coin("btc")
-        i = importer.CliImporter(Coin)
+        i = importer.CliImporter(self.Coin)
 
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
@@ -70,15 +65,13 @@ class TestCliImporter(TestBaseImporter):
         with patch("builtins.input", side_effect=in2):
             self.do_test(i, None, None, addr)
 
+
 class TestBaseBrainImporter(TestBaseImporter):
     """The same as TestBaseImporter, but for BaseBrainImporter."""
 
     def test_all(self):
         """Run do_test for a brain phrase."""
-
-        cl = coins.CoinList()
-        Coin = cl.get_coin("btc")
-        i = importer.BaseBrainImporter(Coin)
+        i = importer.BaseBrainImporter(self.Coin)
 
         phrase = "pyperwalletbrain"
         wif = "KxiDxGBdavV586DaKPAZfA8rB8jpjxXjEhQ6fhSZmZpbhNkX7FLb"

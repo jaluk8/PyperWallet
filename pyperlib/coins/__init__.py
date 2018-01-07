@@ -11,7 +11,7 @@ class CryptError(Exception):
     """An error that is raised when there is an issue with cryptography."""
 
 
-class CoinList:
+class CoinFactory:
     """A class that keeps track of and returns all coin modules."""
 
     def __init__(self):
@@ -58,7 +58,8 @@ class BaseCoin:
     view_type = None
     addr_type = None
 
-    def __init__(self, priv=None, wif=None, view=None, addr=None, settings=None):
+    def __init__(self, priv=None, wif=None, view=None, addr=None,
+                 settings=None):
         """Construct the coin based on spend, view, or address keys."""
         self.keypair = None
         self.wif = None
