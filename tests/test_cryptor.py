@@ -6,7 +6,7 @@ class TestCryptorFactory(helper.TestNameFactory):
     """Test the CryptorFactory's get method."""
 
     factory = cryptor.CryptorFactory
-    
+
     def test_all(self):
         """Attempt to import various names."""
         self.do_test("Base", None)

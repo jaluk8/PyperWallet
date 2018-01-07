@@ -19,6 +19,7 @@ class NameFactory:
         else:
             return None
 
+
 class TestNameFactory(TestCase):
     """A TestCase for the NameFactory class."""
 

@@ -7,7 +7,7 @@ class TestImporterFactory(helper.TestNameFactory):
     """Test the ImporterFactory's get method."""
 
     factory = importer.ImporterFactory
-    
+
     def test_all(self):
         """Attempt to import various names."""
         self.do_test("Base", None)
