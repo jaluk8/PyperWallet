@@ -8,11 +8,10 @@ class TestBaseExporter(TestCase):
 
     def do_test(self, e, c, w, v, a):
         """Run exporting on Coin c with e, and checks the result."""
-        wif, view, addr = e.run(c)
+        exported = e.run(c)
 
-        self.assertEqual(w, wif)
-        self.assertEqual(v, view)
-        self.assertEqual(a, addr)
+        self.assertEqual(w, exported.wif)
+        self.assertEqual(a, exported.addr)
 
     def test_all(self):
         """Run do_test with all test sets."""
@@ -30,14 +29,24 @@ class TestBaseExporter(TestCase):
 class TestCliExporter(TestCase):
     """Same as TestBaseExporter, but for the Cli exporter."""
 
+    maxDiff = None
     out = ""
     correct_out = """
-Coin type: Bitcoin
-WIF: KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU
-Address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
+Coin name: Bitcoin
+Compressed: True
 
-Coin type: Bitcoin
-Address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
+Private WIF key: KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU
+Private hex key: 3C5F262F56AF74A2C314354BE7EA0CCAFEDA1C059E2B5B3B4C3151912C774\
+F78
+
+Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
+Public hex key: 02FF136594F723F047A0917A8EC66B56079841AC989FB4F6AC75982FC7F57E\
+980A
+
+Coin name: Bitcoin
+Compressed: True
+
+Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
 """
 
     def mock_print(self):

@@ -58,7 +58,7 @@ class BaseCoin:
     view_type = None
     addr_type = None
 
-    def __init__(self, wif=None, view=None, addr=None):
+    def __init__(self, wif=None, view=None, addr=None, settings=None):
         """Construct the coin based on spend, view, or address keys."""
         self.keypair = None
         self.wif = None
@@ -66,7 +66,10 @@ class BaseCoin:
         self.addr = None
         self.crypt_type = None
 
-        self.settings = CoinSettings()
+        if settings is None:
+            self.settings = CoinSettings()
+        else:
+            self.settings = settings
 
         if wif is not None:
             self.from_wif(self.str2wif(wif))
@@ -177,16 +180,32 @@ class BaseCoin:
         """Calculate the addr from the keypair."""
         raise NotImplementedError(self.name + " does not support addr.")
 
+    def calc_all(self):
+        """Attempt to calculate wif/view/addr."""
+        if self.keypair is not None:
+            if self.keypair.priv is not None:
+                self.calc_wif()
+                if self.has_privacy:
+                    self.calc_view()
+            if self.keypair.pub_u is not None:
+                self.calc_addr()
+
     def wif_string(self):
         """Return wif not as Data but as string."""
+        if self.wif is None:
+            return None
         return self.wif.export(self.wif_type)
 
     def view_string(self):
         """Return view not as Data but as string."""
+        if self.view is None:
+            return None
         return self.view.export(self.view_type)
 
     def addr_string(self):
         """Return addr not as Data but as string."""
+        if self.addr is None:
+            return None
         return self.addr.export(self.addr_type)
 
     def encrypt(self, **kwargs):
@@ -197,6 +216,7 @@ class BaseCoin:
             raise CryptError("No cryptor is selected.")
 
         self.wif = self.settings.cryptor.encrypt(wif=self.wif, **kwargs)
+        self.keypair = None
         self.crypt_type = self.settings.cryptor.name
 
     def decrypt(self, **kwargs):
@@ -208,5 +228,7 @@ class BaseCoin:
         elif self.crypt_type != self.settings.cryptor.name:
             raise CryptError("Cryptor does not match the encryption type.")
 
-        self.wif = self.settings.cryptor.decrypt(wif=self.wif, **kwargs)
+        wif = self.settings.cryptor.decrypt(wif=self.wif, **kwargs)
+        self.from_wif(wif)
+        self.validate_all()
         self.crypt_type = None
