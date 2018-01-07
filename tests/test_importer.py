@@ -69,3 +69,19 @@ class TestCliImporter(TestBaseImporter):
 
         with patch("builtins.input", side_effect=in2):
             self.do_test(i, None, None, addr)
+
+class TestBaseBrainImporter(TestBaseImporter):
+    """The same as TestBaseImporter, but for BaseBrainImporter."""
+
+    def test_all(self):
+        """Run do_test for a brain phrase."""
+
+        cl = coins.CoinList()
+        Coin = cl.get_coin("btc")
+        i = importer.BaseBrainImporter(Coin)
+
+        phrase = "pyperwalletbrain"
+        wif = "KxiDxGBdavV586DaKPAZfA8rB8jpjxXjEhQ6fhSZmZpbhNkX7FLb"
+        addr = "1Ge1Cn5UzqNnx37bpnoqWEY4McPFGG8Z5f"
+
+        self.do_test(i, wif, None, addr, brain=phrase)

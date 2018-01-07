@@ -3,7 +3,6 @@
  - ADD seeds to coins that use them?
 * pyperlib.importer
  - ADD qr scanner importer
- - ADD a brain-wallet importer?
 * pyperlib.exporter
  - ADD text file exporter
  - ADD bill-style wallet exporter

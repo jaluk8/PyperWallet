@@ -1,3 +1,5 @@
+from pyperlib import data, mods
+
 class BaseImporter:
     """An importer that imports using args, rather than external sources."""
 
@@ -36,3 +38,13 @@ class CliImporter(BaseImporter):
         elif t == "addr":
             addr = input("Enter address: ")
             return super().run(addr=addr)
+
+
+class BaseBrainImporter(BaseImporter):
+    """An importer for brainwallets using sha256."""
+
+    def run(self, brain):
+        """Uses brainwallet string given to make a private key."""
+        brain_data = data.StringData(brain)
+        priv = mods.Sha256(brain_data)
+        return super().run(priv=priv)

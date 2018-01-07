@@ -26,8 +26,6 @@ class Coin(coins.BaseCoin):
             self.settings.compression = False
         priv = wif[1:33]
         self.load_priv(priv)
-        self.calc_wif()
-        self.calc_addr()
 
     def from_addr(self, addr):
         """Create a coin object only containing the addr."""

@@ -58,7 +58,7 @@ class BaseCoin:
     view_type = None
     addr_type = None
 
-    def __init__(self, wif=None, view=None, addr=None, settings=None):
+    def __init__(self, priv=None, wif=None, view=None, addr=None, settings=None):
         """Construct the coin based on spend, view, or address keys."""
         self.keypair = None
         self.wif = None
@@ -71,7 +71,9 @@ class BaseCoin:
         else:
             self.settings = settings
 
-        if wif is not None:
+        if priv is not None:
+            self.load_priv(priv)
+        elif wif is not None:
             self.from_wif(self.str2wif(wif))
         elif view is not None:
             self.from_view(self.str2view(view))
@@ -150,11 +152,13 @@ class BaseCoin:
         """Set the keypair from a private key."""
         self.check_curve()
         self.keypair = ec.KeyPair(self.curve, priv=priv)
+        self.calc_all()
 
     def load_pub(self, pub):
         """Set the keypair from a public key."""
         self.check_curve()
         self.keypair = ec.KeyPair(self.curve, pub=pub)
+        self.calc_all()
 
     def from_wif(self, wif):
         """Generate the coin from wallet import format Data."""

@@ -16,8 +16,6 @@ class Coin(coins.BaseCoin):
         """Create the coin from wallet import format Data."""
         priv = data.HexData(wif.string)
         self.load_priv(priv)
-        self.calc_wif()
-        self.calc_addr()
 
     def from_addr(self, addr):
         """Create a coin containing only the addr."""
