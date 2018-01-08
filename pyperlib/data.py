@@ -91,6 +91,10 @@ class ByteData:
             i = self.bytes[key]
             return IntData(i, 1)
 
+    def __repr__(self):
+        """Represents the Data as a HexData string."""
+        return "HexData('" + self.hex + "')"
+
 
 class HexData(ByteData):
     """A separate constructor for the data class that uses hex strings."""

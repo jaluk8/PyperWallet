@@ -220,7 +220,7 @@ class BaseCoin:
         elif self.settings.cryptor is None:
             raise CryptError("No cryptor is selected.")
 
-        self.wif = self.settings.cryptor.encrypt(wif=self.wif, **kwargs)
+        self.settings.cryptor.encrypt(coin=self, **kwargs)
         self.keypair = None
         self.crypt_type = self.settings.cryptor.name
 
@@ -233,7 +233,6 @@ class BaseCoin:
         elif self.crypt_type != self.settings.cryptor.name:
             raise CryptError("Cryptor does not match the encryption type.")
 
-        wif = self.settings.cryptor.decrypt(wif=self.wif, **kwargs)
-        self.from_wif(wif)
+        self.settings.cryptor.decrypt(coin=self, **kwargs)
         self.validate_all()
         self.crypt_type = None

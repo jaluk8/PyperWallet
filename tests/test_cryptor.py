@@ -47,3 +47,14 @@ class TestBaseCryptor(TestCase):
     def test_all(self):
         """Run do_test (no arguments needed for BaseCryptor)."""
         self.do_test()
+
+
+class TestBIP38Cryptor(TestBaseCryptor):
+    """Encrypt and decrypt a coin, with bip38."""
+
+    cryptor = cryptor.BIP38Cryptor()
+    enc_wif = "6PYS3EufMDqJZMqKxHZ2fGTe1FDGWQy9vYrnuJeiUUxppqTDfUNKoVjJXu"
+
+    def test_all(self):
+        """Run do_test with various passwords."""
+        self.do_test(passphrase="12345")

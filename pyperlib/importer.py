@@ -3,6 +3,7 @@ from pyperlib import data, mods, helper
 
 class ImporterFactory(helper.NameFactory):
     """A class that makes importers from names."""
+
     suffix = "Importer"
     pool = globals()
 
