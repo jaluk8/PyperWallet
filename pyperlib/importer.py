@@ -11,9 +11,10 @@ class ImporterFactory(helper.NameFactory):
 class BaseImporter:
     """An importer that imports using args, rather than external sources."""
 
-    def __init__(self, Coin):
+    def __init__(self, Coin, prompt=None):
         """Initializes the importer with a Coin class."""
         self.Coin = Coin
+        self.prompt = prompt
 
     def run(self, **kwargs):
         """Returns the result of creating a Coin with kwargs."""
@@ -28,31 +29,34 @@ class GenImporter(BaseImporter):
         return super().run()
 
 
-class CliImporter(BaseImporter):
-    """An importer that takes the arguments from stdin."""
+class WifImporter(BaseImporter):
+    """An importer that takes imports using a wif string."""
 
-    def run(self):
-        """Returns the result of creating a Coin from stdin."""
-        t = input("Choose a data type to input (wif/view/addr): ")
-        while t not in ["wif", "view", "addr"]:
-            t = input("You must enter wif, view, or addr: ")
-
-        if t == "wif":
-            wif = input("Enter WIF key: ")
-            return super().run(wif=wif)
-        elif t == "view":
-            view = input("Enter view key: ")
-            return super().run(view=view)
-        elif t == "addr":
-            addr = input("Enter address: ")
-            return super().run(addr=addr)
+    def run(self, wif=None):
+        """Returns the result of creating a Coin from wif."""
+        if wif is None:
+            wif = self.prompt.prompt_info(name="WIF key", type_f=str)
+        return super().run(wif=wif)
 
 
-class BaseBrainImporter(BaseImporter):
+class AddrImporter(BaseImporter):
+    """An importer that takes imports using a addr string."""
+
+    def run(self, addr=None):
+        """Returns the result of creating a Coin from addr."""
+        if addr is None:
+            addr = self.prompt.prompt_info(name="Public address", type_f=str)
+        return super().run(addr=addr)
+
+
+class BrainImporter(BaseImporter):
     """An importer for brainwallets using sha256."""
 
-    def run(self, brain):
+    def run(self, brain=None):
         """Uses brainwallet string given to make a private key."""
+        if brain is None:
+            brain = self.prompt.prompt_pass(name="Brain phrase", type_f=str)
+
         brain_data = data.StringData(brain)
         priv = mods.Sha256(brain_data)
         return super().run(priv=priv)

@@ -36,8 +36,6 @@ class CliTestCase(TestCase):
 
     def mock_print(self):
         """Creates the mock print function."""
-        self.out = ""
-
         def print(x):
             """Record the input in self.out."""
             self.out += x + "\n"
@@ -45,19 +43,15 @@ class CliTestCase(TestCase):
 
     def cli_test(self, f, stdin=None, stdout=None, **kwargs):
         """Run test function f with some inport and/or output."""
-        if stdin is None and stdout is None:
-            return f(**kwargs)
-        elif stdin is not None:
+        self.out = ""
+
+        if stdout is None:
             with patch("builtins.input", side_effect=stdin):
                 return f(**kwargs)
-        elif stdout is not None:
+        elif stdin is None:
             with patch('builtins.print', new_callable=self.mock_print):
                 result = f(**kwargs)
                 self.assertEqual(self.out, stdout)
                 return result
         else:
-            with patch("builtins.input", side_effect=stdin):
-                with patch('builtins.print', new_callable=self.mock_print):
-                    result = f(**kwargs)
-                    self.assertEqual(self.out, stdout)
-                    return result
+            return f(**kwargs)

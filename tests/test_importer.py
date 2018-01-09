@@ -1,5 +1,5 @@
 from unittest import TestCase
-from pyperlib import importer, coins, helper
+from pyperlib import importer, coins, prompter, helper
 
 
 class TestImporterFactory(helper.TestNameFactory):
@@ -9,9 +9,9 @@ class TestImporterFactory(helper.TestNameFactory):
 
     def test_all(self):
         """Attempt to import various names."""
-        self.do_test("Base", None)
-        self.do_test("Nonexistant", None)
-        self.do_test("cli", importer.CliImporter)
+        self.do_test("base", None)
+        self.do_test("nonexistant", None)
+        self.do_test("wif", importer.WifImporter)
 
 
 class TestBaseImporter(TestCase):
@@ -57,30 +57,30 @@ class TestGenImporter(TestBaseImporter):
             self.do_test(i, None, None, None)
 
 
-class TestCliImporter(TestBaseImporter, helper.CliTestCase):
-    """The same as TestBaseImporter, but for CliImporter."""
+class TestCliImporters(TestBaseImporter, helper.CliTestCase):
+    """Test wif and addr importers using the CLI prompter."""
 
     def test_all(self):
         """Run do_test given command line input."""
-        i = importer.CliImporter(self.Coin)
+        w_i = importer.WifImporter(self.Coin, prompter.CliPrompter)
+        a_i = importer.AddrImporter(self.Coin, prompter.CliPrompter)
 
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
 
-        in1 = ["wif", wif]
-        in2 = ["addr", addr]
+        in1 = [wif]
+        in2 = [addr]
 
-        self.cli_test(self.do_test, stdin=in1, i=i, w=wif, v=None, a=addr)
+        self.cli_test(self.do_test, stdin=in1, i=w_i, w=wif, v=None, a=addr)
+        self.cli_test(self.do_test, stdin=in2, i=a_i, w=None, v=None, a=addr)
 
-        self.cli_test(self.do_test, stdin=in2, i=i, w=None, v=None, a=addr)
 
-
-class TestBaseBrainImporter(TestBaseImporter):
-    """The same as TestBaseImporter, but for BaseBrainImporter."""
+class TestBrainImporter(TestBaseImporter):
+    """The same as TestBaseImporter, but for BrainImporter."""
 
     def test_all(self):
         """Run do_test for a brain phrase."""
-        i = importer.BaseBrainImporter(self.Coin)
+        i = importer.BrainImporter(self.Coin)
 
         phrase = "pyperwalletbrain"
         wif = "KxiDxGBdavV586DaKPAZfA8rB8jpjxXjEhQ6fhSZmZpbhNkX7FLb"
