@@ -75,4 +75,5 @@ Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
 
         self.cli_test(self.make_test(e, self.Coin(wif=wif)), stdout=self.out1)
-        self.cli_test(self.make_test(e, self.Coin(addr=addr)), stdout=self.out2)
+        self.cli_test(self.make_test(e, self.Coin(addr=addr)),
+                      stdout=self.out2)
