@@ -1,5 +1,4 @@
 from unittest import TestCase
-from unittest.mock import patch
 from pyperlib import importer, coins, helper
 
 
@@ -58,7 +57,7 @@ class TestGenImporter(TestBaseImporter):
             self.do_test(i, None, None, None)
 
 
-class TestCliImporter(TestBaseImporter):
+class TestCliImporter(TestBaseImporter, helper.CliTestCase):
     """The same as TestBaseImporter, but for CliImporter."""
 
     def test_all(self):
@@ -71,11 +70,9 @@ class TestCliImporter(TestBaseImporter):
         in1 = ["wif", wif]
         in2 = ["addr", addr]
 
-        with patch("builtins.input", side_effect=in1):
-            self.do_test(i, wif, None, addr)
+        self.cli_test(self.do_test, stdin=in1, i=i, w=wif, v=None, a=addr)
 
-        with patch("builtins.input", side_effect=in2):
-            self.do_test(i, None, None, addr)
+        self.cli_test(self.do_test, stdin=in2, i=i, w=None, v=None, a=addr)
 
 
 class TestBaseBrainImporter(TestBaseImporter):

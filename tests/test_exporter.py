@@ -1,5 +1,4 @@
 from unittest import TestCase
-from unittest.mock import patch
 from pyperlib import exporter, coins, helper
 
 
@@ -39,13 +38,11 @@ class TestBaseExporter(TestCase):
         self.do_test(e, self.Coin(addr=addr), None, None, addr)
 
 
-class TestCliExporter(TestBaseExporter):
+class TestCliExporter(TestBaseExporter, helper.CliTestCase):
     """Same as TestBaseExporter, but for the Cli exporter."""
 
     maxDiff = None
-    out = ""
-    correct_out = """
-Coin name: Bitcoin
+    out1 = """Coin name: Bitcoin
 Compressed: True
 
 Private WIF key: KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU
@@ -55,25 +52,20 @@ F78
 Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
 Public hex key: 02FF136594F723F047A0917A8EC66B56079841AC989FB4F6AC75982FC7F57E\
 980A
+"""
 
-Coin name: Bitcoin
+    out2 = """Coin name: Bitcoin
 Compressed: True
 
 Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
 """
 
-    def mock_print(self):
-        """Creates the mock print function."""
-        def print(x):
-            """Record the input in self.out."""
-            self.out += x + "\n"
-        return print
-
-    def do_test(self, e, c):
-        """Run exporting on Coin c with e, and records the output."""
-        self.out += '\n'
-        with patch('builtins.print', new_callable=self.mock_print):
+    def make_test(self, e, c):
+        """Return a function that tests exporting on Coin c with e."""
+        def test():
+            """The test function for use in cli_test."""
             e.run(c)
+        return test
 
     def test_all(self):
         """Run do_test with all test sets."""
@@ -82,7 +74,5 @@ Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
 
-        self.do_test(e, self.Coin(wif=wif))
-        self.do_test(e, self.Coin(addr=addr))
-
-        self.assertEqual(self.correct_out, self.out)
+        self.cli_test(self.make_test(e, self.Coin(wif=wif)), stdout=self.out1)
+        self.cli_test(self.make_test(e, self.Coin(addr=addr)), stdout=self.out2)
