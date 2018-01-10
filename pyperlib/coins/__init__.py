@@ -58,8 +58,11 @@ class BaseCoin:
     view_type = None
     addr_type = None
 
+    priv_type = data.HexData
+    pub_type = data.HexData
+
     def __init__(self, priv=None, wif=None, view=None, addr=None,
-                 settings=None):
+                 pub=None, settings=None):
         """Construct the coin based on spend, view, or address keys."""
         self.keypair = None
         self.wif = None
@@ -73,17 +76,33 @@ class BaseCoin:
             self.settings = settings
 
         if priv is not None:
-            self.load_priv(priv)
+            self.load_priv(self.str2priv(priv))
         elif wif is not None:
             self.from_wif(self.str2wif(wif))
         elif view is not None:
             self.from_view(self.str2view(view))
+        elif pub is not None:
+            self.load_pub(self.str2pub(pub))
         elif addr is not None:
             self.from_addr(self.str2addr(addr))
         else:
             self.gen()
 
         self.validate_all()
+
+    @classmethod
+    def str2priv(self, string):
+        """Convert ambiguous string to priv_type."""
+        if type(string) is not str:
+            return string
+        return self.priv_type(string)
+
+    @classmethod
+    def str2pub(self, string):
+        """Convert ambiguous string to pub_type."""
+        if type(string) is not str:
+            return string
+        return self.pub_type(string)
 
     @classmethod
     def str2wif(self, string):
@@ -192,7 +211,7 @@ class BaseCoin:
                 self.calc_wif()
                 if self.has_privacy:
                     self.calc_view()
-            if self.keypair.pub_u is not None:
+            if self.keypair.pub_c is not None:  # true when any pub is present.
                 self.calc_addr()
 
     def wif_string(self):

@@ -73,7 +73,8 @@ class BIP38Cryptor(BaseCryptor):
     def decrypt(self, coin, passphrase=None):
         """Decrypt with bip38, loading the new private key."""
         if passphrase is None:
-            passphrase = self.prompt.prompt_pass("BIP38 Password", repeat=False)
+            passphrase = self.prompt.prompt_pass("BIP38 Password",
+                                                 repeat=False)
 
         addr_hash = coin.wif[3:7]
 

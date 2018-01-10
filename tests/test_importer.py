@@ -62,17 +62,28 @@ class TestCliImporters(TestBaseImporter, helper.CliTestCase):
 
     def test_all(self):
         """Run do_test given command line input."""
-        w_i = importer.WifImporter(self.Coin, prompter.CliPrompter)
-        a_i = importer.AddrImporter(self.Coin, prompter.CliPrompter)
+        wif_i = importer.WifImporter(self.Coin, prompter.CliPrompter)
+        priv_i = importer.PrivImporter(self.Coin, prompter.CliPrompter)
+        addr_i = importer.AddrImporter(self.Coin, prompter.CliPrompter)
+        pub_i = importer.PubImporter(self.Coin, prompter.CliPrompter)
 
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
+        priv = "3C5F262F56AF74A2C314354BE7EA0CCAFEDA1C059E2B5B3B4C3151912C774F\
+78"
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
+        pub = "02FF136594F723F047A0917A8EC66B56079841AC989FB4F6AC75982FC7F57E9\
+80A"
 
         in1 = [wif]
-        in2 = [addr]
+        in2 = [priv]
+        in3 = [addr]
+        in4 = [pub]
 
-        self.cli_test(self.do_test, stdin=in1, i=w_i, w=wif, v=None, a=addr)
-        self.cli_test(self.do_test, stdin=in2, i=a_i, w=None, v=None, a=addr)
+        self.cli_test(self.do_test, stdin=in1, i=wif_i, w=wif, v=None, a=addr)
+        self.cli_test(self.do_test, stdin=in2, i=priv_i, w=wif, v=None, a=addr)
+        self.cli_test(self.do_test, stdin=in3, i=addr_i, w=None, v=None,
+                      a=addr)
+        self.cli_test(self.do_test, stdin=in4, i=pub_i, w=None, v=None, a=addr)
 
 
 class TestBrainImporter(TestBaseImporter):

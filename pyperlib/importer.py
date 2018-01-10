@@ -30,20 +30,40 @@ class GenImporter(BaseImporter):
 
 
 class WifImporter(BaseImporter):
-    """An importer that takes imports using a wif string."""
+    """An importer that imports using a wif string."""
 
     def run(self, wif=None):
-        """Returns the result of creating a Coin from wif."""
+        """Return the result of creating a Coin from wif."""
         if wif is None:
             wif = self.prompt.prompt_info(name="WIF key", type_f=str)
         return super().run(wif=wif)
 
 
+class PrivImporter(BaseImporter):
+    """An importer that imports using a private key."""
+
+    def run(self, priv=None):
+        """Return the result of creating a Coin from priv."""
+        if priv is None:
+            priv = self.prompt.prompt_info(name="Private key", type_f=str)
+        return super().run(priv=priv)
+
+
+class PubImporter(BaseImporter):
+    """An importer that imports using a public key."""
+
+    def run(self, pub=None):
+        """Return the result of creating a Coin from pub."""
+        if pub is None:
+            pub = self.prompt.prompt_info(name="Public key", type_f=str)
+        return super().run(pub=pub)
+
+
 class AddrImporter(BaseImporter):
-    """An importer that takes imports using a addr string."""
+    """An importer that imports using a addr string."""
 
     def run(self, addr=None):
-        """Returns the result of creating a Coin from addr."""
+        """Return the result of creating a Coin from addr."""
         if addr is None:
             addr = self.prompt.prompt_info(name="Public address", type_f=str)
         return super().run(addr=addr)
