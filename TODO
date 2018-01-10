@@ -1,15 +1,21 @@
 * pyperlib.coins
+ - ADD wif encryption autodetect
+ - ADD the ability to create coins from encrypted wifs
  - ADD XMR support
+ - ADD XRP support
  - ADD seeds to coins that use them?
 * pyperlib.importer
  - ADD qr scanner importer
 * pyperlib.exporter
- - ADD text file exporter
+ - ADD file exporter
  - ADD bill-style wallet exporter
  - ADD trifold-style wallet exporter
  - ADD sixfold-style wallet exporter
 * pyperlib.crypto
+ - MODIFY how bip38 interacts with non-base58 coins
  - ADD bip39 cryptor
+* pyperlib.prompter
+ - ADD gui prompter?
 * pyperlib.wallet
 * pyper_wallet.py
  - ADD cli
@@ -30,3 +36,5 @@
  - ADD an extension guide?
 * Tests
  - ADD more monkey-testing cases
+ - ADD edge-case resistant cases
+ 
