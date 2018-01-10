@@ -34,6 +34,8 @@ class TestNameFactory(TestCase):
 class CliTestCase(TestCase):
     """A testcase that involves stdin or stdout."""
 
+    maxDiff = None
+
     def mock_print(self):
         """Creates the mock print function."""
         def print(x):

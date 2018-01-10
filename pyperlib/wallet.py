@@ -59,4 +59,4 @@ class Wallet:
             c.encrypt(coin)
 
         e = self.Exporter()
-        e.run(coin)
+        return e.run(coin)
