@@ -29,11 +29,11 @@ class TestBaseCryptor(TestCase):
         coin = self.make_coin()
         wif = coin.wif
 
-        coin.encrypt(**kwargs)
-        self.assertEqual(coin.crypt_type, coin.settings.cryptor.name)
+        self.cryptor.encrypt(coin, **kwargs)
+        self.assertEqual(coin.crypt_type, self.cryptor.name)
         self.assertEqual(coin.wif_string(), self.enc_wif)
 
-        coin.decrypt(**kwargs)
+        self.cryptor.decrypt(coin, **kwargs)
         self.assertEqual(coin.crypt_type, None)
         self.assertEqual(coin.wif, wif)
 
@@ -41,7 +41,6 @@ class TestBaseCryptor(TestCase):
         """Generate the coin from self.wif."""
 
         coin = self.Coin(wif=self.wif)
-        coin.settings.cryptor = self.cryptor
         return coin
 
     def test_all(self):

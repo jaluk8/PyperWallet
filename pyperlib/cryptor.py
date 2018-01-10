@@ -6,6 +6,10 @@ class DecryptionUnsucessfulError(Exception):
     """Raised when a password is wrong or decryption fails otherwise."""
 
 
+class CryptorError(Exception):
+    """An error that is raised when cryptor types are wrong."""
+
+
 class CryptorFactory(helper.NameFactory):
     """A class that makes cryptors from names."""
     suffix = "Cryptor"
@@ -21,11 +25,33 @@ class BaseCryptor:
         """Create a cryptor with a prompter for getting passwords."""
         self.prompt = prompt
 
-    def encrypt(self, coin, **kwargs):
+    def run_encrypt(self, coin):
         """Encrypt with nothing."""
 
-    def decrypt(self, coin, **kwargs):
+    def run_decrypt(self, coin):
         """Decrypt with nothing."""
+
+    def encrypt(self, coin, **kwargs):
+        """Changes the unencrypted wif into an encrypted one."""
+        if coin.crypt_type is not None:
+            raise CryptorError("Coin is already encrypted.")
+
+        self.run_encrypt(coin, **kwargs)
+
+        coin.keypair = None
+        coin.crypt_type = self.name
+
+    def decrypt(self, coin, **kwargs):
+        """Changes the encrypted wif key to a decrypted one."""
+        if coin.crypt_type is None:
+            raise CryptorError("Coin is not encrypted.")
+        elif coin.crypt_type != self.name:
+            raise CryptorError("Cryptor does not match the encryption type.")
+
+        self.run_decrypt(coin, **kwargs)
+
+        coin.validate_all()
+        coin.crypt_type = None
 
 
 class BIP38Cryptor(BaseCryptor):
@@ -42,7 +68,7 @@ class BIP38Cryptor(BaseCryptor):
         addr_string = data.StringData(coin.addr_string())
         return self.base58check(addr_string)
 
-    def encrypt(self, coin, passphrase=None):
+    def run_encrypt(self, coin, passphrase=None):
         """Encrypt with bip38, mutating coin.wif."""
         if passphrase is None:
             passphrase = self.prompt.prompt_pass("BIP38 Password")
@@ -70,7 +96,7 @@ class BIP38Cryptor(BaseCryptor):
         enc_wif = prefix + flag + addr_hash + enc_h1 + enc_h2
         coin.wif = enc_wif + self.base58check(enc_wif)
 
-    def decrypt(self, coin, passphrase=None):
+    def run_decrypt(self, coin, passphrase=None):
         """Decrypt with bip38, loading the new private key."""
         if passphrase is None:
             passphrase = self.prompt.prompt_pass("BIP38 Password",
