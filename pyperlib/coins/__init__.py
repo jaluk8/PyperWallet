@@ -35,7 +35,13 @@ class CoinFactory:
 
 class CoinSettings:
     """A container for keeping track of user-defined coin settings."""
+
     compression = True
+
+    def __init__(self, **kwargs):
+        """Sets any attributes given as keyword arguments."""
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
 
 class BaseCoin:
