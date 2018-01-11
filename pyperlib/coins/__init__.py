@@ -1,4 +1,5 @@
 from pyperlib import data, ec
+from pyperlib.coins.settings import CoinSettings
 import importlib
 import pkgutil
 
@@ -10,12 +11,15 @@ class InvalidCoinError(Exception):
 class CoinFactory:
     """A class that keeps track of and returns all coin modules."""
 
+    non_coins = ["settings"]
+
     def __init__(self):
         """Construct the class and search for coin modules."""
         pkgiter = pkgutil.iter_modules(__path__)
         self.coins = []
         for _, name, _ in pkgiter:
-            self.coins.append(name)
+            if name not in self.non_coins:
+                self.coins.append(name)
 
     def has(self, name):
         """Return whether a name was found in the modules."""
@@ -31,17 +35,6 @@ class CoinFactory:
             return None
         p = importlib.import_module('.' + name, package=__package__)
         return p.Coin
-
-
-class CoinSettings:
-    """A container for keeping track of user-defined coin settings."""
-
-    compression = True
-
-    def __init__(self, **kwargs):
-        """Sets any attributes given as keyword arguments."""
-        for key, value in kwargs.items():
-            setattr(self, key, value)
 
 
 class BaseCoin:

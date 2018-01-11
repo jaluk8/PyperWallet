@@ -12,6 +12,7 @@ class Wallet:
     importer_f = importer.ImporterFactory
     cryptor_f = cryptor.CryptorFactory
     exporter_f = exporter.ExporterFactory
+    Settings = coins.CoinSettings
 
     def __init__(self, Coin, Importer, Exporter, Prompt=None, Cryptor=None,
                  settings=None, **kwargs):
@@ -35,8 +36,6 @@ class Wallet:
             self.Exporter = self.exporter_f.get(Exporter)
         if Cryptor is not None and type(Cryptor) is str:
             self.Cryptor = self.cryptor_f.get(Cryptor)
-            if self.Cryptor is None:
-                raise ArgumentError("Invalid Cryptor")
 
         if self.Coin is None:
             raise ArgumentError("Invalid Coin")
