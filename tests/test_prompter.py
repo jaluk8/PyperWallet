@@ -20,7 +20,9 @@ class TestBasePrompter(TestCase):
         """Test that all function return NotImplementedErrors."""
 
         self.do_test(self.prompt.prompt_info, error=NotImplementedError,
-                     name="", type_f=str, options=[])
+                     name="", type_f=str)
+        self.do_test(self.prompt.prompt_list, error=NotImplementedError,
+                     name="", options=[])
         self.do_test(self.prompt.prompt_pass, error=NotImplementedError,
                      name="", type_f=str, repeat=True)
 
@@ -30,7 +32,7 @@ class TestCliPrompter(TestBasePrompter, helper.CliTestCase):
 
     prompt = prompter.CliPrompter
 
-    stdin = ["value", "value", "value"]
+    stdin = ["value", "2", "value", "value"]
 
     def prompt_all(self, name, result):
         """Prompt for name using all prompt functions, expecting a result."""
@@ -38,6 +40,8 @@ class TestCliPrompter(TestBasePrompter, helper.CliTestCase):
         self.prompt.pass_input = input
 
         self.do_test(self.prompt.prompt_info, output=result, name=name)
+        self.do_test(self.prompt.prompt_list, output=result, name=name,
+                     options=["low", result, "high"])
         self.do_test(self.prompt.prompt_pass, output=result, name=name)
 
         self.prompt.pass_input = pi

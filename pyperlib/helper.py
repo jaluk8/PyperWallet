@@ -68,7 +68,8 @@ class CliTestCase(TestCase):
 
         if stdout is None:
             with patch("builtins.input", side_effect=stdin):
-                return f(**kwargs)
+                with patch('builtins.print', new_callable=self.mock_print):
+                    return f(**kwargs)
         elif stdin is None:
             with patch('builtins.print', new_callable=self.mock_print):
                 result = f(**kwargs)
