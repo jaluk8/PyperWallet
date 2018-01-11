@@ -18,9 +18,7 @@
  - ADD gui prompter?
 * pyperlib.wallet
 * pyper_wallet.py
- - ADD cli
  - ADD user-friendly error reporting to cli
- - ADD --help
  - ADD gui?
  - ADD installer?
 * logos
