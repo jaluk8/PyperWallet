@@ -40,6 +40,8 @@ class Exported:
 class BaseExporter:
     """Takes in a Coin object and exports it to python values."""
 
+    description = "no description"
+
     def __init__(self):
         """Exporters require no initialization."""
         pass
@@ -51,6 +53,8 @@ class BaseExporter:
 
 class CliExporter(BaseExporter):
     """Takes in a Coin object and prints its data to stdout."""
+
+    description = "print all known data of the coin to the command line"
 
     def run(self, c):
         """Exports the given coin to stdout."""

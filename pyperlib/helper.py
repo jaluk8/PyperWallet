@@ -33,6 +33,15 @@ class NameFactory:
                     names.append(name)
         return names
 
+    @classmethod
+    def dict(cls):
+        """Return a dict of valid names and objects."""
+        names = cls.list()
+        d = {}
+        for name in names:
+            d[name] = cls.get(name)
+        return d
+
 
 class TestNameFactory(TestCase):
     """A TestCase for the NameFactory class."""

@@ -20,6 +20,7 @@ class BaseCryptor:
     """The base class for all encrypting/decrypting objects."""
 
     name = "identity"
+    description = "no description"
 
     def __init__(self, prompt=None):
         """Create a cryptor with a prompter for getting passwords."""
@@ -58,6 +59,7 @@ class Bip38Cryptor(BaseCryptor):
     """Encrypt/decrypt using the BIP 38 standard."""
 
     name = "bip38"
+    description = "an early bitcoin encryption standard (keys start with 6P)"
 
     def base58check(self, d):
         """Return the base58checksum of the given data."""

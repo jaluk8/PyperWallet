@@ -11,6 +11,8 @@ class ImporterFactory(helper.NameFactory):
 class BaseImporter:
     """An importer that imports using args, rather than external sources."""
 
+    description = "no description"
+
     def __init__(self, Coin, prompt=None):
         """Initializes the importer with a Coin class."""
         self.Coin = Coin
@@ -24,6 +26,8 @@ class BaseImporter:
 class GenImporter(BaseImporter):
     """An importer that takes no arguments and just generates coins."""
 
+    description = "generate a new coin using random numbers"
+
     def run(self):
         """Returns the result of creating a Coin from generation."""
         return super().run()
@@ -31,6 +35,8 @@ class GenImporter(BaseImporter):
 
 class WifImporter(BaseImporter):
     """An importer that imports using a wif string."""
+
+    description = "import the coin from a wallet import format key"
 
     def run(self, wif=None):
         """Return the result of creating a Coin from wif."""
@@ -42,6 +48,8 @@ class WifImporter(BaseImporter):
 class PrivImporter(BaseImporter):
     """An importer that imports using a private key."""
 
+    description = "import the coin from a hexadecimal private key"
+
     def run(self, priv=None):
         """Return the result of creating a Coin from priv."""
         if priv is None:
@@ -51,6 +59,9 @@ class PrivImporter(BaseImporter):
 
 class PubImporter(BaseImporter):
     """An importer that imports using a public key."""
+
+    description = "import the coin from a hexadecimal public key (no private \
+                   key)"
 
     def run(self, pub=None):
         """Return the result of creating a Coin from pub."""
@@ -62,6 +73,8 @@ class PubImporter(BaseImporter):
 class AddrImporter(BaseImporter):
     """An importer that imports using a addr string."""
 
+    description = "import the coin from an address (no private key)"
+
     def run(self, addr=None):
         """Return the result of creating a Coin from addr."""
         if addr is None:
@@ -71,6 +84,8 @@ class AddrImporter(BaseImporter):
 
 class BrainImporter(BaseImporter):
     """An importer for brainwallets using sha256."""
+
+    description = "import the coin using a memorized 'brain wallet' phrase"
 
     def run(self, brain=None):
         """Uses brainwallet string given to make a private key."""
