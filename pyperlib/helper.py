@@ -9,7 +9,7 @@ class NameFactory:
 
     @classmethod
     def get(cls, name):
-        """Returns the proper type, if it exists."""
+        """Return the proper type, if it exists."""
         if name[:4].lower() == "base":
             return None
 
@@ -20,6 +20,19 @@ class NameFactory:
         else:
             return None
 
+    @classmethod
+    def list(cls):
+        """List all valid names that can be passed into get."""
+        names = []
+        for var in cls.pool:
+            if var.endswith(cls.suffix):
+                suf_len = len(cls.suffix)
+                name = var[:-suf_len]
+                name = name.lower()
+                if name[:4] != "base":
+                    names.append(name)
+        return names
+
 
 class TestNameFactory(TestCase):
     """A TestCase for the NameFactory class."""
@@ -29,6 +42,12 @@ class TestNameFactory(TestCase):
     def do_test(self, name, i):
         """Check that you get i when looking for name."""
         self.assertEqual(self.factory.get(name), i)
+
+    def test_list(self):
+        """Get a list of all names and check for correctness."""
+        for name in self.factory.list():
+            obj = self.factory.get(name)
+            self.assertNotEqual(obj, None)
 
 
 class CliTestCase(TestCase):

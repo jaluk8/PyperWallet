@@ -48,10 +48,10 @@ class TestBaseCryptor(TestCase):
         self.do_test()
 
 
-class TestBIP38Cryptor(TestBaseCryptor):
+class TestBip38Cryptor(TestBaseCryptor):
     """Encrypt and decrypt a coin, with bip38."""
 
-    cryptor = cryptor.BIP38Cryptor()
+    cryptor = cryptor.Bip38Cryptor()
     enc_wif = "6PYS3EufMDqJZMqKxHZ2fGTe1FDGWQy9vYrnuJeiUUxppqTDfUNKoVjJXu"
 
     def test_all(self):

@@ -54,7 +54,7 @@ class BaseCryptor:
         coin.crypt_type = None
 
 
-class BIP38Cryptor(BaseCryptor):
+class Bip38Cryptor(BaseCryptor):
     """Encrypt/decrypt using the BIP 38 standard."""
 
     name = "bip38"
