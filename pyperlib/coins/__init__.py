@@ -17,17 +17,17 @@ class CoinFactory:
         for _, name, _ in pkgiter:
             self.coins.append(name)
 
-    def has_coin(self, name):
+    def has(self, name):
         """Return whether a name was found in the modules."""
         return name in self.coins
 
-    def list_coins(self):
+    def list(self):
         """Return a list of found module names."""
         return list(self.coins)
 
-    def get_coin(self, name):
+    def get(self, name):
         """Return the coin module or None if it doesn't exist."""
-        if not self.has_coin(name):
+        if not self.has(name):
             return None
         p = importlib.import_module('.' + name, package=__package__)
         return p.Coin

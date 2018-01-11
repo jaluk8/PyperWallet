@@ -88,5 +88,5 @@ class TestWalletGen(TestCase):
         cf = coins.CoinFactory()
 
         for name in ["btc", "eth", "ltc"]:
-            Coin = cf.get_coin(name)
+            Coin = cf.get(name)
             self.do_test(Coin)

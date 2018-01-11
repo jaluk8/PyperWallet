@@ -28,7 +28,7 @@ class Wallet:
             self.settings = coins.CoinSettings(**kwargs)
 
         if type(Coin) is str:
-            self.Coin = self.coin_f.get_coin(Coin)
+            self.Coin = self.coin_f.get(Coin)
         if type(Importer) is str:
             self.Importer = self.importer_f.get(Importer)
         if type(Exporter) is str:

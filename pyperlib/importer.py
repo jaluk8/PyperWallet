@@ -61,7 +61,7 @@ class PubImporter(BaseImporter):
     """An importer that imports using a public key."""
 
     description = "import the coin from a hexadecimal public key (no private \
-                   key)"
+key)"
 
     def run(self, pub=None):
         """Return the result of creating a Coin from pub."""

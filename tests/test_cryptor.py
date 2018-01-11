@@ -17,7 +17,7 @@ class TestBaseCryptor(TestCase):
     """Encrypt and decrypt a coin, checking for correctness."""
 
     cf = coins.CoinFactory()
-    Coin = cf.get_coin("btc")
+    Coin = cf.get("btc")
     wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
 
     enc_wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"

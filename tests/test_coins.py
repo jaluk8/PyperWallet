@@ -7,9 +7,9 @@ class TestCoinFactory(TestCase):
 
     def do_test(self, name, cf):
         """Check that the coinfactory has the coin and can load it."""
-        self.assertTrue(cf.has_coin(name))
+        self.assertTrue(cf.has(name))
         try:
-            c = cf.get_coin(name)
+            c = cf.get(name)
         except NotImplementedError:
             return
         self.assertTrue(issubclass(c, coins.BaseCoin))
@@ -17,7 +17,7 @@ class TestCoinFactory(TestCase):
     def tests(self):
         """Check all coins in the list, as well as the current top 3."""
         cf = coins.CoinFactory()
-        for name in cf.list_coins():
+        for name in cf.list():
             self.do_test(name, cf)
         self.do_test('btc', cf)
         self.do_test('ltc', cf)
@@ -125,8 +125,8 @@ class TestAllCoins(TestCase):
     def test_all(self):
         """Gets a list of all implemented coins and runs check_coin."""
         cf = coins.CoinFactory()
-        for name in cf.list_coins():
-            Coin = cf.get_coin(name)
+        for name in cf.list():
+            Coin = cf.get(name)
             self.check_gen(Coin)
 
             if name in self.example_keys:
