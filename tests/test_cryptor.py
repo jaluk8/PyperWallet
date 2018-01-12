@@ -40,7 +40,7 @@ class TestBaseCryptor(TestCase):
     def make_coin(self):
         """Generate the coin from self.wif."""
 
-        coin = self.Coin(wif=self.wif)
+        coin = self.Coin(key=self.wif)
         return coin
 
     def test_all(self):

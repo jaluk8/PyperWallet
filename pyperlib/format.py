@@ -2,10 +2,6 @@ from pyperlib import data
 import math
 
 
-class NoFormatError(Exception):
-    """Raise when no format could be found to match some data."""
-
-
 class Format:
     """Represent a data format, such as wif or addresses."""
 
@@ -57,6 +53,18 @@ class Format:
         return True
 
 
+class NoFormat:
+    """A blank format interface, the format equivalent of None."""
+
+    def __init__(self):
+        """Initialize a blank format."""
+        self.name = "none"
+
+    def match(self, d):
+        """This format matches nothing."""
+        return False
+
+
 class AutoDetector:
     """Automatically detect formats for given data."""
 
@@ -72,7 +80,7 @@ class AutoDetector:
         valid = [f for f in self.formats if f.match(d)]
 
         if len(valid) == 0:
-            raise NoFormatError("unsupported or invalid format")
+            return None
         elif len(valid) == 1:
             return valid[0]
         else:

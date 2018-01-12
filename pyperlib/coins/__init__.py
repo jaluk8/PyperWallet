@@ -1,4 +1,4 @@
-from pyperlib import data, ec
+from pyperlib import data, ec, format
 from pyperlib.coins.settings import CoinSettings
 import importlib
 import pkgutil
@@ -55,8 +55,11 @@ class BaseCoin:
     priv_type = data.HexData
     pub_type = data.HexData
 
-    def __init__(self, priv=None, wif=None, view=None, addr=None,
-                 pub=None, settings=None):
+    wif_format = format.NoFormat()
+    view_format = format.NoFormat()
+    addr_format = format.NoFormat()
+
+    def __init__(self, key=None, settings=None, prompt=None):
         """Construct the coin based on spend, view, or address keys."""
         self.keypair = None
         self.wif = None
@@ -64,25 +67,41 @@ class BaseCoin:
         self.addr = None
         self.crypt_type = None
 
+        self.prompt = prompt
+
         if settings is None:
             self.settings = CoinSettings()
         else:
             self.settings = settings
 
-        if priv is not None:
-            self.load_priv(self.str2priv(priv))
-        elif wif is not None:
-            self.from_wif(self.str2wif(wif))
-        elif view is not None:
-            self.from_view(self.str2view(view))
-        elif pub is not None:
-            self.load_pub(self.str2pub(pub))
-        elif addr is not None:
-            self.from_addr(self.str2addr(addr))
-        else:
+        self.make_formats()
+
+        if key is None:
             self.gen()
+        else:
+            ad = format.AutoDetector(self.formats, self.prompt)
+            form = ad.detect(key)
+            if form is None:
+                error_msg = str(key) + " is not recognized as a valid format."
+                raise InvalidCoinError(error_msg)
+
+            if form is self.priv_format:
+                self.load_priv(self.str2priv(key))
+            elif form is self.wif_format:
+                self.from_wif(self.str2wif(key))
+            elif form is self.view_format:
+                self.from_view(self.str2view(key))
+            elif form is self.addr_format:
+                self.from_addr(self.str2addr(key))
 
         self.validate_all()
+
+    def make_formats(self):
+        """Create all formats supported by the coin."""
+        self.priv_format = format.Format("private key", data.HexData,
+                                         min_len=32, max_len=32)
+        self.formats = [self.priv_format, self.wif_format, self.view_format,
+                        self.addr_format]
 
     @classmethod
     def str2priv(self, string):

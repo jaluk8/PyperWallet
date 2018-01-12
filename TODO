@@ -1,4 +1,5 @@
 * pyperlib.coins
+ - FIX the effect of importing uncompressed wif keys into a compressed wallet
  - ADD wif encryption autodetect
  - ADD the ability to create coins from encrypted wifs
  - ADD XMR support
@@ -12,7 +13,7 @@
  - ADD trifold-style wallet exporter
  - ADD sixfold-style wallet exporter
 * pyperlib.crypto
- - MODIFY how bip38 interacts with non-base58 coins
+ - FIX how bip38 interacts with non-base58 coins
  - ADD bip39 cryptor
 * pyperlib.prompter
  - ADD gui prompter?

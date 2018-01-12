@@ -5,14 +5,20 @@ from unittest import TestCase
 class MockPrompter(prompter.BasePrompter):
     """A prompter that returns values based on a dict."""
 
-    answers = {
-        "WIF key": "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU",
-        "Public address": "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"}
+    answers = [
+        "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU",
+        "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU",
+        "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"]
+
+    @classmethod
+    def reset(cls):
+        """Reset the answers back to the start."""
+        cls.answer_iter = iter(cls.answers)
 
     @classmethod
     def prompt_info(cls, name, type_f=None, options=None):
         """Check the dict for name and return it."""
-        return cls.answers[name]
+        return next(cls.answer_iter)
 
 
 class TestWalletCli(helper.CliTestCase):
@@ -50,17 +56,18 @@ Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
     def do_tests(self):
         """Run various wallet imports."""
 
-        w = wallet.Wallet(Coin="btc", Importer="wif", Exporter="cli",
+        MockPrompter.reset()
+        w = wallet.Wallet(Coin="btc", Importer="prompt", Exporter="cli",
                           Prompt=MockPrompter)
         w.run()
         print("------")
 
-        w = wallet.Wallet(Coin="btc", Importer="wif", Exporter="cli",
+        w = wallet.Wallet(Coin="btc", Importer="prompt", Exporter="cli",
                           Prompt=MockPrompter, compression=False)
         w.run()
         print("------")
 
-        w = wallet.Wallet(Coin="btc", Importer="addr", Exporter="cli",
+        w = wallet.Wallet(Coin="btc", Importer="prompt", Exporter="cli",
                           Prompt=MockPrompter)
         w.run()
         print("------")
@@ -79,7 +86,7 @@ class TestWalletGen(TestCase):
                           Exporter=exporter.BaseExporter)
         exported = w.run()
 
-        coin = Coin(wif=exported.wif)
+        coin = Coin(exported.wif)
         self.assertEqual(coin.addr_string(), exported.addr)
 
     def test_all(self):

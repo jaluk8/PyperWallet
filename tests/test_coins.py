@@ -33,9 +33,6 @@ class TestBaseCoin(TestCase):
     def test_set(self):
         """Check all possible versions of the constructor."""
         self.do_constructor()
-        self.do_constructor(wif=1)
-        self.do_constructor(view=1)
-        self.do_constructor(addr=1)
 
 
 class TestAllCoins(TestCase):
@@ -79,34 +76,34 @@ class TestAllCoins(TestCase):
 
     def check_load(self, Coin, wif_str, view_str, addr_str, wif, view, addr):
         """Load Coin from various keys and check correctness."""
-        c1 = Coin(wif=wif)
+        c1 = Coin(key=wif)
         self.assertEqual(c1.wif, wif)
         self.assertEqual(c1.addr, addr)
         if Coin.has_privacy:
             self.assertEqual(c1.view, view)
 
-        c2 = Coin(addr=addr)
+        c2 = Coin(key=addr)
         self.assertEqual(c2.wif, None)
         self.assertEqual(c2.addr, addr)
         if Coin.has_privacy:
             self.assertEqual(c2.view, None)
 
         if Coin.has_privacy:
-            c3 = Coin(view=view)
+            c3 = Coin(key=view)
             self.assertEqual(c3.wif, None)
             self.assertEqual(c3.addr, None)
             self.assertEqual(c3.view, view)
 
         if wif_str is not None:
-            c4 = Coin(wif=wif_str)
+            c4 = Coin(key=wif_str)
             self.assertEqual(c4.wif, wif)
 
         if addr_str is not None:
-            c5 = Coin(addr=addr_str)
+            c5 = Coin(key=addr_str)
             self.assertEqual(c5.addr, addr)
 
         if view_str is not None and Coin.has_privacy:
-            c6 = Coin(view=view_str)
+            c6 = Coin(key=view_str)
             self.assertEqual(c6.view, view)
 
     def get_key(self, name, Coin):
@@ -165,12 +162,12 @@ class TestValidation(TestAllCoins):
 
         if Coin.has_priv_csum:
             with self.assertRaises(coins.InvalidCoinError):
-                c1 = Coin(wif=wif)
+                c1 = Coin(key=wif)
 
         if Coin.has_addr_csum:
             with self.assertRaises(coins.InvalidCoinError):
-                c2 = Coin(addr=addr)
+                c2 = Coin(key=addr)
 
         if Coin.has_view_csum and Coin.has_privacy:
             with self.assertRaises(coins.InvalidCoinError):
-                c3 = Coin(view=view)
+                c3 = Coin(key=view)

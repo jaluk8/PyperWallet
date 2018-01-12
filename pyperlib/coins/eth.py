@@ -1,4 +1,4 @@
-from pyperlib import coins, ec, data, mods
+from pyperlib import coins, ec, data, mods, format
 
 
 class Coin(coins.BaseCoin):
@@ -9,13 +9,18 @@ class Coin(coins.BaseCoin):
 
     has_addr_csum = True
 
-    wif_type = data.StringData
+    wif_type = data.HexData
     addr_type = data.StringData
+
+    def make_formats(self):
+        """Create all formats supported by the coin."""
+        self.addr_format = format.Format("address", data.StringData,
+                                         min_len=42, max_len=42, prefix="3078")
+        super().make_formats()
 
     def from_wif(self, wif):
         """Create the coin from wallet import format Data."""
-        priv = data.HexData(wif.string)
-        self.load_priv(priv)
+        self.load_priv(wif)
 
     def from_addr(self, addr):
         """Create a coin containing only the addr."""
@@ -43,8 +48,7 @@ class Coin(coins.BaseCoin):
 
     def calc_wif(self):
         """Calculate the wif key from the keypair."""
-        wif_hex = self.keypair.priv.hex.lower()
-        self.wif = data.StringData(wif_hex)
+        self.wif = self.keypair.priv
 
     def calc_addr(self):
         """Calculate the addr from the keypair."""

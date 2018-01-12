@@ -34,8 +34,8 @@ class TestBaseExporter(TestCase):
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
 
-        self.do_test(e, self.Coin(wif=wif), wif, None, addr)
-        self.do_test(e, self.Coin(addr=addr), None, None, addr)
+        self.do_test(e, self.Coin(key=wif), wif, None, addr)
+        self.do_test(e, self.Coin(key=addr), None, None, addr)
 
 
 class TestCliExporter(TestBaseExporter, helper.CliTestCase):
@@ -74,6 +74,6 @@ Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"
 
-        self.cli_test(self.make_test(e, self.Coin(wif=wif)), stdout=self.out1)
-        self.cli_test(self.make_test(e, self.Coin(addr=addr)),
+        self.cli_test(self.make_test(e, self.Coin(key=wif)), stdout=self.out1)
+        self.cli_test(self.make_test(e, self.Coin(key=addr)),
                       stdout=self.out2)

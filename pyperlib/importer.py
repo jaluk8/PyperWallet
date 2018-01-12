@@ -20,7 +20,7 @@ class BaseImporter:
 
     def run(self, **kwargs):
         """Returns the result of creating a Coin with kwargs."""
-        return self.Coin(**kwargs)
+        return self.Coin(**kwargs, prompt=self.prompt)
 
 
 class GenImporter(BaseImporter):
@@ -33,53 +33,16 @@ class GenImporter(BaseImporter):
         return super().run()
 
 
-class WifImporter(BaseImporter):
-    """An importer that imports using a wif string."""
+class PromptImporter(BaseImporter):
+    """An importer that imports by prompting a wif/priv/addr/etc."""
 
-    description = "import the coin from a wallet import format key"
+    description = "import the coin from a wif key, address, private key, etc."
 
-    def run(self, wif=None):
-        """Return the result of creating a Coin from wif."""
-        if wif is None:
-            wif = self.prompt.prompt_info(name="WIF key", type_f=str)
-        return super().run(wif=wif)
-
-
-class PrivImporter(BaseImporter):
-    """An importer that imports using a private key."""
-
-    description = "import the coin from a hexadecimal private key"
-
-    def run(self, priv=None):
-        """Return the result of creating a Coin from priv."""
-        if priv is None:
-            priv = self.prompt.prompt_info(name="Private key", type_f=str)
-        return super().run(priv=priv)
-
-
-class PubImporter(BaseImporter):
-    """An importer that imports using a public key."""
-
-    description = "import the coin from a hexadecimal public key (no private \
-key)"
-
-    def run(self, pub=None):
-        """Return the result of creating a Coin from pub."""
-        if pub is None:
-            pub = self.prompt.prompt_info(name="Public key", type_f=str)
-        return super().run(pub=pub)
-
-
-class AddrImporter(BaseImporter):
-    """An importer that imports using a addr string."""
-
-    description = "import the coin from an address (no private key)"
-
-    def run(self, addr=None):
-        """Return the result of creating a Coin from addr."""
-        if addr is None:
-            addr = self.prompt.prompt_info(name="Public address", type_f=str)
-        return super().run(addr=addr)
+    def run(self, key=None):
+        """Return the result of creating a Coin from something."""
+        if key is None:
+            key = self.prompt.prompt_info(name="Key", type_f=str)
+        return super().run(key=key)
 
 
 class BrainImporter(BaseImporter):
@@ -94,4 +57,4 @@ class BrainImporter(BaseImporter):
 
         brain_data = data.StringData(brain)
         priv = mods.Sha256(brain_data)
-        return super().run(priv=priv)
+        return super().run(key=priv)
