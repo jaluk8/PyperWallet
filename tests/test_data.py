@@ -1,5 +1,17 @@
 from unittest import TestCase
-from pyperlib import data
+from pyperlib import data, helper
+
+
+class TestDataFactory(helper.TestNameFactory):
+    """Test the DataFactory's get method."""
+
+    factory = data.DataFactory
+
+    def test_all(self):
+        """Attempt to import various names."""
+        self.do_test("base", None)
+        self.do_test("nonexistant", None)
+        self.do_test("byte", data.ByteData)
 
 
 class TestDataBytes(TestCase):

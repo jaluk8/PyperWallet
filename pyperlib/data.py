@@ -1,19 +1,21 @@
+from pyperlib import helper
 import unicodedata
-
-base58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
 
 class EncodingException(Exception):
     """Occurs when invalid characters exist during conversion."""
 
 
-class ByteData:
-    """A main data class that can convert between various needed data types."""
+class DataFactory(helper.NameFactory):
+    """A factory to produce data objects based on their name."""
+    suffix = "Data"
+    pool = globals()
 
-    def __init__(self, b=b''):
-        """Construct Data from bytes."""
-        assert type(b) is bytes
-        self.bytes = b
+
+class BaseData:
+    """The base class for all data types."""
+
+    base58_chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
     @property
     def hex(self):
@@ -33,7 +35,7 @@ class ByteData:
 
         while value > 0:
             i = value % 58
-            b58 = base58[i] + b58
+            b58 = self.base58_chars[i] + b58
             value //= 58
 
         for b in self.bytes:
@@ -64,7 +66,7 @@ class ByteData:
 
     def __eq__(self, other):
         """Determine the equality of two Data objects."""
-        if issubclass(type(other), ByteData):
+        if issubclass(type(other), BaseData):
             return self.bytes == other.bytes
         else:
             return False
@@ -96,16 +98,25 @@ class ByteData:
         return "HexData('" + self.hex + "')"
 
 
-class HexData(ByteData):
+class ByteData(BaseData):
+    """A main data class that can convert between various needed data types."""
+
+    def __init__(self, b=b''):
+        """Construct Data from bytes."""
+        assert type(b) is bytes
+        self.bytes = b
+
+
+class HexData(BaseData):
     """A separate constructor for the data class that uses hex strings."""
 
     def __init__(self, s=""):
         """Construnct Data from a hex string."""
         assert type(s) is str
-        super().__init__(bytes.fromhex(s))
+        self.bytes = bytes.fromhex(s)
 
 
-class Base58Data(ByteData):
+class Base58Data(BaseData):
     """A separate constructor for the data class that uses base58 strings."""
 
     def __init__(self, b58=""):
@@ -115,10 +126,10 @@ class Base58Data(ByteData):
         value = 0
         place = 1
         for c in b58[::-1]:
-            if c not in base58:
+            if c not in self.base58_chars:
                 raise EncodingException(
                     c + " is not a valid base58 character.")
-            value += place * base58.find(c)
+            value += place * self.base58_chars.find(c)
             place *= 58
 
         data = IntData(value)
@@ -129,10 +140,10 @@ class Base58Data(ByteData):
             else:
                 break
 
-        super().__init__(data.bytes)
+        self.bytes = data.bytes
 
 
-class IntData(ByteData):
+class IntData(BaseData):
     """A separate constructor for the data class that uses ints."""
 
     def __init__(self, i, size=0):
@@ -142,10 +153,10 @@ class IntData(ByteData):
         while len(byte_value) < size:
             byte_value = b'\x00' + byte_value
 
-        super().__init__(byte_value)
+        self.bytes = byte_value
 
 
-class StringData(ByteData):
+class StringData(BaseData):
     """A separate constructor for the data class that uses encoded strings."""
 
     def __init__(self, s, encoding="utf-8", normalize=None):
@@ -153,4 +164,4 @@ class StringData(ByteData):
         if normalize is not None:
             s = unicodedata.normalize(normalize, s)
         bts = s.encode(encoding)
-        super().__init__(bts)
+        self.bytes = bts
