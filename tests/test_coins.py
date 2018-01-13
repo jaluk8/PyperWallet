@@ -19,8 +19,8 @@ class TestCoinFactory(TestCase):
         cf = coins.CoinFactory()
         for name in cf.list():
             self.do_test(name, cf)
-        self.do_test('btc', cf)
-        self.do_test('ltc', cf)
+        self.do_test('bitcoin', cf)
+        self.do_test('litecoin', cf)
 
 
 class TestBaseCoin(TestCase):
@@ -39,24 +39,25 @@ class TestAllCoins(TestCase):
     """A TestCase for every Coin module."""
 
     example_keys = {
-        "btc": ("KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU",
-                None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"),
-        "ltc": ("T3hvqLBBEtBui8Leo9bhezChRggpouqVxBP2A9svN8gYrig13GDZ",
-                None, "LWUhrUrbUMZTsNqQkCtuMwsr9pTskCLtVt"),
-        "bch": ("5JNrhoR2HJ1fH5ts1n2D77o35MrWCEj3gQvBWTc3oZi55uuMu34",
-                None, "13gU9r4cKRvLMKgFtt5nuMYJ6SEyPBjwid"),  # Uncompressed
+        "bitcoin": ("KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU",
+                    None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"),
+        "litecoin": ("T3hvqLBBEtBui8Leo9bhezChRggpouqVxBP2A9svN8gYrig13GDZ",
+                     None, "LWUhrUrbUMZTsNqQkCtuMwsr9pTskCLtVt"),
+        "bitcoincash": ("5JNrhoR2HJ1fH5ts1n2D77o35MrWCEj3gQvBWTc3oZi55uuMu34",
+                        None, "13gU9r4cKRvLMKgFtt5nuMYJ6SEyPBjwid"),
         "dash": ("XCZtcGqHxmFAmLxQhKmra9AwkESEHknu5jTAKEgSTAFypc93jovp",
                  None, "XwEMaB6n2CpxKS9poY1DZCZEv7v8woJmWu"),
-        "doge": ("6JDNEPxEquFZs5qEMjHkGAjkGU3VbSiQkGaz7FfDhTwxwd88tL5",
-                 None, "DL95V4VvXbvhVdeih8ovaXMHijh2rphiXb"),
-        "ftc": ("N9mVytYSm1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d",
-                None, "6fQZRM3i5NWs5YXEdQgAKpjrGfwjZQnbje"),
-        "vtc": ("L5f9KLMVxanA7aVANckLmCcCb5T93uBGkiQauDBCVBXfD3JQnH9e",
-                None, "Vy47znT6TubeUnhMau9v4ZuKrDdbfAJHKG"),
-        "zec": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfPbetMbSD9hoY1gDLvdL",
-                None, "t1WCf2xoYaeUzHKjdLCxjHL2c4W2S6jZMSQ"),
-        "eth": ("ab2aeb09578892b1658ee824ae166772c57ce4b77685eca3ea6647da84b96"
-                "287", None, "0xB8F758b3f2016Bb391fb18C7Ef39847ef164649e")}
+        "dogecoin": ("6JDNEPxEquFZs5qEMjHkGAjkGU3VbSiQkGaz7FfDhTwxwd88tL5",
+                     None, "DL95V4VvXbvhVdeih8ovaXMHijh2rphiXb"),
+        "feathercoin": ("N9mVytYSm1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d",
+                        None, "6fQZRM3i5NWs5YXEdQgAKpjrGfwjZQnbje"),
+        "vertcoin": ("L5f9KLMVxanA7aVANckLmCcCb5T93uBGkiQauDBCVBXfD3JQnH9e",
+                     None, "Vy47znT6TubeUnhMau9v4ZuKrDdbfAJHKG"),
+        "zcash": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfPbetMbSD9hoY1gDLvdL",
+                  None, "t1WCf2xoYaeUzHKjdLCxjHL2c4W2S6jZMSQ"),
+        "ethereum": ("ab2aeb09578892b1658ee824ae166772c57ce4b77685eca3ea6647da"
+                     "84b96287", None, "0xB8F758b3f2016Bb391fb18C7Ef39847ef164"
+                     "649e")}
 
     def check_gen(self, Coin):
         """Generate Coin and check that it loads correctly."""
@@ -135,24 +136,25 @@ class TestValidation(TestAllCoins):
     """A TestCase for checking that checksum validation works."""
 
     example_keys = {  # These all have minor errors included
-        "btc": ("KyF4khaPVK9YeMBUukYKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU",
-                None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw6ywx"),
-        "ltc": ("T3hvqLBBEtBui8Leo9bhezChRggpPuqVxBP2A9svN8gYrig13GDZ",
-                None, "LWUhrUrbUMZTsNqQkCtuMwsr9pTskCLrVt"),
-        "bch": ("5JNrhoR2HJ1fH5ts1n2D77o35MrVCEj3gQvBWTc3oZi55uuMu34",
-                None, "13gU9r4cKRvLMKgFtt5nuMYJ6SEyPBjwiD"),  # Uncompressed
+        "bitcoin": ("KyF4khaPVK9YeMBUukYKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU",
+                    None, "1PYqAUK4q8Lbq32o32ouyQMUFkzszw6ywx"),
+        "litecoin": ("T3hvqLBBEtBui8Leo9bhezChRggpPuqVxBP2A9svN8gYrig13GDZ",
+                     None, "LWUhrUrbUMZTsNqQkCtuMwsr9pTskCLrVt"),
+        "bitcoincash": ("5JNrhoR2HJ1fH5ts1n2D77o35MrVCEj3gQvBWTc3oZi55uuMu34",
+                        None, "13gU9r4cKRvLMKgFtt5nuMYJ6SEyPBjwiD"),
         "dash": ("XCZtcGqHxmFAmfxQhKmra9AwkESEHknu5jTAKEgSTAFypc93jovp",
                  None, "XwEMaB6n2CPxKS9poY1DZCZEv7v8woJmWu"),
-        "doge": ("6JDNEPxEquFzs5qEMjHkGAjkGU3VbSiQkGaz7FfDhTwxwd88tL5",
-                 None, "DL95V4VvxbvhVdeih8ovaXMHijh2rphiXb"),
-        "ftc": ("N9mVytYSM1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d",
-                None, "6fQZRM4i5NWs5YXEdQgAKpjrGfwjZQnbje"),
-        "vtc": ("L5f9KLMVxanA6aVANckLmCcCb5T93uBGkiQauDBCVBXfD3JQnH9e",
-                None, "Vy47znT6TubeunhMau9v4ZuKrDdbfAJHKG"),
-        "zec": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfpbetMbSD9hoY1gDLvdL",
-                None, "t1WCf2xoYaeUzHKjdLCxjHL2C4W2S6jZMSQ"),
-        "eth": ("ab2aeb09578892b1658ee924ae166772c57ce4b77685eca3ea6647da84b96"
-                "287", None, "0xB8F758b3f2016Bb391fb18C7EF39847ef164649e")}
+        "dogecoin": ("6JDNEPxEquFzs5qEMjHkGAjkGU3VbSiQkGaz7FfDhTwxwd88tL5",
+                     None, "DL95V4VvxbvhVdeih8ovaXMHijh2rphiXb"),
+        "feathercoin": ("N9mVytYSM1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d",
+                        None, "6fQZRM4i5NWs5YXEdQgAKpjrGfwjZQnbje"),
+        "vertcoin": ("L5f9KLMVxanA6aVANckLmCcCb5T93uBGkiQauDBCVBXfD3JQnH9e",
+                     None, "Vy47znT6TubeunhMau9v4ZuKrDdbfAJHKG"),
+        "zcash": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfpbetMbSD9hoY1gDLvdL",
+                  None, "t1WCf2xoYaeUzHKjdLCxjHL2C4W2S6jZMSQ"),
+        "ethereum": ("ab2aeb09578892b1658ee924ae166772c57ce4b77685eca3ea6647da"
+                     "84b96287", None, "0xB8F758b3f2016Bb391fb18C7EF39847ef164"
+                     "649e")}
 
     def check_gen(self, Coin):
         """Does nothing as gen validation is checked in the base class."""

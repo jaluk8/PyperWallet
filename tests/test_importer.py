@@ -18,7 +18,7 @@ class TestBaseImporter(TestCase):
     """A TestCase that creates BaseImporters and verifies their output."""
 
     cf = coins.CoinFactory()
-    Coin = cf.get("btc")
+    Coin = cf.get("bitcoin")
 
     def do_test(self, i, w, v, a, *args, **kwargs):
         """Uses importer i with given args, checking that the results fit."""

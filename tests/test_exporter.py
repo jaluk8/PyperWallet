@@ -18,7 +18,7 @@ class TestBaseExporter(TestCase):
     """Tests if exporting coins to python values works."""
 
     cf = coins.CoinFactory()
-    Coin = cf.get("btc")
+    Coin = cf.get("bitcoin")
 
     def do_test(self, e, c, w, v, a):
         """Run exporting on Coin c with e, and checks the result."""

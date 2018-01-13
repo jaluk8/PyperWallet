@@ -21,9 +21,14 @@ class CoinFactory:
             if name not in self.non_coins:
                 self.coins.append(name)
 
+    @staticmethod
+    def normalize(name):
+        """Strip a name of any ambiguous factors."""
+        return name.lower().strip(" -_")
+
     def has(self, name):
         """Return whether a name was found in the modules."""
-        return name in self.coins
+        return self.normalize(name) in self.coins
 
     def list(self):
         """Return a list of found module names."""
@@ -33,7 +38,8 @@ class CoinFactory:
         """Return the coin module or None if it doesn't exist."""
         if not self.has(name):
             return None
-        p = importlib.import_module('.' + name, package=__package__)
+        p = importlib.import_module('.' + self.normalize(name),
+                                    package=__package__)
         return p.Coin
 
 

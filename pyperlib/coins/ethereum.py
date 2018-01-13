@@ -5,6 +5,7 @@ class Coin(coins.BaseCoin):
     """A coin that represents the Ethereum protocol."""
 
     name = "Ethereum"
+    ticker = "eth"
     curve = ec.SECP256K1
 
     has_addr_csum = True

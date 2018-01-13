@@ -57,17 +57,17 @@ Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
         """Run various wallet imports."""
 
         MockPrompter.reset()
-        w = wallet.Wallet(Coin="btc", Importer="prompt", Exporter="cli",
+        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="cli",
                           Prompt=MockPrompter)
         w.run()
         print("------")
 
-        w = wallet.Wallet(Coin="btc", Importer="prompt", Exporter="cli",
+        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="cli",
                           Prompt=MockPrompter, compression=False)
         w.run()
         print("------")
 
-        w = wallet.Wallet(Coin="btc", Importer="prompt", Exporter="cli",
+        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="cli",
                           Prompt=MockPrompter)
         w.run()
         print("------")
@@ -94,6 +94,6 @@ class TestWalletGen(TestCase):
 
         cf = coins.CoinFactory()
 
-        for name in ["btc", "eth", "ltc"]:
+        for name in ["bitcoin", "ethereum", "litecoin"]:
             Coin = cf.get(name)
             self.do_test(Coin)

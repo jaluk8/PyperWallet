@@ -8,7 +8,7 @@ description = """\
 """
 
 
-coin_help = "the ticker name of the coin"
+coin_help = "the name of the coin"
 
 
 importer_help = "control how the coin is initially created"
@@ -64,7 +64,7 @@ def make_parser():
                                      description=description)
 
     coin_f = wallet.Wallet.coin_f
-    make_opt(parser, "-c", factory=coin_f, default="btc", metavar="name",
+    make_opt(parser, "-c", factory=coin_f, default="bitcoin", metavar="name",
              dest="coin", help=coin_help)
 
     imp_f = wallet.Wallet.importer_f
