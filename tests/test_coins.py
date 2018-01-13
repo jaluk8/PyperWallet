@@ -47,12 +47,12 @@ class TestAllCoins(TestCase):
                 None, "13gU9r4cKRvLMKgFtt5nuMYJ6SEyPBjwid"),  # Uncompressed
         "dash": ("XCZtcGqHxmFAmLxQhKmra9AwkESEHknu5jTAKEgSTAFypc93jovp",
                  None, "XwEMaB6n2CpxKS9poY1DZCZEv7v8woJmWu"),
-        "doge": ("QWyapnA2914T89HSR23QZiJgmM55oPeBUcjdJ9PkFKYccZpoF9uj",
-                 None, "DFxKgD7CY6zTGDGsyFfr2YHNzPhMooUSYb"),
+        "doge": ("6JDNEPxEquFZs5qEMjHkGAjkGU3VbSiQkGaz7FfDhTwxwd88tL5",
+                 None, "DL95V4VvXbvhVdeih8ovaXMHijh2rphiXb"),
         "ftc": ("N9mVytYSm1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d",
                 None, "6fQZRM3i5NWs5YXEdQgAKpjrGfwjZQnbje"),
-        "vtc": ("WZHPcZNDbWiJEUEgR36prdAR2nqJ1ZftFNRnnjUV5N2SkeVgVkMk",
-                None, "VmeQa8L2xidM976jLbBqCWPWFbEDEXfPpe"),
+        "vtc": ("L5f9KLMVxanA7aVANckLmCcCb5T93uBGkiQauDBCVBXfD3JQnH9e",
+                None, "Vy47znT6TubeUnhMau9v4ZuKrDdbfAJHKG"),
         "zec": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfPbetMbSD9hoY1gDLvdL",
                 None, "t1WCf2xoYaeUzHKjdLCxjHL2c4W2S6jZMSQ"),
         "eth": ("ab2aeb09578892b1658ee824ae166772c57ce4b77685eca3ea6647da84b96"
@@ -143,12 +143,12 @@ class TestValidation(TestAllCoins):
                 None, "13gU9r4cKRvLMKgFtt5nuMYJ6SEyPBjwiD"),  # Uncompressed
         "dash": ("XCZtcGqHxmFAmfxQhKmra9AwkESEHknu5jTAKEgSTAFypc93jovp",
                  None, "XwEMaB6n2CPxKS9poY1DZCZEv7v8woJmWu"),
-        "doge": ("qWyapnA2914T89HSR23QZiJgmM55oPeBUcjdJ9PkFKYccZpoF9uj",
-                 None, "dFxKgD7CY6zTGDGsyFfr2YHNzPhMooUSYb"),
+        "doge": ("6JDNEPxEquFzs5qEMjHkGAjkGU3VbSiQkGaz7FfDhTwxwd88tL5",
+                 None, "DL95V4VvxbvhVdeih8ovaXMHijh2rphiXb"),
         "ftc": ("N9mVytYSM1cDEecUKv68mis5WF8cC9Xzi6nwMm9GAExJ4wmNDU6d",
                 None, "6fQZRM4i5NWs5YXEdQgAKpjrGfwjZQnbje"),
-        "vtc": ("WZHPcZNDbWiJEUEgR36prdAR2nqJ1ZftFNRnnjUV5N2SkeVgVkMK",
-                None, "VmeQa8L2xidM976jLbBqCWPWFbEDEXfPp3"),
+        "vtc": ("L5f9KLMVxanA6aVANckLmCcCb5T93uBGkiQauDBCVBXfD3JQnH9e",
+                None, "Vy47znT6TubeunhMau9v4ZuKrDdbfAJHKG"),
         "zec": ("Kx62UU7eJP4rCtaU1N8zy34cWnkj2CoFfpbetMbSD9hoY1gDLvdL",
                 None, "t1WCf2xoYaeUzHKjdLCxjHL2C4W2S6jZMSQ"),
         "eth": ("ab2aeb09578892b1658ee924ae166772c57ce4b77685eca3ea6647da84b96"
