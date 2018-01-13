@@ -24,10 +24,11 @@ class Coin(coins.BaseCoin):
         wl = self.wif_len + len(self.wif_version)
         al = self.addr_len + len(self.addr_version)
 
-        self.wif_format = format.Format("WIF key", self.wif_type, min_len=wl,
-                                        max_len=wl+1, prefix=self.wif_version)
-        self.addr_format = format.Format("address", self.addr_type, min_len=al,
-                                         max_len=al, prefix=self.addr_version)
+        self.wif_format = format.Format("WIF key", self.wif_type,
+                                        length=[wl, wl+1],
+                                        prefix=self.wif_version)
+        self.addr_format = format.Format("address", self.addr_type, length=al,
+                                         prefix=self.addr_version)
         super().make_formats()
 
     def from_wif(self, wif):

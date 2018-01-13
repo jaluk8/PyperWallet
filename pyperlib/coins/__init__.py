@@ -87,6 +87,8 @@ class BaseCoin:
 
             if form is self.priv_format:
                 self.load_priv(self.str2priv(key))
+            elif form is self.pub_format:
+                self.load_pub(self.str2pub(key))
             elif form is self.wif_format:
                 self.from_wif(self.str2wif(key))
             elif form is self.view_format:
@@ -97,17 +99,23 @@ class BaseCoin:
                 self.decrypt_format(key, form)
             else:
                 msg = form.name + " format is supported but not recognized."
-                raise InvalidCoinError()
+                raise InvalidCoinError(msg)
 
         self.validate_all()
 
     def make_formats(self):
         """Create all formats supported by the coin."""
         self.priv_format = format.Format("private key", data.HexData,
-                                         min_len=32, max_len=32)
+                                         length=32)
+
+        pub_u = format.Format("public key", data.HexData, length=33,
+                              prefix=["02", "03"])
+        pub_c = format.Format("public key", data.HexData, length=65,
+                              prefix="04")
+        self.pub_format = format.CombinedFormat(pub_u, pub_c)
 
         self.formats = [self.priv_format, self.wif_format, self.view_format,
-                        self.addr_format]
+                        self.addr_format, self.pub_format]
 
         for _, crypt in cryptor.CryptorFactory.dict().items():
             self.formats.append(crypt.crypt_format)
@@ -210,6 +218,7 @@ class BaseCoin:
         """Set the keypair from a public key."""
         self.check_curve()
         self.keypair = ec.KeyPair(self.curve, pub=pub)
+        self.settings.compression = self.keypair.is_compressed(pub)
         self.calc_all()
 
     def from_wif(self, wif):

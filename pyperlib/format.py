@@ -1,24 +1,32 @@
 from pyperlib import data
+from functools import reduce
 import math
+
+
+class CombinationError(Exception):
+    """Raise when combining two uncompatible formats."""
 
 
 class Format:
     """Represent a data format, such as wif or addresses."""
 
-    def __init__(self, name, data_type, min_len=0, max_len=math.inf,
-                 prefix=None, suffix=None, cryptor=None):
+    def __init__(self, name, data_type, length=[],
+                 prefix=[], suffix=[], cryptor=None):
         """Create a new format with certain requirements."""
 
-        if type(prefix) is str:
-            prefix = data.HexData(prefix)
+        if type(prefix) is not list:
+            prefix = [prefix]
+        if type(suffix) is not list:
+            suffix = [suffix]
+        if type(length) is not list:
+            length = [length]
 
-        if type(suffix) is str:
-            suffix = data.HexData(suffix)
+        prefix = [data.HexData(p) for p in prefix]
+        suffix = [data.HexData(s) for s in suffix]
 
         self.name = name
         self.data_type = data_type
-        self.min_len = min_len
-        self.max_len = max_len
+        self.length = length
         self.prefix = prefix
         self.suffix = suffix
         self.cryptor = cryptor
@@ -32,26 +40,61 @@ class Format:
             except Exception:
                 return False
 
-        if len(d) < self.min_len:
+        if len(d) not in self.length:
             return False
 
-        if len(d) > self.max_len:
-            return False
+        if len(self.prefix) > 0:
+            prefix_match = False
 
-        if self.prefix is not None:
-            pre_len = len(self.prefix)
-            prefix = d[:pre_len]
-            if prefix != self.prefix:
+            for pre in self.prefix:
+                pre_len = len(pre)
+                prefix = d[:pre_len]
+                if prefix == pre:
+                    prefix_match = True
+
+            if not prefix_match:
                 return False
 
-        if self.suffix is not None:
-            suf_len = len(self.suffix)
-            suffix = d[-suf_len:]
-            if suffix != self.suffix:
-                print(self.suffix)
+        if len(self.suffix) > 0:
+            suffix_match = False
+
+            for suf in self.suffix:
+                suf_len = len(suf)
+                suffix = d[-suf_len:]
+                if suffix == suf:
+                    suffix_match = True
+
+            if not suffix_match:
                 return False
 
         return True
+
+
+class CombinedFormat:
+    """A format that is the union of multiple other formats."""
+
+    def __init__(self, *formats):
+        """Create the format from a list of formats with a joined name."""
+        self.name = formats[0].name
+        self.data_type = formats[0].data_type
+        self.formats = formats
+        self.cryptor = None
+
+        for f in formats:
+            if f.name != self.name or f.data_type != self.data_type:
+                raise CombinationError("formats are not compatible")
+
+    def match(self, d):
+        """Return the union of all format matches."""
+
+        def union(f1, f2):
+            """Return the union of two format matches."""
+            if type(f1) is bool:
+                return f1 or f2.match(d)
+            else:
+                return f1.match(d) or f2.match(d)
+
+        return reduce(union, self.formats)
 
 
 class NoFormat:

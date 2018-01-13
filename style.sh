@@ -11,6 +11,7 @@ function doc
             if echo "$line" | grep -Eq '^ *(class|def) '
             then
                 status=start
+                last="$line"
             fi
         fi
 
@@ -33,7 +34,6 @@ function doc
                 status=
             fi
         fi
-        last="$line"
     done < "$1"
 }
 

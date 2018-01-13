@@ -84,3 +84,8 @@ class KeyPair:
             return self.pub_c
         else:
             return self.pub_u
+
+    def is_compressed(self, pub):
+        """Check whether the given public key is compressed."""
+        if type(self.curve) is SECP256K1:
+            return pub[0].hex != "04"

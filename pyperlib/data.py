@@ -112,8 +112,11 @@ class HexData(BaseData):
 
     def __init__(self, s=""):
         """Construnct Data from a hex string."""
-        assert type(s) is str
-        self.bytes = bytes.fromhex(s)
+        if isinstance(s, BaseData):
+            self.bytes = s.bytes
+        else:
+            assert type(s) is str
+            self.bytes = bytes.fromhex(s)
 
 
 class Base58Data(BaseData):
@@ -121,6 +124,10 @@ class Base58Data(BaseData):
 
     def __init__(self, b58=""):
         """Construct Data from a base58 string."""
+        if isinstance(b58, BaseData):
+            self.bytes = b58.bytes
+            return
+
         assert type(b58) is str
 
         value = 0
@@ -148,6 +155,12 @@ class IntData(BaseData):
 
     def __init__(self, i, size=0):
         """Construct Data from an int and a data size."""
+        if isinstance(i, BaseData):
+            self.bytes = i.bytes
+            return
+
+        assert type(i) is int
+
         byte_value = i.to_bytes((i.bit_length() + 7) // 8, 'big', signed=False)
 
         while len(byte_value) < size:
@@ -161,6 +174,12 @@ class StringData(BaseData):
 
     def __init__(self, s, encoding="utf-8", normalize=None):
         """Construct Data from an encoded string."""
+        if isinstance(s, BaseData):
+            self.bytes = s.bytes
+            return
+
+        assert type(s) is str
+
         if normalize is not None:
             s = unicodedata.normalize(normalize, s)
         bts = s.encode(encoding)

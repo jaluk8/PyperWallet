@@ -15,7 +15,7 @@ class Coin(coins.BaseCoin):
     def make_formats(self):
         """Create all formats supported by the coin."""
         self.addr_format = format.Format("address", data.StringData,
-                                         min_len=42, max_len=42, prefix="3078")
+                                         length=42, prefix="3078")
         super().make_formats()
 
     def from_wif(self, wif):
