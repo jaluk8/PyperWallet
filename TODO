@@ -1,6 +1,4 @@
 * pyperlib.coins
- - ADD wif encryption autodetect
- - ADD the ability to create coins from encrypted wifs
  - ADD XMR support
  - ADD XRP support
  - ADD seeds to coins that use them?

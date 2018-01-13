@@ -6,7 +6,7 @@ class Format:
     """Represent a data format, such as wif or addresses."""
 
     def __init__(self, name, data_type, min_len=0, max_len=math.inf,
-                 prefix=None, suffix=None):
+                 prefix=None, suffix=None, cryptor=None):
         """Create a new format with certain requirements."""
 
         if type(prefix) is str:
@@ -21,6 +21,7 @@ class Format:
         self.max_len = max_len
         self.prefix = prefix
         self.suffix = suffix
+        self.cryptor = cryptor
 
     def match(self, d):
         """Return whether data d matches the rules of this format."""

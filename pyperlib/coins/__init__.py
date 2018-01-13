@@ -1,4 +1,4 @@
-from pyperlib import data, ec, format
+from pyperlib import data, ec, format, cryptor
 from pyperlib.coins.settings import CoinSettings
 import importlib
 import pkgutil
@@ -93,6 +93,11 @@ class BaseCoin:
                 self.from_view(self.str2view(key))
             elif form is self.addr_format:
                 self.from_addr(self.str2addr(key))
+            elif form.cryptor is not None:
+                self.decrypt_format(key, form)
+            else:
+                msg = form.name + " format is supported but not recognized."
+                raise InvalidCoinError()
 
         self.validate_all()
 
@@ -100,8 +105,22 @@ class BaseCoin:
         """Create all formats supported by the coin."""
         self.priv_format = format.Format("private key", data.HexData,
                                          min_len=32, max_len=32)
+
         self.formats = [self.priv_format, self.wif_format, self.view_format,
                         self.addr_format]
+
+        for _, crypt in cryptor.CryptorFactory.dict().items():
+            self.formats.append(crypt.crypt_format)
+
+    def decrypt_format(self, key, form):
+        """Decrypt key, which is encrypted with format form."""
+        Cryptor = cryptor.CryptorFactory.get(form.cryptor)
+        c = Cryptor(prompt=self.prompt)
+
+        self.wif = form.data_type(key)
+        self.crypt_type = form.cryptor
+
+        c.decrypt(self)
 
     @classmethod
     def str2priv(self, string):

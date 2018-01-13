@@ -1,4 +1,4 @@
-from pyperlib import mods, helper, data
+from pyperlib import mods, helper, data, format, coins
 from copy import deepcopy
 
 
@@ -21,6 +21,7 @@ class BaseCryptor:
 
     name = "identity"
     description = "no description"
+    crypt_format = format.NoFormat()
 
     def __init__(self, prompt=None):
         """Create a cryptor with a prompter for getting passwords."""
@@ -60,6 +61,9 @@ class Bip38Cryptor(BaseCryptor):
 
     name = "bip38"
     description = "an early bitcoin encryption standard (keys start with 6P)"
+    crypt_format = format.Format("bip38-encrypted", data.Base58Data,
+                                 min_len=43, max_len=43, prefix="0142",
+                                 cryptor="bip38")
 
     def base58check(self, d):
         """Return the base58checksum of the given data."""
@@ -100,6 +104,9 @@ class Bip38Cryptor(BaseCryptor):
 
     def run_decrypt(self, coin, passphrase=None):
         """Decrypt with bip38, loading the new private key."""
+        if self.base58check(coin.wif[:-4]) != coin.wif[-4:]:
+            raise coins.InvalidCoinError("WIF checksum is incorrect")
+
         if passphrase is None:
             passphrase = self.prompt.prompt_pass("BIP38 Password",
                                                  repeat=False)
