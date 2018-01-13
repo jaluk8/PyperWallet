@@ -15,7 +15,7 @@ class Wallet:
     Settings = coins.CoinSettings
 
     def __init__(self, Coin, Importer, Exporter, Prompt=None, Cryptor=None,
-                 settings=None, **kwargs):
+                 **kwargs):
         """Create a Wallet from any coin-manipulating objects."""
 
         self.Coin = Coin
@@ -23,10 +23,7 @@ class Wallet:
         self.Exporter = Exporter
         self.Prompt = Prompt
         self.Cryptor = Cryptor
-        self.settings = settings
-
-        if settings is None:
-            self.settings = coins.CoinSettings(**kwargs)
+        self.kwargs = kwargs
 
         if type(Coin) is str:
             self.Coin = self.coin_f.get(Coin)
@@ -49,8 +46,7 @@ class Wallet:
         i = self.Importer(self.Coin, self.Prompt)
         coin = i.run()
 
-        if self.settings is not None:
-            coin.settings = self.settings
+        coin.settings.apply(**self.kwargs)
         coin.calc_all()
 
         if self.Cryptor is not None:

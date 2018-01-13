@@ -1,5 +1,4 @@
 * pyperlib.coins
- - FIX the effect of importing uncompressed wif keys into a compressed wallet
  - ADD wif encryption autodetect
  - ADD the ability to create coins from encrypted wifs
  - ADD XMR support

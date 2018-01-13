@@ -104,6 +104,14 @@ class Bip38Cryptor(BaseCryptor):
             passphrase = self.prompt.prompt_pass("BIP38 Password",
                                                  repeat=False)
 
+        flag = coin.wif[2]
+        if flag.hex == "E0":
+            compression = True
+        elif flag.hex == "C0":
+            compression = False
+        else:
+            raise DecryptionUnsucessfulError("Invalid bip38 wif key flag")
+
         addr_hash = coin.wif[3:7]
 
         passphrase = data.StringData(passphrase)
@@ -129,5 +137,6 @@ class Bip38Cryptor(BaseCryptor):
 
         if addr_hash == addr_hash2:
             coin.load_priv(priv)
+            coin.settings.compression = compression
         else:
             raise DecryptionUnsucessfulError("Password incorrect")

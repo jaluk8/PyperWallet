@@ -89,7 +89,7 @@ def make_parser():
         else:
             s_type = setting.s_type
 
-        parser.add_argument(arg, default=setting.default, type=s_type,
+        parser.add_argument(arg, default=None, type=s_type,
                             metavar=setting.name, dest=setting.name, help=help)
 
     return parser

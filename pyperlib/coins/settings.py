@@ -24,5 +24,10 @@ address or not")
         """Sets any attributes, either from kwargs or self.settings."""
         for s in self.settings:
             setattr(self, s.name, s.default)
+        self.apply(**kwargs)
+
+    def apply(self, **kwargs):
+        """Apply a list of arguments to the settings, if not None."""
         for key, value in kwargs.items():
-            setattr(self, key, value)
+            if value is not None:
+                setattr(self, key, value)
