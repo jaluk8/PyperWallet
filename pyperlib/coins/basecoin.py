@@ -47,7 +47,7 @@ class Coin:
             form = ad.detect(key)
             if form is None:
                 error_msg = str(key) + " is not recognized as a valid format."
-                raise InvalidCoinError(error_msg)
+                raise coins.InvalidCoinError(error_msg)
 
             if form is self.priv_format:
                 self.load_priv(self.str2priv(key))
@@ -63,7 +63,7 @@ class Coin:
                 self.decrypt_format(key, form)
             else:
                 msg = form.name + " format is supported but not recognized."
-                raise InvalidCoinError(msg)
+                raise coins.InvalidCoinError(msg)
 
         self.validate_all()
 

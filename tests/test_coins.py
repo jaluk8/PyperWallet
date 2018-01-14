@@ -41,7 +41,7 @@ class TestAllCoins(TestCase):
 
     def check_gen(self, Coin):
         """Generate Coin and check that it loads correctly."""
-        for _ in range(100):
+        for _ in range(5):
             c = Coin()
 
             self.assertIsInstance(c.wif_string(), str)
