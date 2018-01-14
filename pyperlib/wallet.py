@@ -1,4 +1,4 @@
-from pyperlib import importer, coins, cryptor, exporter, prompter
+from pyperlib import importer, coins, coinutil, cryptor, exporter, prompter
 
 
 class ArgumentError(Exception):
@@ -8,11 +8,11 @@ class ArgumentError(Exception):
 class Wallet:
     """A high-level interface for manipulating coins."""
 
-    coin_f = coins.CoinFactory()
+    coin_f = coinutil.CoinFactory
     importer_f = importer.ImporterFactory
     cryptor_f = cryptor.CryptorFactory
     exporter_f = exporter.ExporterFactory
-    Settings = coins.CoinSettings
+    Settings = coins.CoinSettings()
 
     def __init__(self, Coin, Importer, Exporter, Prompt=None, Cryptor=None,
                  **kwargs):

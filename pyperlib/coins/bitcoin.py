@@ -1,7 +1,8 @@
-from pyperlib import coins, ec, data, mods, format
+from pyperlib import ec, data, mods, format, coins
+from pyperlib.coins import basecoin
 
 
-class Coin(coins.BaseCoin):
+class Coin(basecoin.Coin):
     """A coin that represents the Bitcoin protocol."""
 
     name = "Bitcoin"

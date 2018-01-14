@@ -1,4 +1,4 @@
-from pyperlib import wallet, prompter, helper, coins, exporter
+from pyperlib import wallet, prompter, helper, coinutil, exporter
 from unittest import TestCase
 
 
@@ -92,7 +92,7 @@ class TestWalletGen(TestCase):
     def test_all(self):
         """Run do_test with a variety of coins."""
 
-        cf = coins.CoinFactory()
+        cf = coinutil.CoinFactory
 
         for name in ["bitcoin", "ethereum", "litecoin"]:
             Coin = cf.get(name)

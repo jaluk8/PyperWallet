@@ -1,5 +1,5 @@
 from unittest import TestCase
-from pyperlib import cryptor, coins, helper
+from pyperlib import cryptor, coinutil, helper
 
 
 class TestCryptorFactory(helper.TestNameFactory):
@@ -16,7 +16,7 @@ class TestCryptorFactory(helper.TestNameFactory):
 class TestBaseCryptor(TestCase):
     """Encrypt and decrypt a coin, checking for correctness."""
 
-    cf = coins.CoinFactory()
+    cf = coinutil.CoinFactory
     Coin = cf.get("bitcoin")
     wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
 

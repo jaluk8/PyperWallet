@@ -1,5 +1,5 @@
 from unittest import TestCase
-from pyperlib import exporter, coins, helper
+from pyperlib import exporter, coinutil, helper
 
 
 class TestExporterFactory(helper.TestNameFactory):
@@ -17,7 +17,7 @@ class TestExporterFactory(helper.TestNameFactory):
 class TestBaseExporter(TestCase):
     """Tests if exporting coins to python values works."""
 
-    cf = coins.CoinFactory()
+    cf = coinutil.CoinFactory
     Coin = cf.get("bitcoin")
 
     def do_test(self, e, c, w, v, a):

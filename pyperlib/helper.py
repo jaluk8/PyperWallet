@@ -6,14 +6,29 @@ class NameFactory:
     """Create a class from a name."""
 
     suffix = ""
+    caps = True
+    initialized = False
+
+    def __init__(self):
+        """A NameFactory is not an object."""
+        raise NotImplementedError("A NameFactory object shouldn't be created.")
+
+    @classmethod
+    def append_name(cls, name):
+        """Return the class name from a user-readable name."""
+        if name[:4].lower() == "base":
+            return None
+
+        if cls.caps:
+            name = name.title()
+
+        return name + cls.suffix
 
     @classmethod
     def get(cls, name):
         """Return the proper type, if it exists."""
-        if name[:4].lower() == "base":
-            return None
-
-        name = name.title() + cls.suffix
+        cls.try_init()
+        name = cls.append_name(name)
 
         if name in cls.pool:
             return cls.pool[name]
@@ -21,13 +36,25 @@ class NameFactory:
             return None
 
     @classmethod
+    def has(cls, name):
+        """Return whether the type exists."""
+        cls.try_init()
+        name = cls.append_name(name)
+
+        return name in cls.pool
+
+    @classmethod
     def list(cls):
         """List all valid names that can be passed into get."""
+        cls.try_init()
         names = []
         for var in cls.pool:
             if var.endswith(cls.suffix):
                 suf_len = len(cls.suffix)
-                name = var[:-suf_len]
+                if suf_len > 0:
+                    name = var[:-suf_len]
+                else:
+                    name = var
                 name = name.lower()
                 if name[:4] != "base":
                     names.append(name)
@@ -36,11 +63,23 @@ class NameFactory:
     @classmethod
     def dict(cls):
         """Return a dict of valid names and objects."""
+        cls.try_init()
         names = cls.list()
         d = {}
         for name in names:
             d[name] = cls.get(name)
         return d
+
+    @classmethod
+    def try_init(cls):
+        """Run init if it has not already been run."""
+        if not cls.initialized:
+            cls.init()
+            cls.initialized = True
+
+    @classmethod
+    def init(cls):
+        """By default, no initialization is needed."""
 
 
 class TestNameFactory(TestCase):

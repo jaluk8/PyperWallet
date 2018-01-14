@@ -1,26 +1,6 @@
-from pyperlib import coins, data
+from pyperlib import coins, coinutil, data
+from pyperlib.coins.basecoin import Coin as BaseCoin
 from unittest import TestCase
-
-
-class TestCoinFactory(TestCase):
-    """A TestCase for the CoinFactory class."""
-
-    def do_test(self, name, cf):
-        """Check that the coinfactory has the coin and can load it."""
-        self.assertTrue(cf.has(name))
-        try:
-            c = cf.get(name)
-        except NotImplementedError:
-            return
-        self.assertTrue(issubclass(c, coins.BaseCoin))
-
-    def tests(self):
-        """Check all coins in the list, as well as the current top 3."""
-        cf = coins.CoinFactory()
-        for name in cf.list():
-            self.do_test(name, cf)
-        self.do_test('bitcoin', cf)
-        self.do_test('litecoin', cf)
 
 
 class TestBaseCoin(TestCase):
@@ -28,7 +8,7 @@ class TestBaseCoin(TestCase):
 
     def do_constructor(self, *args, **kwargs):
         """Check that the constructor throws the correct error."""
-        self.assertRaises(NotImplementedError, coins.BaseCoin, *args, **kwargs)
+        self.assertRaises(NotImplementedError, BaseCoin, *args, **kwargs)
 
     def test_set(self):
         """Check all possible versions of the constructor."""
@@ -122,7 +102,7 @@ class TestAllCoins(TestCase):
 
     def test_all(self):
         """Gets a list of all implemented coins and runs check_coin."""
-        cf = coins.CoinFactory()
+        cf = coinutil.CoinFactory
         for name in cf.list():
             Coin = cf.get(name)
             self.check_gen(Coin)

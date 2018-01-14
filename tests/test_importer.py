@@ -1,5 +1,6 @@
 from unittest import TestCase
-from pyperlib import importer, coins, prompter, helper
+from pyperlib import importer, coins, coinutil, prompter, helper
+from pyperlib.coins.basecoin import Coin as BaseCoin
 
 
 class TestImporterFactory(helper.TestNameFactory):
@@ -17,13 +18,13 @@ class TestImporterFactory(helper.TestNameFactory):
 class TestBaseImporter(TestCase):
     """A TestCase that creates BaseImporters and verifies their output."""
 
-    cf = coins.CoinFactory()
+    cf = coinutil.CoinFactory
     Coin = cf.get("bitcoin")
 
     def do_test(self, i, w, v, a, *args, **kwargs):
         """Uses importer i with given args, checking that the results fit."""
         coin = i.run(*args, **kwargs)
-        self.assertIsInstance(coin, coins.BaseCoin)
+        self.assertIsInstance(coin, BaseCoin)
 
         if w is not None:
             self.assertEqual(w, coin.wif_string())
