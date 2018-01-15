@@ -27,7 +27,7 @@ class Exported:
         self.name = coin.name
         self.wif = coin.wif_string()  # TODO: Add view key
         self.addr = coin.addr_string()
-        self.compression = coin.settings.compression
+        self.compression = coin.get_settings().compression
         self.crypt_type = coin.crypt_type
 
         if coin.keypair is not None:

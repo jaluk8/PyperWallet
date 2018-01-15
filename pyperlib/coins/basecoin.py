@@ -1,4 +1,5 @@
 from pyperlib import data, ec, format, cryptor, coins
+from copy import deepcopy
 
 
 class Coin:
@@ -23,7 +24,7 @@ class Coin:
     view_format = format.NoFormat()
     addr_format = format.NoFormat()
 
-    def __init__(self, key=None, settings=None, prompt=None):
+    def __init__(self, key=None, prompt=None):
         """Construct the coin based on spend, view, or address keys."""
         self.keypair = None
         self.wif = None
@@ -33,10 +34,7 @@ class Coin:
 
         self.prompt = prompt
 
-        if settings is None:
-            self.settings = coins.CoinSettings()
-        else:
-            self.settings = settings
+        self._settings = coins.CoinSettings()
 
         self.make_formats()
 
@@ -66,6 +64,15 @@ class Coin:
                 raise coins.InvalidCoinError(msg)
 
         self.validate_all()
+
+    def apply_settings(self, **kwargs):
+        """Apply the kwargs to the settings object."""
+        self._settings.apply(**kwargs)
+        self.calc_all()
+
+    def get_settings(self):
+        """Return a read-only version of the settings object."""
+        return deepcopy(self._settings)
 
     def make_formats(self):
         """Create all formats supported by the coin."""

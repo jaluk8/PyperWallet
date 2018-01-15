@@ -36,6 +36,10 @@ address or not")
             if value is not None:
                 setattr(self, key, value)
 
+    def get(self, name):
+        """Return the setting named name."""
+        return getattr(self, name)
+
 
 class CoinList:
     """A class that can generate a list of Coin classes."""

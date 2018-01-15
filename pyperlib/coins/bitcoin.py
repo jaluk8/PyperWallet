@@ -38,9 +38,9 @@ class Coin(basecoin.Coin):
         self.verifybase58check(wif)
 
         if len(wif) == 38:
-            self.settings.compression = True
+            self.apply_settings(compression=True)
         elif len(wif) == 37:
-            self.settings.compression = False
+            self.apply_settings(compression=False)
         priv = wif[1:33]
         self.load_priv(priv)
 
@@ -71,12 +71,12 @@ class Coin(basecoin.Coin):
     def calc_wif(self):
         """Calculate the wif key from the keypair."""
         payload = self.wif_version + self.keypair.priv
-        if self.settings.compression:
+        if self.get_settings().compression:
             payload += data.HexData("01")
         self.wif = self.base58check(payload)
 
     def calc_addr(self):
         """Calculate the addr from the keypair."""
-        pub = self.keypair.pub(self.settings.compression)
+        pub = self.keypair.pub(self.get_settings().compression)
         payload = mods.Ripemd160(mods.Sha256(pub))
         self.addr = self.base58check(self.addr_version + payload)

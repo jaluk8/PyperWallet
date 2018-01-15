@@ -11,6 +11,11 @@ class DataFactory(helper.NameFactory):
     suffix = "Data"
     pool = globals()
 
+    @classmethod
+    def make_base58_data(cls, b58):
+        """Create a new Base58Data type, using different base58_chars."""
+        return type("Base58Data", (Base58Data,), {"base58_chars": b58})
+
 
 class BaseData:
     """The base class for all data types."""
@@ -40,7 +45,7 @@ class BaseData:
 
         for b in self.bytes:
             if b == 0:
-                b58 = '1' + b58
+                b58 = self.base58_chars[0] + b58
             else:
                 break
 
@@ -53,16 +58,8 @@ class BaseData:
 
     def export(self, t):
         """Export from Data to type t."""
-        if t is ByteData:
-            return self.bytes
-        elif t is HexData:
-            return self.hex
-        elif t is Base58Data:
-            return self.base58
-        elif t is IntData:
-            return self.int
-        elif t is StringData:
-            return self.string
+        d = t(self)
+        return d.exporter()
 
     def __eq__(self, other):
         """Determine the equality of two Data objects."""
@@ -103,8 +100,15 @@ class ByteData(BaseData):
 
     def __init__(self, b=b''):
         """Construct Data from bytes."""
-        assert type(b) is bytes
-        self.bytes = b
+        if isinstance(b, BaseData):
+            self.bytes = b.bytes
+        else:
+            assert type(b) is bytes
+            self.bytes = b
+
+    def exporter(self):
+        """Export as Bytes."""
+        return self.bytes
 
 
 class HexData(BaseData):
@@ -117,6 +121,10 @@ class HexData(BaseData):
         else:
             assert type(s) is str
             self.bytes = bytes.fromhex(s)
+
+    def exporter(self):
+        """Export as Hex."""
+        return self.hex
 
 
 class Base58Data(BaseData):
@@ -142,12 +150,16 @@ class Base58Data(BaseData):
         data = IntData(value)
 
         for c in b58:
-            if c == '1':
+            if c == self.base58_chars[0]:
                 data = ByteData(b'\x00') + data
             else:
                 break
 
         self.bytes = data.bytes
+
+    def exporter(self):
+        """Export as Base58."""
+        return self.base58
 
 
 class IntData(BaseData):
@@ -168,6 +180,10 @@ class IntData(BaseData):
 
         self.bytes = byte_value
 
+    def exporter(self):
+        """Export as Int."""
+        return self.int
+
 
 class StringData(BaseData):
     """A separate constructor for the data class that uses encoded strings."""
@@ -184,3 +200,7 @@ class StringData(BaseData):
             s = unicodedata.normalize(normalize, s)
         bts = s.encode(encoding)
         self.bytes = bts
+
+    def exporter(self):
+        """Export as String."""
+        return self.string

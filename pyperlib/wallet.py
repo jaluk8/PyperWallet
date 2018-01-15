@@ -46,7 +46,7 @@ class Wallet:
         i = self.Importer(self.Coin, self.Prompt)
         coin = i.run()
 
-        coin.settings.apply(**self.kwargs)
+        coin.apply_settings(**self.kwargs)
         coin.calc_all()
 
         if self.Cryptor is not None:
