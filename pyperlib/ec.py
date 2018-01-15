@@ -60,11 +60,11 @@ class KeyPair:
 
         self.set_pub(x_int, y_int)
 
-        assert len(self.priv.bytes) == self.curve.key_size // 8
+        assert len(self.priv) == self.curve.key_size // 8
 
     def set_pub(self, x, y):
         """Set the public keys from x and y coordinates."""
-        coord_size = (self.curve.key_size // 8 - 1) // 2
+        coord_size = (self.curve.key_size // 8)
         x_data = data.IntData(x, coord_size)
         y_data = data.IntData(y, coord_size)
 
@@ -77,6 +77,9 @@ class KeyPair:
         compressed = data.ByteData(prefix) + x_data
         self.pub_u = uncompressed
         self.pub_c = compressed
+
+        assert len(self.pub_u) == self.curve.key_size // 4 + 1
+        assert len(self.pub_c) == self.curve.key_size // 8 + 1
 
     def pub(self, compressed):
         """Return a compressed or uncompressed public Data object."""

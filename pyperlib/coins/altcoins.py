@@ -28,6 +28,10 @@ class CoinList(coins.CoinList):
         return cl
 
 
+coins = [
+    ("Garlicoin",            "26", "b0", "grlc")
+]
+
 '''
 The below code is derived from code that is copyright WalletGenerator.net.
 
@@ -45,7 +49,7 @@ The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 '''
 
-coins = [
+coins += [
     ("2GIVE",               "27", "a7", "2give"),
     ("42coin",              "08", "88", "42"),
     ("Acoin",               "17", "e6", "acoin"),
