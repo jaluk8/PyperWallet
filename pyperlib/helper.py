@@ -58,6 +58,7 @@ class NameFactory:
                 name = name.lower()
                 if name[:4] != "base":
                     names.append(name)
+        names.sort()
         return names
 
     @classmethod
