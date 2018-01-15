@@ -47,21 +47,7 @@ class Coin:
                 error_msg = str(key) + " is not recognized as a valid format."
                 raise coins.InvalidCoinError(error_msg)
 
-            if form is self.priv_format:
-                self.load_priv(self.str2priv(key))
-            elif form is self.pub_format:
-                self.load_pub(self.str2pub(key))
-            elif form is self.wif_format:
-                self.from_wif(self.str2wif(key))
-            elif form is self.view_format:
-                self.from_view(self.str2view(key))
-            elif form is self.addr_format:
-                self.from_addr(self.str2addr(key))
-            elif form.cryptor is not None:
-                self.decrypt_format(key, form)
-            else:
-                msg = form.name + " format is supported but not recognized."
-                raise coins.InvalidCoinError(msg)
+            self.from_form(key, form)
 
         self.validate_all()
 
@@ -100,6 +86,24 @@ class Coin:
         self.crypt_type = form.cryptor
 
         c.decrypt(self)
+
+    def from_form(self, key, form):
+        """Create the coin from a format and a key."""
+        if form is self.priv_format:
+            self.load_priv(self.str2priv(key))
+        elif form is self.pub_format:
+            self.load_pub(self.str2pub(key))
+        elif form is self.wif_format:
+            self.from_wif(self.str2wif(key))
+        elif form is self.view_format:
+            self.from_view(self.str2view(key))
+        elif form is self.addr_format:
+            self.from_addr(self.str2addr(key))
+        elif form.cryptor is not None:
+            self.decrypt_format(key, form)
+        else:
+            msg = form.name + " format is supported but not recognized."
+            raise coins.InvalidCoinError(msg)
 
     @classmethod
     def str2priv(self, string):
