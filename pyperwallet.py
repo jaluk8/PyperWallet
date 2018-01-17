@@ -17,6 +17,9 @@ importer_help = "control how the coin is initially created"
 exporter_help = "control how the coin will be displayed at the end"
 
 
+file_help = "the coin will be exported to this file (default=none)."
+
+
 encrypt_help = "encrypt the coin with an encryption standard"
 
 
@@ -72,8 +75,11 @@ def make_parser():
              dest="importer", help=importer_help, descriptions=True)
 
     exp_f = wallet.Wallet.exporter_f
-    make_opt(parser, "-o", factory=exp_f, default="cli", metavar="output",
+    make_opt(parser, "-o", factory=exp_f, default="text", metavar="output",
              dest="exporter", help=exporter_help, descriptions=True)
+
+    parser.add_argument("-f", default="-", help=file_help, metavar="file",
+                        dest="out_file")
 
     enc_f = wallet.Wallet.cryptor_f
     make_opt(parser, "-e", factory=enc_f, default="none",
@@ -106,13 +112,20 @@ def proc_args(args):
     Exporter = args.exporter
     del args.exporter
 
+    out_file = args.out_file
+    del args.out_file
+    if out_file in ["-", "none"]:
+        out_file = None
+    else:
+        out_file = open(out_file, "w")
+
     Cryptor = args.cryptor
     del args.cryptor
 
     setting_args = vars(args)
 
     w = wallet.Wallet(Coin, Importer, Exporter, Prompt=prompter.CliPrompter,
-                      Cryptor=Cryptor, **setting_args)
+                      Cryptor=Cryptor, out_file=out_file, **setting_args)
     w.run()
 
 

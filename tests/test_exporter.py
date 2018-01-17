@@ -1,5 +1,6 @@
 from unittest import TestCase
 from pyperlib import exporter, coinutil, helper
+import sys
 
 
 class TestExporterFactory(helper.TestNameFactory):
@@ -11,7 +12,7 @@ class TestExporterFactory(helper.TestNameFactory):
         """Attempt to export various names."""
         self.do_test("Base", None)
         self.do_test("Nonexistant", None)
-        self.do_test("cli", exporter.CliExporter)
+        self.do_test("text", exporter.TextExporter)
 
 
 class TestBaseExporter(TestCase):
@@ -38,8 +39,8 @@ class TestBaseExporter(TestCase):
         self.do_test(e, self.Coin(key=addr), None, None, addr)
 
 
-class TestCliExporter(TestBaseExporter, helper.CliTestCase):
-    """Same as TestBaseExporter, but for the Cli exporter."""
+class TestTextExporter(TestBaseExporter, helper.CliTestCase):
+    """Same as TestBaseExporter, but for the Text exporter."""
 
     maxDiff = None
     out1 = """Coin name: Bitcoin
@@ -69,7 +70,7 @@ Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
 
     def test_all(self):
         """Run do_test with all test sets."""
-        e = exporter.CliExporter()
+        e = exporter.TextExporter(sys.stdout)
 
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
         addr = "1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx"

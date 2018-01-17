@@ -106,7 +106,7 @@ class CliTestCase(TestCase):
 
     def mock_print(self):
         """Creates the mock print function."""
-        def print(x):
+        def print(x, file=None):
             """Record the input in self.out."""
             self.out += x + "\n"
         return print

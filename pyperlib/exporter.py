@@ -1,5 +1,6 @@
 from copy import deepcopy
 from pyperlib import helper
+import sys
 
 
 class ExporterFactory(helper.NameFactory):
@@ -38,23 +39,30 @@ class Exported:
 
 
 class BaseExporter:
-    """Takes in a Coin object and exports it to python values."""
+    """Take in a Coin object and export it to python values."""
 
     description = "no description"
 
-    def __init__(self):
-        """Exporters require no initialization."""
-        pass
+    def __init__(self, f=None):
+        """Create the exporter given an output file."""
+        if f is None:
+            self.out_file = sys.stdout
+        else:
+            self.out_file = f
 
     def run(self, c):
         """Exports the given coin to an Exported class."""
         return Exported(c)
 
 
-class CliExporter(BaseExporter):
-    """Takes in a Coin object and prints its data to stdout."""
+class TextExporter(BaseExporter):
+    """Take in a Coin object and print its data as text."""
 
     description = "print all known data of the coin to the command line"
+
+    def print2file(self, *args):
+        """Print the arguments to self.file."""
+        print(*args, file=self.out_file)
 
     def run(self, c):
         """Exports the given coin to stdout."""
@@ -75,10 +83,10 @@ class CliExporter(BaseExporter):
         for title, value in elements:
             if title is None:
                 if not blank:
-                    print("")
+                    self.print2file("")
                     blank = True
             elif value is None:
                 pass
             else:
-                print(title + ": " + str(value))
+                self.print2file(title + ": " + str(value))
                 blank = False

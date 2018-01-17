@@ -5,7 +5,6 @@
 * pyperlib.importer
  - ADD qr scanner importer
 * pyperlib.exporter
- - ADD file exporter
  - ADD bill-style wallet exporter
  - ADD trifold-style wallet exporter
  - ADD sixfold-style wallet exporter

@@ -1,4 +1,5 @@
 from pyperlib import importer, coins, coinutil, cryptor, exporter, prompter
+import sys
 
 
 class ArgumentError(Exception):
@@ -15,7 +16,7 @@ class Wallet:
     Settings = coins.CoinSettings()
 
     def __init__(self, Coin, Importer, Exporter, Prompt=None, Cryptor=None,
-                 **kwargs):
+                 out_file=None, **kwargs):
         """Create a Wallet from any coin-manipulating objects."""
 
         self.Coin = Coin
@@ -23,6 +24,7 @@ class Wallet:
         self.Exporter = Exporter
         self.Prompt = Prompt
         self.Cryptor = Cryptor
+        self.out_file = out_file
         self.kwargs = kwargs
 
         if type(Coin) is str:
@@ -53,5 +55,5 @@ class Wallet:
             c = self.Cryptor(self.Prompt)
             c.encrypt(coin)
 
-        e = self.Exporter()
+        e = self.Exporter(self.out_file)
         return e.run(coin)

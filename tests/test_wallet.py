@@ -57,17 +57,17 @@ Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
         """Run various wallet imports."""
 
         MockPrompter.reset()
-        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="cli",
+        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="text",
                           Prompt=MockPrompter)
         w.run()
         print("------")
 
-        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="cli",
+        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="text",
                           Prompt=MockPrompter, compression=False)
         w.run()
         print("------")
 
-        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="cli",
+        w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="text",
                           Prompt=MockPrompter)
         w.run()
         print("------")
