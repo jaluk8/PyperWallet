@@ -24,10 +24,7 @@
  - ADD trifold-style images
  - ADD sixfold-style images
 * README.md
- - MODIFY the description to be more detailed
- - ADD an installation guide
  - ADD a use guide
- - ADD an extension guide?
 * Tests
  - ADD more monkey-testing cases
  - ADD edge-case resistant cases
