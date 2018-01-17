@@ -2,6 +2,7 @@
 
 from pyperlib import wallet, prompter
 import argparse
+import sys
 
 
 description = """\
@@ -9,18 +10,11 @@ description = """\
 
 
 coin_help = "the name of the coin"
-
-
 importer_help = "control how the coin is initially created"
-
-
 exporter_help = "control how the coin will be displayed at the end"
-
-
 file_help = "the coin will be exported to this file (default=none)."
-
-
 encrypt_help = "encrypt the coin with an encryption standard"
+debug_help = "turn on debugging mode (errors will be shown more verbosely)."
 
 
 def str2bool(s):
@@ -98,11 +92,17 @@ def make_parser():
         parser.add_argument(arg, default=None, type=s_type,
                             metavar=setting.name, dest=setting.name, help=help)
 
+    parser.add_argument("--debug", dest="debug", help=debug_help,
+                        action="store_true")
+
     return parser
 
 
 def proc_args(args):
     """Process the arguments and make a wallet from them."""
+    debug = args.debug
+    del args.debug
+    
     Coin = args.coin
     del args.coin
 
@@ -124,9 +124,25 @@ def proc_args(args):
 
     setting_args = vars(args)
 
-    w = wallet.Wallet(Coin, Importer, Exporter, Prompt=prompter.CliPrompter,
-                      Cryptor=Cryptor, out_file=out_file, **setting_args)
-    w.run()
+    try:
+        w = wallet.Wallet(Coin, Importer, Exporter, Prompt=prompter.CliPrompter,
+                          Cryptor=Cryptor, out_file=out_file, **setting_args)
+        try:
+            w.run()
+        except KeyboardInterrupt:
+            print("Exit")
+            sys.exit(3)
+    except Exception as e:
+        if debug:
+            e.print()
+        else:
+            msg = str(e)
+            tpe = str(type(e))
+            tpe = tpe[8:-2]
+            print("Error: " + tpe)
+            if msg != "":
+                print(msg)
+            sys.exit(1)
 
 
 parser = make_parser()

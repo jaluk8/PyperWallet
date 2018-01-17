@@ -18,7 +18,7 @@ class Mod(data.ByteData):
 
     def mod(self, d):
         """Execute the mod."""
-        raise NotImplementedError
+        raise NotImplementedError("This mod does not exist.")
 
 
 class HashMod(Mod):
@@ -70,8 +70,8 @@ class Xor(Mod):
     def mod(self, d1, d2):
         """Execute the mod."""
         if len(d1) != len(d2):
-            raise LengthError(
-                "Both operands of xor must have the same length.")
+            raise LengthError("Both operands of xor must have the same "
+                              "length.")
         i = d1.int ^ d2.int
         return data.IntData(i, len(d1))
 

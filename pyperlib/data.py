@@ -142,8 +142,8 @@ class Base58Data(BaseData):
         place = 1
         for c in b58[::-1]:
             if c not in self.base58_chars:
-                raise EncodingException(
-                    c + " is not a valid base58 character.")
+                raise EncodingException(c + " is not a valid base58 "
+                                        "character.")
             value += place * self.base58_chars.find(c)
             place *= 58
 

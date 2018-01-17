@@ -135,8 +135,8 @@ class Coin:
         if type(string) is not str:
             return string
         if self.view_type is None:
-            raise NotImplementedError(
-                self.name + " does not support str2view.")
+            raise NotImplementedError(self.name + " does not support "
+                                      "str2view.")
         else:
             return self.view_type(string)
 
@@ -146,8 +146,8 @@ class Coin:
         if type(string) is not str:
             return string
         if self.addr_type is None:
-            raise NotImplementedError(
-                self.name + " does not support str2addr.")
+            raise NotImplementedError(self.name + " does not support "
+                                      "str2addr.")
         else:
             return self.addr_type(string)
 

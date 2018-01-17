@@ -46,7 +46,7 @@ class Coin(basecoin.Coin):
     def validate_addr(self):
         """Raise an error if the addr checksum fails."""
         if self.addr != self.eth_checksum(self.addr):
-            raise coins.InvalidCoinError
+            raise coins.InvalidCoinError("Address checksum failed.")
 
     def calc_wif(self):
         """Calculate the wif key from the keypair."""
