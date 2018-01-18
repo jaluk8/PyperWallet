@@ -1,4 +1,5 @@
-from pyperlib import cliwallet, helper
+from pyperlib import helper
+from pyperlib.wallet import cliwallet
 
 
 class BaseCliTest(helper.CliTestCase):

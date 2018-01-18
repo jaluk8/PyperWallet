@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from pyperlib import cliwallet
+from pyperlib.wallet import cliwallet
 import sys
 
 w = cliwallet.CliWallet(sys.argv)

@@ -2,6 +2,9 @@ from pyperlib import importer, coins, coinutil, cryptor, exporter, prompter
 import sys
 
 
+__all__ = ["ArgumentError", "Wallet", "cliwallet"]
+
+
 class ArgumentError(Exception):
     """Raise when an argument, such as the importer, is invalid."""
 
