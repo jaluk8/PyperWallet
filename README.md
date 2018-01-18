@@ -23,7 +23,7 @@ Next, you need to install the required dependencies. This pip command should ins
 ```
 pip3 install cryptography pysha3
 ```
-Then download this repository and put wherever you want on your computer. The `pyperwallet.py` file will start the program.
+Then download this repository and put wherever you want on your computer. The `cpyper.py` file will start the command line interface.
 
 ## Why PyperWallet?
 PyperWallet was made using three major design decisions:
