@@ -31,21 +31,63 @@ class Wallet:
         self.debug = debug
         self.kwargs = kwargs
 
-        if type(Coin) is str:
-            self.Coin = self.coin_f.get(Coin)
-        if type(Importer) is str:
-            self.Importer = self.importer_f.get(Importer)
-        if type(Exporter) is str:
-            self.Exporter = self.exporter_f.get(Exporter)
-        if Cryptor is not None and type(Cryptor) is str:
-            self.Cryptor = self.cryptor_f.get(Cryptor)
+    @property
+    def Coin(self):
+        """Getter for the coin variable."""
+        return self._Coin
 
+    @Coin.setter
+    def Coin(self, Coin):
+        """Setter for the coin variable."""
+        if type(Coin) is str:
+            self._Coin = self.coin_f.get(Coin)
+        else:
+            self._Coin = Coin
         if self.Coin is None:
             raise ArgumentError("Invalid Coin")
+
+    @property
+    def Importer(self):
+        """Getter for the importer variable."""
+        return self._Importer
+
+    @Importer.setter
+    def Importer(self, Importer):
+        """Setter for the importer variable."""
+        if type(Importer) is str:
+            self._Importer = self.importer_f.get(Importer)
+        else:
+            self._Importer = Importer
         if self.Importer is None:
             raise ArgumentError("Invalid Importer")
+
+    @property
+    def Exporter(self):
+        """Getter for the exporter variable."""
+        return self._Exporter
+
+    @Exporter.setter
+    def Exporter(self, Exporter):
+        """Setter for the exporter variable."""
+        if type(Exporter) is str:
+            self._Exporter = self.exporter_f.get(Exporter)
+        else:
+            self._Exporter = Exporter
         if self.Exporter is None:
             raise ArgumentError("Invalid Exporter")
+
+    @property
+    def Cryptor(self):
+        """Getter for the cryptor variable."""
+        return self._Cryptor
+
+    @Cryptor.setter
+    def Cryptor(self, Cryptor):
+        """Setter for the cryptor variable."""
+        if type(Cryptor) is str:
+            self._Cryptor = self.cryptor_f.get(Cryptor)
+        else:
+            self._Cryptor = Cryptor
 
     def run(self):
         """Import the coin, perform any modifications, and export it."""

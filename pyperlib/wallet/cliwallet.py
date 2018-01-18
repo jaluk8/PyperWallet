@@ -15,7 +15,7 @@ encrypt_help = "encrypt the coin with an encryption standard"
 debug_help = "turn on debugging mode (errors will be shown more verbosely)."
 
 
-class CliWallet:
+class CliWallet(wallet.Wallet):
     """Create a command line interface for the wallet."""
 
     def __init__(self, args):
@@ -70,27 +70,27 @@ class CliWallet:
                                               formatter_class=formatter,
                                               description=description)
 
-        coin_f = wallet.Wallet.coin_f
+        coin_f = self.coin_f
         self.make_opt("-c", factory=coin_f, default="bitcoin", metavar="name",
                       dest="coin", help=coin_help)
 
-        imp_f = wallet.Wallet.importer_f
+        imp_f = self.importer_f
         self.make_opt("-i", factory=imp_f, default="gen", metavar="input",
                       dest="importer", help=importer_help, descriptions=True)
 
-        exp_f = wallet.Wallet.exporter_f
+        exp_f = self.exporter_f
         self.make_opt("-o", factory=exp_f, default="text", metavar="output",
                       dest="exporter", help=exporter_help, descriptions=True)
 
         self.parser.add_argument("-f", default="-", help=file_help,
                                  metavar="file", dest="out_file")
 
-        enc_f = wallet.Wallet.cryptor_f
+        enc_f = self.cryptor_f
         self.make_opt("-e", factory=enc_f, default="none",
                       default_desc="no encryption", metavar="encryption",
                       dest="cryptor", help=encrypt_help, descriptions=True)
 
-        for setting in wallet.Wallet.Settings.settings:
+        for setting in self.Settings.settings:
             help = (setting.description + " (default=" +
                     str(setting.default) + ")")
             arg = "--" + setting.name
@@ -134,10 +134,16 @@ class CliWallet:
         setting_args = vars(self.args)
 
         try:
-            w = wallet.Wallet(Coin, Importer, Exporter, Cryptor=Cryptor,
-                              Prompt=prompter.CliPrompter, out_file=out_file,
-                              debug=debug, **setting_args)
-            w.run()
+            self.Coin = Coin
+            self.Importer = Importer
+            self.Exporter = Exporter
+            self.Cryptor = Cryptor
+            self.Prompt = prompter.CliPrompter
+            self.out_file = out_file
+            self.debug = debug
+            self.kwargs = setting_args
+
+            super().run()
         except Exception as e:
             if debug:
                 e.print()
