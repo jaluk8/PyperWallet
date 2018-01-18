@@ -63,7 +63,7 @@ class TestCliImporters(TestBaseImporter, helper.CliTestCase):
 
     def test_all(self):
         """Run do_test given command line input."""
-        i = importer.PromptImporter(self.Coin, prompter.CliPrompter)
+        i = importer.PromptImporter(self.Coin, prompter.CliPrompter())
 
         wif = "KyF4khaPVK9YeMBUukyKwq5qKvYNux4KM2FibQ7bZWxTaYVTn6XU"
         priv = "3C5F262F56AF74A2C314354BE7EA0CCAFEDA1C059E2B5B3B4C3151912C774F\

@@ -5,7 +5,7 @@ from unittest import TestCase
 class TestBasePrompter(TestCase):
     """Test that the base prompter interface works."""
 
-    prompt = prompter.BasePrompter
+    prompt = prompter.BasePrompter()
 
     def do_test(self, f, output=None, error=None, **kwargs):
         """Run f with kwargs and verify output or error is given."""
@@ -30,7 +30,7 @@ class TestBasePrompter(TestCase):
 class TestCliPrompter(TestBasePrompter, helper.CliTestCase):
     """Test that the cli prompter interface works."""
 
-    prompt = prompter.CliPrompter
+    prompt = prompter.CliPrompter()
 
     stdin = ["value", "2", "value", "value"]
 

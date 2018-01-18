@@ -83,6 +83,7 @@ class TestWalletGen(TestCase):
     def do_test(self, Coin):
         """Generate one instance of Coin and check for validity."""
         w = wallet.Wallet(Coin=Coin, Importer="gen",
+                          Prompt=prompter.BasePrompter,
                           Exporter=exporter.BaseExporter)
         exported = w.run()
 

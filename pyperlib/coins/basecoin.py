@@ -193,7 +193,7 @@ class Coin:
         """Set the keypair from a public key."""
         self.check_curve()
         self.keypair = ec.KeyPair(self.curve, pub=pub)
-        self.settings.compression = self.keypair.is_compressed(pub)
+        self.apply_settings(compression=self.keypair.is_compressed(pub))
         self.calc_all()
 
     def from_wif(self, wif):
