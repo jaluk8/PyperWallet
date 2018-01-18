@@ -16,7 +16,7 @@ class Wallet:
     Settings = coins.CoinSettings()
 
     def __init__(self, Coin, Importer, Exporter, Prompt=None, Cryptor=None,
-                 out_file=None, **kwargs):
+                 out_file=None, debug=False, **kwargs):
         """Create a Wallet from any coin-manipulating objects."""
 
         self.Coin = Coin
@@ -25,6 +25,7 @@ class Wallet:
         self.Prompt = Prompt
         self.Cryptor = Cryptor
         self.out_file = out_file
+        self.debug = debug
         self.kwargs = kwargs
 
         if type(Coin) is str:
@@ -45,6 +46,9 @@ class Wallet:
 
     def run(self):
         """Import the coin, perform any modifications, and export it."""
+        if self.debug:
+            self.Prompt.pass_input = input
+
         i = self.Importer(self.Coin, self.Prompt)
         coin = i.run()
 

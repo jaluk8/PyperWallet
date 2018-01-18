@@ -115,14 +115,12 @@ class CliTestCase(TestCase):
         """Run test function f with some inport and/or output."""
         self.out = ""
 
-        if stdout is None:
-            with patch("builtins.input", side_effect=stdin):
-                with patch('builtins.print', new_callable=self.mock_print):
-                    return f(**kwargs)
-        elif stdin is None:
+        if stdin is None:
+            stdin = []
+
+        with patch("builtins.input", side_effect=stdin):
             with patch('builtins.print', new_callable=self.mock_print):
                 result = f(**kwargs)
-                self.assertEqual(self.out, stdout)
+                if stdout is not None:
+                    self.assertEqual(self.out, stdout)
                 return result
-        else:
-            return f(**kwargs)
