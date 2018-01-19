@@ -18,9 +18,10 @@ debug_help = "turn on debugging mode (errors will be shown more verbosely)."
 class CliWallet(wallet.Wallet):
     """Create a command line interface for the wallet."""
 
-    def __init__(self, args):
+    def __init__(self, args, prompt=prompter.CliPrompter()):
         """Create the cli from a list of command line arguments."""
         self.make_parser(args[0])
+        self.prompt = prompt
         self.args = self.parser.parse_args(args[1:])
 
     def run(self):
@@ -138,20 +139,11 @@ class CliWallet(wallet.Wallet):
             self.Importer = Importer
             self.Exporter = Exporter
             self.Cryptor = Cryptor
-            self.Prompt = prompter.CliPrompter
             self.out_file = out_file
             self.debug = debug
             self.kwargs = setting_args
 
             super().run()
         except Exception as e:
-            if debug:
-                e.print()
-            else:
-                msg = str(e)
-                tpe = str(type(e))
-                tpe = tpe[8:-2]
-                print("Error: " + tpe)
-                if msg != "":
-                    print(msg)
-                sys.exit(1)
+            self.prompt.show_error(e, debug)
+            sys.exit(1)

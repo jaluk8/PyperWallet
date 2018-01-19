@@ -58,17 +58,17 @@ Public address: 1PYqAUK4q8Lbq32o32ouyQMUFkzszw7ywx
 
         MockPrompter.reset()
         w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="text",
-                          Prompt=MockPrompter)
+                          prompt=MockPrompter())
         w.run()
         print("------")
 
         w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="text",
-                          Prompt=MockPrompter, compression=False)
+                          prompt=MockPrompter(), compression=False)
         w.run()
         print("------")
 
         w = wallet.Wallet(Coin="bitcoin", Importer="prompt", Exporter="text",
-                          Prompt=MockPrompter)
+                          prompt=MockPrompter())
         w.run()
         print("------")
 
@@ -83,7 +83,7 @@ class TestWalletGen(TestCase):
     def do_test(self, Coin):
         """Generate one instance of Coin and check for validity."""
         w = wallet.Wallet(Coin=Coin, Importer="gen",
-                          Prompt=prompter.BasePrompter,
+                          prompt=prompter.BasePrompter(),
                           Exporter=exporter.BaseExporter)
         exported = w.run()
 

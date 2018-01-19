@@ -18,14 +18,14 @@ class Wallet:
     exporter_f = exporter.ExporterFactory
     Settings = coins.CoinSettings()
 
-    def __init__(self, Coin, Importer, Exporter, Prompt, Cryptor=None,
+    def __init__(self, Coin, Importer, Exporter, prompt, Cryptor=None,
                  out_file=None, debug=False, **kwargs):
         """Create a Wallet from any coin-manipulating objects."""
 
         self.Coin = Coin
         self.Importer = Importer
         self.Exporter = Exporter
-        self.Prompt = Prompt
+        self.prompt = prompt
         self.Cryptor = Cryptor
         self.out_file = out_file
         self.debug = debug
@@ -91,7 +91,7 @@ class Wallet:
 
     def run(self):
         """Import the coin, perform any modifications, and export it."""
-        prompt = self.Prompt()
+        prompt = self.prompt
         if self.debug:
             prompt.pass_input = input
 

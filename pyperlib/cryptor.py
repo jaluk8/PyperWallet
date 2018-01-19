@@ -138,7 +138,7 @@ class Bip38Cryptor(BaseCryptor):
 
         priv = priv_h1 + priv_h2
 
-        coin_test = deepcopy(coin)
+        coin_test = type(coin)()
         coin_test.load_priv(priv)
         addr_hash2 = self.addr_hash(coin_test)
 
