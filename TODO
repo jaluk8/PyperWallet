@@ -12,7 +12,6 @@
  - FIX how bip38 interacts with non-base58 coins
  - ADD bip39 cryptor
 * pyperlib.prompter
- - ADD gui prompter?
 * pyperlib.wallet
 * pyper_wallet.py
  - ADD gui?
