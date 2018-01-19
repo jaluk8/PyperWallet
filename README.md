@@ -21,7 +21,7 @@ In order to install PyperWallet, you will first need to install Python 3.6. This
 
 Next, you need to install the required dependencies. This pip command should install them all.
 ```
-pip3 install cryptography pysha3
+pip3 install cryptography pysha3 PyQt5
 ```
 Then download this repository and put wherever you want on your computer. The `cpyper.py` file will start the command line interface. If you want to properly install the program as a system command (linux only), run `install_linux.sh --install` as root.
 
