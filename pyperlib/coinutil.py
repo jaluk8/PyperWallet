@@ -18,10 +18,19 @@ class CoinFinder:
         return {name: Coin}
 
     @classmethod
+    def get_coin_path(cls):
+        """Find the path of the coins package."""
+        assert __file__[-11:] == "coinutil.py"
+        path = __file__[:-7]  # The path up to .../pyperlib/coin
+        path += "s"
+        return [path]
+
+    @classmethod
     def pool(cls):
         """Return a pool containing all Coin classes."""
         pool = {}
-        pkgiter = pkgutil.iter_modules(["pyperlib/coins"])
+
+        pkgiter = pkgutil.iter_modules(cls.get_coin_path())
 
         for _, name, _ in pkgiter:
             pkg = importlib.import_module("pyperlib.coins." + name)
