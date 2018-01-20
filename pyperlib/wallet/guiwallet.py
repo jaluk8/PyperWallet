@@ -146,7 +146,7 @@ class SettingsWidget(PyperWidget):
 
         def bool_slot(state):
             """A slot for a boolean type."""
-            if type(state) is int:
+            if type(state) is not bool:
                 state = state == Qt.Checked
             self.apply_setting(setting.name, state)
 
