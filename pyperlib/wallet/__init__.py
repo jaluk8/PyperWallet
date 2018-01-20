@@ -18,6 +18,10 @@ class Wallet:
     exporter_f = exporter.ExporterFactory
     Settings = coins.CoinSettings()
 
+    out_file = None
+    debug = False
+    kwargs = {}
+
     def __init__(self, Coin, Importer, Exporter, prompt, Cryptor=None,
                  out_file=None, debug=False, **kwargs):
         """Create a Wallet from any coin-manipulating objects."""

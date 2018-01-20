@@ -1,13 +1,10 @@
 #!/usr/bin/env python3
 
 from pyperlib import prompter
-from pyperlib.wallet import cliwallet
-from PyQt5.QtWidgets import QApplication
+from pyperlib.wallet import guiwallet
 import sys
 
-app = QApplication([])
-
-w = cliwallet.CliWallet(sys.argv, prompter.GuiPrompter())
+w = guiwallet.GuiWallet(sys.argv)
 
 try:
     w.run()
