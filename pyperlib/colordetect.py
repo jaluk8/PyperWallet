@@ -6,6 +6,8 @@ import copy
 class Color:
     """Store a pixel's color and interact with other colors."""
 
+    approx_dist = 900  # The distance between to similar colors.
+
     def __init__(self, r, g, b, a=0, rnd=1):
         """Initialize the color with rgb."""
         self.r = int(r / rnd) * rnd
@@ -20,6 +22,10 @@ class Color:
         db = other.b - self.b
         return dr**2 + dg**2 + db**2
 
+    def similar(self, other):
+        """Return whether a color is similar to another."""
+        return self.distance(other) < self.approx_dist
+
     @staticmethod
     def mean(colors):
         """Return the mean color from a list of colors."""
@@ -30,8 +36,23 @@ class Color:
         r_mean = sum([c.r for c in colors]) / amount
         g_mean = sum([c.g for c in colors]) / amount
         b_mean = sum([c.b for c in colors]) / amount
-        
+
         return Color(r_mean, g_mean, b_mean)
+
+    @staticmethod
+    def unique(colors):
+        """Merge similar colors together in a set."""
+        colors = list(colors)
+        similars = set()
+        for c in colors:
+            sim_list = tuple([c2 for c2 in colors if c.similar(c2)])
+            similars.add(sim_list)
+
+        uniques = set()
+        for sim_list in similars:
+            c = Color.mean(sim_list)
+            uniques.add(c)
+        return uniques
 
     def __repr__(self):
         """Return the color's repr string."""
@@ -133,8 +154,15 @@ class Detector:
             if count / total > 0.01:
                 self.colors += [co for _ in range(count)]
 
-    def detect(self, count):
+    def run(self, count=10):
+        """Return a list of colors in the image."""
         km = KMeans(self.colors, count)
         km.run()
-        return set(km.centers())
-
+        colors = set(km.centers())
+        uniques = list(Color.unique(colors))
+        if len(uniques) == 0:
+            return [Color(0, 0, 0), Color(255, 255, 255)]
+        elif len(uniques) == 1:
+            return [uniques[0], Color(255, 255, 255)]
+        else:
+            return uniques
