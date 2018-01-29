@@ -6,14 +6,14 @@ import copy
 class Color:
     """Store a pixel's color and interact with other colors."""
 
-    approx_dist = 900  # The distance between to similar colors.
+    approx_dist = 300  # The distance between to similar colors.
 
     def __init__(self, r, g, b, a=0, rnd=1):
         """Initialize the color with rgb."""
-        self.r = int(r / rnd) * rnd
-        self.g = int(g / rnd) * rnd
-        self.b = int(b / rnd) * rnd
-        self.a = int(a / rnd) * rnd
+        self.r = round(r / rnd) * rnd
+        self.g = round(g / rnd) * rnd
+        self.b = round(b / rnd) * rnd
+        self.a = round(a / rnd) * rnd
 
     def distance(self, other):
         """Calculate the 'distance' to another color."""
@@ -24,7 +24,7 @@ class Color:
 
     def similar(self, other):
         """Return whether a color is similar to another."""
-        return self.distance(other) < self.approx_dist
+        return self.distance(other) <= self.approx_dist
 
     @staticmethod
     def mean(colors):
@@ -39,20 +39,36 @@ class Color:
 
         return Color(r_mean, g_mean, b_mean)
 
-    @staticmethod
-    def unique(colors):
+    @classmethod
+    def unique(cls, colors):
         """Merge similar colors together in a set."""
         colors = list(colors)
-        similars = set()
-        for c in colors:
-            sim_list = tuple([c2 for c2 in colors if c.similar(c2)])
-            similars.add(sim_list)
+        similars = True
+        while similars:
+            similars = False
+            closest_dist = cls.approx_dist
+            close_i = None
+            close_j = None
 
-        uniques = set()
-        for sim_list in similars:
-            c = Color.mean(sim_list)
-            uniques.add(c)
-        return uniques
+            for i, c1 in enumerate(colors):
+                for j, c2 in enumerate(colors):
+                    if i != j:
+                        dist = c1.distance(c2)
+                        if dist <= closest_dist:
+                            close_i = i
+                            close_j = j
+                            closest_dist = dist
+                            similars = True
+
+            if similars:
+                c1 = colors.pop(close_i)
+                if close_j > close_i:
+                    close_j -= 1
+                c2 = colors.pop(close_j)
+                avg = Color.mean([c1, c2])
+                colors.append(avg)
+
+        return colors
 
     def __repr__(self):
         """Return the color's repr string."""
@@ -159,7 +175,7 @@ class Detector:
         km = KMeans(self.colors, count)
         km.run()
         colors = set(km.centers())
-        uniques = list(Color.unique(colors))
+        uniques = Color.unique(colors)
         if len(uniques) == 0:
             return [Color(0, 0, 0), Color(255, 255, 255)]
         elif len(uniques) == 1:
