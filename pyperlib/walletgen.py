@@ -1,5 +1,5 @@
 from pyperlib import colordetect, helper
-from PIL import Image
+from PIL import Image, ImageOps
 from pathlib import Path
 
 
@@ -44,6 +44,15 @@ class BaseDesigner:
         detector = colordetect.Detector(img)
         return detector.run()
 
+    def colorize(self, img, colors):
+        """Colorize the image with colors."""
+        img = img.convert("L")
+
+        c1 = colors[0].rgb
+        c2 = colors[1].rgb
+        img = ImageOps.colorize(img, c2, c1)
+        return img.convert("RGBA")
+
     def run_one(self, logo, name):
         """Create a wallet from a logo."""
         raise NotImplementedError("This designer has no run_one function.")
@@ -66,6 +75,8 @@ class SixfoldDesigner(BaseDesigner):
         colors = self.detect_colors(img)
 
         gradient, overlay, design = self.images
+
+        gradient = self.colorize(gradient, colors)
 
         background = Image.blend(gradient, overlay, 0.5)
         design = Image.alpha_composite(background, design)

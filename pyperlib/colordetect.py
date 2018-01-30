@@ -15,6 +15,11 @@ class Color:
         self.b = round(b / rnd) * rnd
         self.a = round(a / rnd) * rnd
 
+    @property
+    def rgb(self):
+        """Return the color as an rgb tuple."""
+        return self.r, self.g, self.b
+
     def distance(self, other):
         """Calculate the 'distance' to another color."""
         dr = other.r - self.r
