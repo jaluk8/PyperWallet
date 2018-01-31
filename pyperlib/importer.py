@@ -71,5 +71,5 @@ class VanityImporter(BaseImporter):
             pattern = self.prompt.prompt_info(name="Pattern", type_f=str)
         
         generator = vanity.Generator(self.Coin)
-        priv = generator.run(pattern).keypair.priv
+        priv = generator.run(pattern).priv
         return super().run(key=priv)

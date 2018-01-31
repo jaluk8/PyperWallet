@@ -3,13 +3,15 @@ from multiprocessing import Queue
 from pyperlib import data, ec
 import re
 import string
+import time
 
 
 substitutions = {
     "i": ["1"],
     "o": ["0"],
     "l": ["1"],
-    "e": ["3"]
+    "e": ["3"],
+    "s": ["5"]
 }
 
 
@@ -56,17 +58,17 @@ class Generator:
             c = self.Coin()
             addr = c.addr_string()
             match = regex.match(addr)
-        queue.put(c)
+        queue.put(c.keypair)
 
     def run(self, pattern):
         """Generate and return a coin that matches the pattern."""
         processes = []
-        queue = Queue()
+        queue = Queue(1)
         for _ in range(cpu_count()):
             proc = Process(target=self.run_thread, args=(pattern, queue))
             processes += [proc]
             proc.start()
-        coin = queue.get()
+        kp = queue.get()
         for p in processes:
             p.terminate()
-        return coin
+        return kp
