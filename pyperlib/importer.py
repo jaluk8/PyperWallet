@@ -1,4 +1,4 @@
-from pyperlib import data, mods, helper
+from pyperlib import data, mods, helper, vanity
 
 
 class ImporterFactory(helper.NameFactory):
@@ -9,7 +9,7 @@ class ImporterFactory(helper.NameFactory):
 
 
 class BaseImporter:
-    """An importer that imports using args, rather than external sources."""
+    """Import using args, rather than external sources."""
 
     description = "no description"
 
@@ -24,7 +24,7 @@ class BaseImporter:
 
 
 class GenImporter(BaseImporter):
-    """An importer that takes no arguments and just generates coins."""
+    """Generate a coin to import it."""
 
     description = "generate a new coin using random numbers"
 
@@ -34,7 +34,7 @@ class GenImporter(BaseImporter):
 
 
 class PromptImporter(BaseImporter):
-    """An importer that imports by prompting a wif/priv/addr/etc."""
+    """Prompt a wif/priv/addr/etc to import."""
 
     description = "import the coin from a wif key, address, private key, etc."
 
@@ -46,7 +46,7 @@ class PromptImporter(BaseImporter):
 
 
 class BrainImporter(BaseImporter):
-    """An importer for brainwallets using sha256."""
+    """Create brainwallets using sha256."""
 
     description = "import the coin using a memorized 'brain wallet' phrase"
 
@@ -57,4 +57,19 @@ class BrainImporter(BaseImporter):
 
         brain_data = data.StringData(brain)
         priv = mods.Sha256(brain_data)
+        return super().run(key=priv)
+
+
+class VanityImporter(BaseImporter):
+    """Generate a vanity address."""
+
+    description = "generate a vanity address"
+
+    def run(self, pattern=None):
+        """Generate an address that matches pattern."""
+        if pattern is None:
+            pattern = self.prompt.prompt_info(name="Pattern", type_f=str)
+        
+        generator = vanity.Generator(self.Coin)
+        priv = generator.run(pattern).keypair.priv
         return super().run(key=priv)
