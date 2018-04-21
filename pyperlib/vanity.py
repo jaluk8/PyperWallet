@@ -9,7 +9,6 @@ import time
 substitutions = {
     "i": ["1"],
     "o": ["0"],
-    "l": ["1"],
     "e": ["3"],
     "s": ["5"]
 }

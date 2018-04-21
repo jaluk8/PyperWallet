@@ -14,8 +14,8 @@
 * pyperlib.prompter
 * pyperlib.wallet
 * pyper_wallet.py
- - ADD gui?
- - ADD installer?
+ - ADD gui
+ - ADD installer
 * logos
  - ADD logos from all supported coins
 * wallets
@@ -27,4 +27,3 @@
 * Tests
  - ADD more monkey-testing cases
  - ADD edge-case resistant cases
- 
