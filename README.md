@@ -1,6 +1,8 @@
 # PyperWallet
 
 ## Description
+*NOTE: This project is no longer maintained and should not be used.*
+
 PyperWallet is an extendable wallet generator written in Python for various types of cryptocurrencies. It currently supports Bitcoin, Ethereum, Litecoin, and 180 more cryptocurrencies. The full list can be found at the bottom of this page. A GUI is available, but the CLI client is recommended as it is more advanced.
 
 ## Features
